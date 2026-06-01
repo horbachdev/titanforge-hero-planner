@@ -23,4 +23,14 @@ describe('App', () => {
 
     expect(screen.getByText('Avatar Core')).toBeInTheDocument();
   });
+
+  it('shows roster management and champion controls', () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Roster' }));
+
+    expect(screen.getByRole('heading', { name: 'Roster' })).toBeInTheDocument();
+    expect(screen.getByText('Team Totals')).toBeInTheDocument();
+    expect(screen.getByText('Champion aura')).toBeInTheDocument();
+  });
 });

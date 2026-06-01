@@ -30,6 +30,16 @@ export interface PercentModifiers {
   critDamage: number;
 }
 
+export interface FlatStatModifiers {
+  attack: number;
+  defense: number;
+  hp: number;
+  evasion: number;
+  critChance: number;
+  critDamage: number;
+  threat: number;
+}
+
 export interface SourceMetadata {
   generatedAt: string;
   officialSpreadsheetId: string;
@@ -50,11 +60,16 @@ export interface HeroData {
   name: string;
   role: HeroRole;
   promoted: boolean;
+  baseClassId: string;
+  baseClassName: string;
+  promotedClassId: string;
+  promotedClassName: string;
   element: string;
   prerequisite: string;
   baseStats: StatBlock;
   slots: HeroSlot[];
   skillUnlocks: string[];
+  innateSkillIds: string[];
 }
 
 export interface HeroLevelData {
@@ -109,6 +124,14 @@ export interface SkillData {
   classes: string[];
   requiresPromotion: boolean;
   modifiers: PercentModifiers;
+  flatStats: FlatStatModifiers;
+}
+
+export interface ChampionData {
+  id: string;
+  name: string;
+  guest: boolean;
+  leaderSkillIds: string[];
 }
 
 export interface QuestData {
@@ -130,6 +153,7 @@ export interface GameData {
   heroLevels: HeroLevelData[];
   items: ItemData[];
   skills: SkillData[];
+  champions: ChampionData[];
   enchantments: EnchantmentData[];
   quests: QuestData[];
 }
@@ -157,27 +181,48 @@ export interface BuildConfig {
   name: string;
   heroClassId: string;
   promoted: boolean;
+  championSkillId?: string;
   level: number;
   seeds: SeedConfig;
   skills: string[];
   equipment: EquipmentSelection[];
 }
 
+export interface RosterConfig {
+  schemaVersion: 1;
+  id: string;
+  name: string;
+  championSkillId: string;
+  builds: BuildConfig[];
+}
+
 export interface ResolvedGearLine {
   slotId: string;
   slotLabel: string;
+  itemId: string;
   itemName: string;
+  itemType: string;
+  itemTier: number;
   quality: ItemQuality;
   starforged: boolean;
+  baseStats: ItemStats;
+  elementStats: ItemStats;
   stats: ItemStats;
+  elementSources: string[];
+  spiritSources: string[];
+  affinityBonuses: string[];
   warnings: string[];
 }
 
 export interface ResolvedBuild {
   build: BuildConfig;
   hero: HeroData | null;
+  baseHero: HeroData | null;
   stats: StatBlock;
   modifiers: PercentModifiers;
+  flatStats: FlatStatModifiers;
+  innateSkills: SkillData[];
+  championSkill: SkillData | null;
   warnings: string[];
   gear: ResolvedGearLine[];
   sourceVersion: string;

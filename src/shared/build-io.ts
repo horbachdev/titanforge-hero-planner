@@ -46,6 +46,10 @@ export function validateBuildConfig(build: BuildConfig, data: GameData): Validat
     warnings.push({ field: 'heroClassId', message: `Unknown hero class "${build.heroClassId}".` });
   }
 
+  if (build.championSkillId && !data.skills.some((skill) => skill.id === build.championSkillId && skill.type === 'Leader')) {
+    warnings.push({ field: 'championSkillId', message: `Unknown champion skill "${build.championSkillId}".` });
+  }
+
   for (const [index, skillId] of build.skills.entries()) {
     if (skillId && !data.skills.some((skill) => skill.id === skillId)) {
       warnings.push({ field: `skills.${index}`, message: `Unknown skill "${skillId}".` });

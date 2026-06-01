@@ -1,4 +1,4 @@
-import type { BuildConfig, EquipmentSelection, GameData, HeroData, HeroSlot, ItemQuality } from './types';
+import type { BuildConfig, EquipmentSelection, GameData, HeroData, HeroSlot, ItemQuality, RosterConfig } from './types';
 
 export const QUALITY_MULTIPLIERS: Record<ItemQuality, number> = {
   normal: 1,
@@ -33,6 +33,29 @@ export function slugify(value: string): string {
 
 export function getHero(data: GameData, heroClassId: string): HeroData | undefined {
   return data.heroes.find((hero) => hero.id === heroClassId);
+}
+
+export function getBaseHero(data: GameData, heroClassId: string): HeroData | undefined {
+  const hero = getHero(data, heroClassId);
+  if (!hero) {
+    return undefined;
+  }
+  return data.heroes.find((candidate) => candidate.id === hero.baseClassId) ?? hero;
+}
+
+export function getEffectiveHero(data: GameData, heroClassId: string, promoted: boolean): HeroData | undefined {
+  const baseHero = getBaseHero(data, heroClassId);
+  if (!baseHero) {
+    return undefined;
+  }
+  if (!promoted || !baseHero.promotedClassId) {
+    return baseHero;
+  }
+  return getHero(data, baseHero.promotedClassId) ?? baseHero;
+}
+
+export function baseHeroOptions(data: GameData): HeroData[] {
+  return data.heroes.filter((hero) => !hero.promoted);
 }
 
 export function getMaxTierForLevel(data: GameData, level: number): number {
@@ -70,13 +93,14 @@ export function normalizeEquipmentForHero(build: BuildConfig, hero: HeroData): E
 }
 
 export function defaultBuild(data: GameData): BuildConfig {
-  const hero = data.heroes[0];
+  const hero = baseHeroOptions(data)[0] ?? data.heroes[0];
   return {
     schemaVersion: 1,
     id: createId('build'),
     name: 'New Build',
     heroClassId: hero?.id ?? '',
-    promoted: hero?.promoted ?? false,
+    promoted: false,
+    championSkillId: '',
     level: 40,
     seeds: {
       attack: 0,
@@ -85,6 +109,16 @@ export function defaultBuild(data: GameData): BuildConfig {
     },
     skills: ['', '', '', ''],
     equipment: hero ? emptyEquipmentForHero(hero) : []
+  };
+}
+
+export function defaultRoster(data: GameData): RosterConfig {
+  return {
+    schemaVersion: 1,
+    id: createId('roster'),
+    name: 'Main Roster',
+    championSkillId: data.champions[0]?.leaderSkillIds.at(-1) ?? '',
+    builds: []
   };
 }
 

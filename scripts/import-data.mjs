@@ -22,12 +22,15 @@ async function main() {
 
   const ressVersion = await readRessVersion();
   const metadata = readMetadata(sheets.get('Home') ?? [], ressVersion);
+  const skills = parseSkills(sheets.get('Skills') ?? []);
+  const heroes = linkHeroMetadata(parseHeroes(sheets.get('Heroes') ?? []), skills);
   const data = {
     metadata,
-    heroes: parseHeroes(sheets.get('Heroes') ?? []),
+    heroes,
     heroLevels: parseHeroLevels(sheets.get('Hero Levels') ?? []),
     items: parseItems(sheets.get('Blueprints') ?? []),
-    skills: parseSkills(sheets.get('Skills') ?? []),
+    skills,
+    champions: parseChampions(skills),
     enchantments: parseEnchantments(sheets.get('Enchantments') ?? []),
     quests: parseQuests(sheets.get('Quests') ?? [])
   };
@@ -173,7 +176,8 @@ function parseSkills(rows) {
           .map((entry) => entry.trim())
           .filter(Boolean),
         requiresPromotion: /^yes$/i.test(clean(row[idx('Requires Class Promotion')])),
-        modifiers: parseSkillModifiers(effect)
+        modifiers: parseSkillModifiers(effect),
+        flatStats: parseSkillFlatStats(effect)
       };
     })
     .filter(Boolean);
@@ -216,7 +220,11 @@ function parseHeroes(rows) {
         continue;
       }
 
-      const name = titleCase(clean(row[startColumn]));
+      const rawName = clean(row[startColumn]);
+      const promotionMatch = rawName.match(/^(.+?)\s*\((.+?)\s+Class Promotion\)$/is);
+      const name = titleCase((promotionMatch?.[1] ?? rawName).replace(/\s+/g, ' '));
+      const baseClassName = titleCase((promotionMatch?.[2] ?? rawName).replace(/\s+/g, ' '));
+      const isPromotion = Boolean(promotionMatch);
       const prerequisite = clean(row[startColumn + 3]);
       const slots = [];
       const skillUnlocks = [];
@@ -249,10 +257,14 @@ function parseHeroes(rows) {
       }
 
       heroes.push({
-        id: makeId(name),
+        id: isPromotion ? slugify(`${name}-${baseClassName}-class-promotion`) : makeId(name),
         name,
         role,
-        promoted: Boolean(prerequisite),
+        promoted: isPromotion,
+        baseClassId: slugify(baseClassName),
+        baseClassName,
+        promotedClassId: '',
+        promotedClassName: '',
         element: clean(rows[rowIndex + 2]?.[startColumn + 6]),
         prerequisite,
         baseStats: {
@@ -266,12 +278,61 @@ function parseHeroes(rows) {
           power: 0
         },
         slots,
-        skillUnlocks
+        skillUnlocks,
+        innateSkillIds: []
       });
     }
   }
 
   return heroes;
+}
+
+function linkHeroMetadata(heroes, skills) {
+  const byId = new Map(heroes.map((hero) => [hero.id, hero]));
+  const innateSkills = skills.filter((skill) => skill.type === 'Innate');
+
+  for (const hero of heroes) {
+    if (hero.promoted) {
+      const baseHero = byId.get(hero.baseClassId);
+      if (baseHero) {
+        baseHero.promotedClassId = hero.id;
+        baseHero.promotedClassName = hero.name;
+      }
+      hero.promotedClassId = hero.id;
+      hero.promotedClassName = hero.name;
+    }
+  }
+
+  for (const hero of heroes) {
+    const matchingInnates = innateSkills
+      .filter((skill) => skill.classes.some((entry) => normalizeName(entry) === normalizeName(hero.name)))
+      .sort((left, right) => right.tier - left.tier);
+    hero.innateSkillIds = matchingInnates.length > 0 ? [matchingInnates[0].id] : [];
+  }
+
+  return heroes;
+}
+
+function parseChampions(skills) {
+  const championMap = new Map();
+  for (const skill of skills.filter((entry) => entry.type === 'Leader')) {
+    const classLabel = skill.classes[0] ?? '';
+    const match = classLabel.match(/^(.+?)\s+\((Guest Champion|Champion)\)$/i);
+    if (!match) {
+      continue;
+    }
+    const name = match[1].trim();
+    const id = slugify(name);
+    const champion = championMap.get(id) ?? {
+      id,
+      name,
+      guest: /guest/i.test(match[2]),
+      leaderSkillIds: []
+    };
+    champion.leaderSkillIds.push(skill.id);
+    championMap.set(id, champion);
+  }
+  return [...championMap.values()].sort((left, right) => left.name.localeCompare(right.name));
 }
 
 function parseQuests(rows) {
@@ -312,12 +373,24 @@ function parseQuests(rows) {
 
 function parseSkillModifiers(effect) {
   return {
-    attack: sumPercent(effect, [/(?:\+|plus )(\d+(?:\.\d+)?)%\s+(?:bonus\s+)?(?:Attack|ATK)/gi]),
-    defense: sumPercent(effect, [/(?:\+|plus )(\d+(?:\.\d+)?)%\s+(?:bonus\s+)?(?:Defense|DEF)/gi]),
-    hp: sumPercent(effect, [/(?:\+|plus )(\d+(?:\.\d+)?)%\s+(?:more\s+|bonus\s+)?(?:HP|Health)/gi]),
-    evasion: sumPercent(effect, [/(?:\+|plus )(\d+(?:\.\d+)?)%\s+(?:bonus\s+)?(?:Evasion|EVA)/gi]),
-    critChance: sumPercent(effect, [/(?:\+|plus )(\d+(?:\.\d+)?)%\s+(?:Critical Hit Chance|Crit Chance|CRIT)/gi]),
-    critDamage: sumPercent(effect, [/(?:\+|plus )(\d+(?:\.\d+)?)%\s+(?:Critical Hit Damage|Crit Damage)/gi])
+    attack: sumPercent(effect, [/(?:\+|plus )(\d+(?:\.\d+)?)%\s+(?:bonus\s+)?(?:Attack|ATK)\b/gi]),
+    defense: sumPercent(effect, [/(?:\+|plus )(\d+(?:\.\d+)?)%\s+(?:bonus\s+)?(?:Defense|DEF)\b/gi]),
+    hp: sumPercent(effect, [/(?:\+|plus )(\d+(?:\.\d+)?)%\s+(?:more\s+|bonus\s+)?(?:HP|Health)\b/gi]),
+    evasion: sumPercent(effect, [/(?:\+|plus )(\d+(?:\.\d+)?)%\s+(?:bonus\s+)?(?:Evasion|EVA)\b/gi]),
+    critChance: sumPercent(effect, [/(?:\+|plus )(\d+(?:\.\d+)?)%\s+(?:Critical Hit Chance|Crit(?:ical)? Chance|\bCRIT\b)/gi]),
+    critDamage: sumPercent(effect, [/(?:\+|plus )(\d+(?:\.\d+)?)%\s+(?:Critical Hit Damage|Crit(?:ical)? Damage)\b/gi])
+  };
+}
+
+function parseSkillFlatStats(effect) {
+  return {
+    attack: sumFlat(effect, [/(?:\+|plus )(\d+(?:\.\d+)?)\s+(?:Attack|ATK)\b/gi]),
+    defense: sumFlat(effect, [/(?:\+|plus )(\d+(?:\.\d+)?)\s+(?:Defense|DEF)\b/gi]),
+    hp: sumFlat(effect, [/(?:\+|plus )(\d+(?:\.\d+)?)\s+(?:Health|HP)\b/gi]),
+    evasion: 0,
+    critChance: 0,
+    critDamage: 0,
+    threat: sumFlat(effect, [/(?:\+|plus )(\d+(?:\.\d+)?)\s+Threat Rating\b/gi])
   };
 }
 
@@ -326,6 +399,17 @@ function sumPercent(value, patterns) {
   for (const pattern of patterns) {
     for (const match of value.matchAll(pattern)) {
       total += Number.parseFloat(match[1]) / 100;
+    }
+  }
+  return total;
+}
+
+function sumFlat(value, patterns) {
+  let total = 0;
+  const withoutPercents = value.replace(/\+\d+(?:\.\d+)?%[^.]*\./g, '');
+  for (const pattern of patterns) {
+    for (const match of withoutPercents.matchAll(pattern)) {
+      total += Number.parseFloat(match[1]);
     }
   }
   return total;
@@ -420,6 +504,10 @@ function titleCase(value) {
     .split(/\s+/)
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
+}
+
+function normalizeName(value) {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, '');
 }
 
 function parseCsv(csv) {

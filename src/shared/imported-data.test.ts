@@ -17,8 +17,15 @@ describe('generated game data', () => {
     expect(data.heroes.length).toBeGreaterThan(30);
     expect(data.items.length).toBeGreaterThan(1000);
     expect(data.skills.length).toBeGreaterThan(500);
+    expect(data.champions.length).toBeGreaterThan(10);
     expect(data.enchantments.length).toBeGreaterThan(50);
     expect(data.quests.length).toBeGreaterThan(80);
+  });
+
+  it('links base classes to promotions and innate skills', () => {
+    const soldier = data.heroes.find((hero) => hero.id === 'soldier');
+    expect(soldier?.promotedClassId).toBe('mercenary-soldier-class-promotion');
+    expect(soldier?.innateSkillIds).toContain('martial-master');
   });
 
   it('keeps Starforged stat milestones on items', () => {

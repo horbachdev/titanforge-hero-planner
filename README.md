@@ -33,7 +33,9 @@ Implemented:
 
 - Electron + Vite + React + TypeScript shell
 - Build-time CSV/XLSX importer
-- Hero class, level, seeds, skills, gear, quality, element, spirit, and Starforge selection
+- Hero class, Titan Soul promotion toggle, level, seeds, innate skills, learned skills, gear, quality, element, spirit, and Starforge selection
+- Champion leader skill selection for party-wide stat effects
+- Roster management with saved hero builds and team totals
 - Pure TypeScript stat calculation engine
 - Build comparison
 - Item browser
@@ -43,5 +45,6 @@ Prepared but not final:
 
 - Quest simulation module boundary
 - Exact combat parity against Ress' formulas
+- Exact affinity/spirit edge-case parity for every special-case item and champion behavior
 
 See `docs/formula-notes.md` for current formula translation notes and known gaps.
