@@ -16,17 +16,28 @@ This MVP implements the stat engine as pure TypeScript and keeps all imported ga
 - Quality multipliers are applied to item ATK, DEF, and HP.
 - Starforge is a per-equipped-item toggle. If the item has a Starforged milestone matching `+25% Base ATK, DEF and HP`, the engine applies a `1.25` multiplier to that item's base ATK, DEF, and HP before quality scaling.
 - Built-in elements and spirits are included in per-item end stats/effects.
-- Element affinity adds +10 element score for matching affinities; `All` affinity adds +5.
-- Spirit affinity increases the matching spirit effect by 25%.
+- Element affinity adds +10 element score for selected matching affinities; `All` affinity adds +5. Built-in elements are locked to the item and do not receive an additional affinity bonus.
+- Spirit affinity uses the matched effect columns extracted from Ress' `Skill Data` spirit rows. Built-in spirits are locked to the item and do not receive an additional matched-affinity bonus.
 - Skill effects are parsed into broad percent modifiers for ATK, DEF, HP, EVA, CRIT, and critical damage.
+- Roster presets are stored locally as separate team configurations. Champion leader skills are applied through the active roster, not through the individual Hero Builder stat panel.
 - Build export/import uses schema version `1`.
+
+## Ress Parity Audit
+
+- The tab shape now matches Ress at a high level: five hero build tabs plus one champion build tab, with the champion aura resolved only in roster/team context.
+- Ress final Hero output cells `E18:E23` read from hidden stat cells `AA140:AF140`. The MVP uses the same broad stat categories, but does not yet reproduce the complete hidden-cell chain.
+- Ress element points are summed in `AC110` and then drive innate/skill tiers through `AA114:AA118`. The app now counts and displays element points, but skill tier upgrades from element thresholds are not fully data-driven yet.
+- Ress spirit handling uses static and matched spirit columns in `Skill Data`; the app now mirrors the common static/matched spirit effects and Idol/Totem doubling, but this should be moved from code mapping to imported data before simulator parity.
+- Ress Champion `Champion 1` formulas calculate HP/ATK/DEF from rank tables, level/card-level offsets, seeds, Champion Soul, Familiar/Aurasong base stats, enchantment bonuses, and affinity checks. The app supports the same controls, but Champion stat parity is still incomplete.
+- Ress Champion gear formulas cap enchant stat additions with item base stats in several places, for example through `min(...)` branches for Familiar/Aurasong element and spirit stats. The MVP gear engine does not yet model every one of those cap branches.
 
 ## Current MVP Approximations
 
 - Level scaling uses deterministic MVP curves until the Ress hero stat formulas are translated cell-by-cell.
 - Element enchantments use imported element scores and a temporary stat conversion. This should be replaced with exact item-tier formulas from Ress' workbook.
-- Spirit effects use an explicit combat mapping and should be expanded as formulas are verified.
+- Spirit effects use an explicit Ress-derived combat mapping and should become importer-driven once the `Skill Data` matrix is normalized.
 - Conditional innate skills are currently approximated as their imported stat modifiers; gear-type-specific and battle-state-specific clauses still need Ress parity work.
+- Champion Card Level, Champion rank scaling, and Champion gear enchant caps still need exact Ress fixture tests.
 - Power is a display score only and is not used for combat simulation.
 - Quest combat and Monte Carlo simulation are intentionally deferred until formula parity tests are in place.
 

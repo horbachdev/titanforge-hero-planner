@@ -42,9 +42,12 @@ import type {
   BuildConfig,
   ChampionBuildConfig,
   ElementScores,
+  EnchantmentData,
   EquipmentSelection,
+  FlatStatModifiers,
   GameData,
   ItemData,
+  PercentModifiers,
   ResolvedGearLine,
   ResolvedChampionBuild,
   RosterConfig,
@@ -197,6 +200,17 @@ export function App(): JSX.Element {
     setIoMessage(`Saved "${copy.name}".`);
   }
 
+  function saveBuildAsNew(): void {
+    const copy = {
+      ...normalizedBuild,
+      id: createId('build'),
+      name: `${normalizedBuild.name} Copy`
+    };
+    setSavedBuilds((current) => [...current, copy]);
+    setActiveBuild(copy);
+    setIoMessage(`Saved "${copy.name}".`);
+  }
+
   function duplicateBuild(): void {
     updateActiveBuild((current) => ({
       ...current,
@@ -221,6 +235,26 @@ export function App(): JSX.Element {
     const roster = { ...defaultRoster(data), name: `Roster ${rosters.length + 1}` };
     setRosters((current) => [...current, roster]);
     setActiveRosterId(roster.id);
+  }
+
+  function duplicateRoster(): void {
+    const roster = {
+      ...activeRoster,
+      id: createId('roster'),
+      name: `${activeRoster.name} Copy`,
+      builds: activeRoster.builds.map((entry) => ({ ...entry }))
+    };
+    setRosters((current) => [...current, roster]);
+    setActiveRosterId(roster.id);
+  }
+
+  function deleteActiveRoster(): void {
+    if (rosters.length <= 1) {
+      return;
+    }
+    const remaining = rosters.filter((roster) => roster.id !== activeRoster.id);
+    setRosters(remaining);
+    setActiveRosterId(remaining[0]?.id ?? '');
   }
 
   function updateRoster(patch: Partial<RosterConfig>): void {
@@ -457,22 +491,39 @@ export function App(): JSX.Element {
               <h2>Stats</h2>
             </div>
             <StatGrid stats={resolvedBuild.stats} />
+            <div className="storage-panel">
+              <div className="storage-panel-head">
+                <h3>Build Storage</h3>
+                <span>{savedBuilds.length} saved · {activeRoster.name}</span>
+              </div>
             <div className="action-row">
               <button type="button" className="primary-button" onClick={saveBuild}>
                 <Save size={17} />
                 Save Build
               </button>
+                <button type="button" onClick={saveBuildAsNew}>
+                  <Save size={17} />
+                  Save Copy
+                </button>
               <button type="button" onClick={addCurrentToRoster}>
                 <UsersRound size={17} />
                 Add to {activeRoster.name}
               </button>
-              <button type="button" onClick={duplicateBuild}>
-                <Plus size={17} />
-                Duplicate
-              </button>
+                <button type="button" onClick={duplicateBuild}>
+                  <Plus size={17} />
+                  New Draft
+                </button>
+              </div>
             </div>
             <ElementPointsPanel scores={resolvedBuild.elementScores} />
-            <SavedBuildList builds={savedBuilds} onLoad={setActiveBuild} onDelete={setSavedBuilds} compact />
+            <SavedBuildList
+              builds={savedBuilds}
+              onLoad={setActiveBuild}
+              onDelete={setSavedBuilds}
+              onAddToRoster={(savedBuild) => updateRoster({ builds: upsertBuild(activeRoster.builds, savedBuild) })}
+              rosterName={activeRoster.name}
+              compact
+            />
             <GearSummary lines={resolvedBuild.gear} />
             {[...resolvedBuild.warnings, ...validationWarnings.map((warning) => warning.message)].length > 0 && (
               <div className="warning-box">
@@ -492,9 +543,12 @@ export function App(): JSX.Element {
           savedBuilds={savedBuilds}
           onActiveRosterChange={setActiveRosterId}
           onCreateRoster={createRoster}
+          onDuplicateRoster={duplicateRoster}
+          onDeleteRoster={deleteActiveRoster}
           onUpdateRoster={updateRoster}
           onLoadBuild={setActiveBuild}
           onAddSavedBuild={(savedBuild) => updateRoster({ builds: upsertBuild(activeRoster.builds, savedBuild) })}
+          onDeleteSavedBuild={setSavedBuilds}
           onRemoveBuild={(buildId) => updateRoster({ builds: activeRoster.builds.filter((entry) => entry.id !== buildId) })}
         />
       )}
@@ -550,9 +604,26 @@ function GearRow({ slotLabel, allowedTypes, selection, resolvedLine, buildLevel,
     [allowedTypes, maxTier]
   );
   const selectedItem = data.items.find((item) => item.id === selection.itemId);
-  const selectedElement = data.enchantments.find((entry) => entry.id === selection.elementId);
-  const selectedSpirit = data.enchantments.find((entry) => entry.id === selection.spiritId);
+  const builtInElement = selectedItem ? findBuiltInEnchantment(selectedItem.builtInElement, 'Element') : undefined;
+  const builtInSpirit = selectedItem ? findBuiltInEnchantment(selectedItem.builtInSpirit, 'Spirit') : undefined;
+  const elementLocked = Boolean(selectedItem?.builtInElement);
+  const spiritLocked = Boolean(selectedItem?.builtInSpirit);
+  const selectedElement = builtInElement ?? data.enchantments.find((entry) => entry.id === selection.elementId);
+  const selectedSpirit = builtInSpirit ?? data.enchantments.find((entry) => entry.id === selection.spiritId);
+  const elementSelectValue = builtInElement?.id ?? (elementLocked ? '__built-in-element' : selection.elementId);
+  const spiritSelectValue = builtInSpirit?.id ?? (spiritLocked ? '__built-in-spirit' : selection.spiritId);
   const starforgeAvailable = selectedItem ? getStarforgeStatMultiplier(selectedItem) > 1 : false;
+  const spiritEffectStats = resolvedLine ? spiritEffectEntries(resolvedLine.spiritModifiers, resolvedLine.spiritFlatStats) : [];
+
+  function handleItemChange(itemId: string): void {
+    const nextItem = data.items.find((item) => item.id === itemId);
+    onChange({
+      itemId,
+      elementId: !nextItem || nextItem.builtInElement ? '' : selection.elementId,
+      spiritId: !nextItem || nextItem.builtInSpirit ? '' : selection.spiritId,
+      starforged: nextItem && getStarforgeStatMultiplier(nextItem) > 1 ? selection.starforged : false
+    });
+  }
 
   return (
     <div className="gear-row">
@@ -560,7 +631,7 @@ function GearRow({ slotLabel, allowedTypes, selection, resolvedLine, buildLevel,
         {slotLabel}
         <div className="select-with-token">
           <ItemToken item={selectedItem} />
-          <select value={selection.itemId} onChange={(event) => onChange({ itemId: event.target.value })}>
+          <select value={selection.itemId} onChange={(event) => handleItemChange(event.target.value)}>
             <option value="">Empty</option>
             {items.map((item) => (
               <option key={item.id} value={item.id}>
@@ -584,8 +655,13 @@ function GearRow({ slotLabel, allowedTypes, selection, resolvedLine, buildLevel,
         Element
         <div className="select-with-token">
           <EnchantmentToken enchantment={selectedElement} type="element" />
-          <select value={selection.elementId} onChange={(event) => onChange({ elementId: event.target.value })}>
+          <select
+            value={elementSelectValue}
+            disabled={elementLocked}
+            onChange={(event) => onChange({ elementId: event.target.value })}
+          >
             <option value="">None</option>
+            {elementLocked && !builtInElement && <option value="__built-in-element">{selectedItem?.builtInElement}</option>}
             {data.enchantments
               .filter((entry) => entry.type === 'Element')
               .map((entry) => (
@@ -600,8 +676,13 @@ function GearRow({ slotLabel, allowedTypes, selection, resolvedLine, buildLevel,
         Spirit
         <div className="select-with-token">
           <EnchantmentToken enchantment={selectedSpirit} type="spirit" />
-          <select value={selection.spiritId} onChange={(event) => onChange({ spiritId: event.target.value })}>
+          <select
+            value={spiritSelectValue}
+            disabled={spiritLocked}
+            onChange={(event) => onChange({ spiritId: event.target.value })}
+          >
             <option value="">None</option>
+            {spiritLocked && !builtInSpirit && <option value="__built-in-spirit">{selectedItem?.builtInSpirit}</option>}
             {data.enchantments
               .filter((entry) => entry.type === 'Spirit')
               .map((entry) => (
@@ -633,6 +714,13 @@ function GearRow({ slotLabel, allowedTypes, selection, resolvedLine, buildLevel,
               <span key={label}>{label} {value}</span>
             ))}
           </div>
+          {spiritEffectStats.length > 0 && (
+            <div className="mini-stats effect-stats">
+              {spiritEffectStats.map(([label, value]) => (
+                <span key={label}>Spirit {value} {label}</span>
+              ))}
+            </div>
+          )}
           <ElementPointStrip scores={resolvedLine.elementScores} />
           <div className="source-row">
             {resolvedLine.elementSources.map((source) => <span key={`element-${source}`}>Element: {source}</span>)}
@@ -653,9 +741,12 @@ function RosterPanel({
   savedBuilds,
   onActiveRosterChange,
   onCreateRoster,
+  onDuplicateRoster,
+  onDeleteRoster,
   onUpdateRoster,
   onLoadBuild,
   onAddSavedBuild,
+  onDeleteSavedBuild,
   onRemoveBuild
 }: {
   activeRoster: RosterConfig;
@@ -663,9 +754,12 @@ function RosterPanel({
   savedBuilds: BuildConfig[];
   onActiveRosterChange: (id: string) => void;
   onCreateRoster: () => void;
+  onDuplicateRoster: () => void;
+  onDeleteRoster: () => void;
   onUpdateRoster: (patch: Partial<RosterConfig>) => void;
   onLoadBuild: (build: BuildConfig) => void;
   onAddSavedBuild: (build: BuildConfig) => void;
+  onDeleteSavedBuild: (updater: (builds: BuildConfig[]) => BuildConfig[]) => void;
   onRemoveBuild: (id: string) => void;
 }): JSX.Element {
   const activeChampion = data.champions.find((champion) => champion.id === activeRoster.championId) ?? data.champions[0];
@@ -689,6 +783,21 @@ function RosterPanel({
     { attack: 0, defense: 0, hp: 0, evasion: 0, critChance: 0, critDamage: 0, threat: 0, power: 0 }
   );
   const totalElementScores = resolved.reduce((acc, entry) => mergeElementScores(acc, entry.elementScores), {} as ElementScores);
+  const rosterSummaries = rosters.map((roster) => {
+    const rosterChampion = data.champions.find((champion) => champion.id === roster.championId) ?? data.champions[0];
+    const rosterChampionResolved = rosterChampion
+      ? resolveChampion(rosterChampion, data, roster.championRank, roster.championPowerUps)
+      : null;
+    const rosterPower = roster.builds
+      .map((build) => calculateHeroStats(build, data, { championSkillId: rosterChampionResolved?.leaderSkill?.id }))
+      .reduce((total, entry) => total + entry.stats.power, 0);
+    return {
+      roster,
+      championName: rosterChampion?.name ?? 'None',
+      heroCount: roster.builds.length,
+      power: rosterPower
+    };
+  });
 
   return (
     <main className="roster-grid">
@@ -716,6 +825,35 @@ function RosterPanel({
             <Plus size={17} />
             New Roster
           </button>
+          <div className="roster-actions">
+            <button type="button" onClick={onDuplicateRoster}>
+              <Plus size={17} />
+              Duplicate
+            </button>
+            <button type="button" disabled={rosters.length <= 1} onClick={onDeleteRoster}>
+              <Trash2 size={17} />
+              Delete
+            </button>
+          </div>
+        </div>
+        <div className="roster-save-state">
+          <Save size={15} />
+          <span>{rosters.length} saved roster{rosters.length === 1 ? '' : 's'} · autosaved locally</span>
+        </div>
+        <div className="saved-roster-grid">
+          {rosterSummaries.map((summary) => (
+            <button
+              key={summary.roster.id}
+              type="button"
+              className={summary.roster.id === activeRoster.id ? 'saved-roster-card active' : 'saved-roster-card'}
+              onClick={() => onActiveRosterChange(summary.roster.id)}
+            >
+              <strong>{summary.roster.name}</strong>
+              <span>{summary.heroCount} heroes</span>
+              <span>{summary.championName}</span>
+              <span>PWR {summary.power.toLocaleString()}</span>
+            </button>
+          ))}
         </div>
         <ChampionRosterControls activeRoster={activeRoster} onUpdateRoster={onUpdateRoster} />
         <div className="roster-aura-note">
@@ -741,15 +879,13 @@ function RosterPanel({
           </div>
         </div>
         <div className="saved-build-picker">
-          <h3>Saved Builds</h3>
-          <div className="saved-build-list">
-            {savedBuilds.map((savedBuild) => (
-              <button key={savedBuild.id} type="button" onClick={() => onAddSavedBuild(savedBuild)}>
-                <HeroToken hero={getBaseHero(data, savedBuild.heroClassId)} />
-                {savedBuild.name}
-              </button>
-            ))}
-          </div>
+          <SavedBuildList
+            builds={savedBuilds}
+            onLoad={onLoadBuild}
+            onDelete={onDeleteSavedBuild}
+            onAddToRoster={onAddSavedBuild}
+            rosterName={activeRoster.name}
+          />
         </div>
         <div className="roster-list">
           {resolved.length === 0 && <p className="muted">No heroes in this roster yet.</p>}
@@ -1030,9 +1166,8 @@ function ChampionBuildPanel({
           <span>{champion?.guest ? 'Guest champion' : 'Champion'}</span>
           <span>{champion?.role ?? 'unknown'}</span>
           <span>{champion?.element || 'No element'}</span>
-          <span>Unlock {champion?.unlockCost || 'Free'}</span>
-          <span>{champion?.prerequisite || 'No prerequisite'}</span>
           <span>Max rank {maxRank}</span>
+          <span>{build.championSoul ? 'Soul active' : 'No Soul'}</span>
         </div>
 
         <div className="seed-row champion-seeds">
@@ -1092,21 +1227,6 @@ function ChampionBuildPanel({
             />
           </div>
         </section>
-
-        {champion && (
-          <section className="subsection">
-            <h3>Rank Rewards</h3>
-            <div className="rank-reward-list champion-rank-list">
-              {champion.rankRewards.map((reward) => (
-                <div key={`${reward.rankLabel}-${reward.reward}`}>
-                  <span>Rank {reward.rankLabel}</span>
-                  <strong>{reward.coinsFormula || (reward.coinsNeeded > 0 ? `${reward.coinsNeeded} coins` : 'Final upgrade')}</strong>
-                  <p>{reward.reward || 'Unlocks base leader skill.'}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
       </section>
 
       <aside className="panel stat-panel">
@@ -1135,19 +1255,13 @@ function ChampionBuildPanel({
           <span>Champion aura</span>
           <strong>{resolved.leaderSkill?.name ?? 'None'}</strong>
         </div>
+        <div className="champion-build-summary">
+          <span>Rank <strong>{build.rank}</strong></span>
+          <span>Level <strong>{build.level}</strong></span>
+          <span>Power-ups <strong>{build.powerUps}</strong></span>
+          <span>Soul <strong>{build.championSoul ? 'On' : 'Off'}</strong></span>
+        </div>
         <GearSummary lines={resolved.gear} />
-        {champion && champion.elementBreakpoints.length > 0 && (
-          <>
-            <div className="champion-section-label">Element breakpoints</div>
-            <div className="element-breakpoints">
-              {champion.elementBreakpoints.map((breakpoint) => (
-                <span key={`${champion.id}-${breakpoint.rank}`}>
-                  R{breakpoint.rank} <strong>{breakpoint.elementValue}</strong>
-                </span>
-              ))}
-            </div>
-          </>
-        )}
         {resolved.warnings.length > 0 && (
           <div className="warning-box">
             {resolved.warnings.map((warning) => (
@@ -1271,33 +1385,58 @@ function SavedBuildList({
   builds,
   onLoad,
   onDelete,
+  onAddToRoster,
+  rosterName,
   compact = false
 }: {
   builds: BuildConfig[];
   onLoad: (build: BuildConfig) => void;
   onDelete: (updater: (builds: BuildConfig[]) => BuildConfig[]) => void;
+  onAddToRoster?: (build: BuildConfig) => void;
+  rosterName?: string;
   compact?: boolean;
 }): JSX.Element {
   return (
     <div className={compact ? 'saved-build-list compact-list' : 'saved-build-list'}>
-      <h3>Saved Builds</h3>
+      <div className="saved-build-head">
+        <h3>Saved Builds</h3>
+        <span>{builds.length}</span>
+      </div>
       {builds.length === 0 && <p className="muted">No saved builds yet.</p>}
       {builds.map((entry) => {
         const hero = getEffectiveHero(data, entry.heroClassId, entry.promoted);
+        const resolved = calculateHeroStats(entry, data);
         return (
           <div className="saved-build-row" key={entry.id}>
-            <button type="button" onClick={() => onLoad(entry)}>
+            <button type="button" className="saved-build-main" onClick={() => onLoad(entry)}>
               <HeroToken hero={hero} />
-              <span>{entry.name}</span>
+              <span>
+                <strong>{entry.name}</strong>
+                <small>
+                  {hero?.name ?? 'Unknown'} | Lv {entry.level} | PWR {resolved.stats.power.toLocaleString()}
+                </small>
+              </span>
             </button>
-            <button
-              type="button"
-              className="icon-button"
-              aria-label={`Delete ${entry.name}`}
-              onClick={() => onDelete((current) => current.filter((build) => build.id !== entry.id))}
-            >
-              <Trash2 size={15} />
-            </button>
+            <div className="saved-build-actions">
+              <button type="button" onClick={() => onLoad(entry)}>Load</button>
+              {onAddToRoster && (
+                <button type="button" onClick={() => onAddToRoster(entry)}>
+                  <UsersRound size={15} />
+                  {rosterName ? `Add` : 'Add'}
+                </button>
+              )}
+              <button
+                type="button"
+                className="icon-button"
+                aria-label={`Delete ${entry.name}`}
+                onClick={() => onDelete((current) => current.filter((build) => build.id !== entry.id))}
+              >
+                <Trash2 size={15} />
+              </button>
+            </div>
+            {rosterName && onAddToRoster && (
+              <span className="saved-build-target">Roster: {rosterName}</span>
+            )}
           </div>
         );
       })}
@@ -1312,11 +1451,19 @@ function GearSummary({ lines }: { lines: ResolvedGearLine[] }): JSX.Element {
         <div className="summary-row" key={line.slotId}>
           <span>{line.slotLabel}</span>
           <strong>{line.itemName}</strong>
+          <div className="summary-enchants">
+            <span>Element {gearSourceLabel(line.elementSources)}</span>
+            <span>Spirit {gearSourceLabel(line.spiritSources)}</span>
+          </div>
           {line.starforged && <em>Starforged</em>}
         </div>
       ))}
     </div>
   );
+}
+
+function gearSourceLabel(sources: string[]): string {
+  return sources[0]?.replace(/\s+built-in$/i, '') || 'None';
 }
 
 function StatGrid({ stats }: { stats: StatBlock }): JSX.Element {
@@ -1455,6 +1602,62 @@ function itemStatEntries(stats: { attack: number; defense: number; hp: number; e
       String(label),
       `${Number(value).toLocaleString()}${isPercent ? '%' : ''}`
     ]) as Array<[string, string]>;
+}
+
+function spiritEffectEntries(modifiers: PercentModifiers, flatStats: FlatStatModifiers): Array<[string, string]> {
+  const percentEntries: Array<[keyof PercentModifiers, string]> = [
+    ['attack', 'ATK'],
+    ['defense', 'DEF'],
+    ['hp', 'HP'],
+    ['evasion', 'EVA'],
+    ['critChance', 'CRIT'],
+    ['critDamage', 'CDMG']
+  ];
+  const flatEntries: Array<[keyof FlatStatModifiers, string, boolean]> = [
+    ['attack', 'ATK', false],
+    ['defense', 'DEF', false],
+    ['hp', 'HP', false],
+    ['evasion', 'EVA', true],
+    ['critChance', 'CRIT', true],
+    ['critDamage', 'CDMG', true],
+    ['threat', 'Threat', false]
+  ];
+
+  return [
+    ...percentEntries
+      .filter(([key]) => modifiers[key] > 0)
+      .map(([key, label]) => [label, formatPercentBonus(modifiers[key] * 100)] as [string, string]),
+    ...flatEntries
+      .filter(([key]) => flatStats[key] > 0)
+      .map(([key, label, isPercent]) => [
+        label,
+        isPercent ? formatPercentBonus(flatStats[key]) : `+${flatStats[key].toLocaleString()}`
+      ] as [string, string])
+  ];
+}
+
+function formatPercentBonus(value: number): string {
+  const rounded = Math.round(value * 100) / 100;
+  return `+${rounded.toLocaleString()}%`;
+}
+
+function findBuiltInEnchantment(name: string, type: 'Element' | 'Spirit'): EnchantmentData | undefined {
+  const normalizedName = normalizeEnchantmentName(name);
+  if (!normalizedName) {
+    return undefined;
+  }
+  return data.enchantments.find(
+    (entry) => entry.type === type && normalizeEnchantmentName(entry.name) === normalizedName
+  );
+}
+
+function normalizeEnchantmentName(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/[\u2019']/g, '')
+    .replace(/\(.+?\)/g, '')
+    .replace(/\b(element|spirit)\b/g, '')
+    .replace(/[^a-z0-9]+/g, '');
 }
 
 function elementScoreEntries(scores: ElementScores): Array<[string, number]> {

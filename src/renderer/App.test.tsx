@@ -13,8 +13,11 @@ describe('App', () => {
     expect(screen.getByRole('heading', { name: 'Hero Builder' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Hero 1' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Save Build/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Save Copy/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Add to Main Roster/i })).toBeInTheDocument();
     expect(screen.getByText('Element Points')).toBeInTheDocument();
+    expect(screen.getAllByText(/Element None/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Spirit None/i).length).toBeGreaterThan(0);
     expect(screen.getByText('ATK')).toBeInTheDocument();
   });
 
@@ -44,6 +47,14 @@ describe('App', () => {
     expect(screen.getByText('Team Totals')).toBeInTheDocument();
     expect(screen.getByText('Champion aura')).toBeInTheDocument();
     expect(screen.getByText('Element Points')).toBeInTheDocument();
+    expect(screen.getByText(/autosaved locally/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Duplicate/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Delete/i })).toBeDisabled();
+    expect(screen.getByText('Saved Builds')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: /New Roster/i }));
+    expect(screen.getAllByDisplayValue('Roster 2').length).toBeGreaterThan(0);
+    expect(screen.getByRole('button', { name: /Delete/i })).not.toBeDisabled();
   });
 
   it('shows the champion builder with champion gear controls', () => {
@@ -58,5 +69,6 @@ describe('App', () => {
     expect(screen.getAllByText('Familiar').length).toBeGreaterThan(0);
     expect(screen.getAllByText('Aurasong').length).toBeGreaterThan(0);
     expect(screen.getByRole('button', { name: /Set for Main Roster/i })).toBeInTheDocument();
+    expect(screen.queryByText('Rank Rewards')).not.toBeInTheDocument();
   });
 });

@@ -570,8 +570,9 @@ function resolveElementStats(
   const sources: string[] = [];
   const affinityBonuses: string[] = [];
   const elementScores: ElementScores = {};
+  const builtInElement = findEnchantmentByName(enchantments, item.builtInElement, 'Element');
 
-  const selected = enchantments.find((candidate) => candidate.id === elementId);
+  const selected = builtInElement ? undefined : enchantments.find((candidate) => candidate.id === elementId);
   if (selected) {
     addElementScoreSource(elementScores, selected, elementAffinityBonus(item, selected));
     sources.push(selected.name);
@@ -581,14 +582,9 @@ function resolveElementStats(
     }
   }
 
-  const builtInElement = findEnchantmentByName(enchantments, item.builtInElement, 'Element');
   if (builtInElement) {
-    addElementScoreSource(elementScores, builtInElement, elementAffinityBonus(item, builtInElement));
+    addElementScoreSource(elementScores, builtInElement, 0);
     sources.push(`${builtInElement.name} built-in`);
-    const bonus = elementAffinityBonus(item, builtInElement);
-    if (bonus > 0) {
-      affinityBonuses.push(`${item.elementalAffinity} affinity on built-in: +${bonus} Element`);
-    }
   }
 
   const score = totalElementScore(elementScores);
@@ -619,8 +615,8 @@ function resolveSpiritEffects(
   const flatStats = { ...EMPTY_FLAT_STATS };
   const sources: string[] = [];
   const affinityBonuses: string[] = [];
-  const selectedSpirit = enchantments.find((candidate) => candidate.id === spiritId)?.name ?? '';
   const builtInSpirit = findEnchantmentByName(enchantments, item.builtInSpirit, 'Spirit')?.name ?? item.builtInSpirit;
+  const selectedSpirit = builtInSpirit ? '' : enchantments.find((candidate) => candidate.id === spiritId)?.name ?? '';
   const slotMultiplier = isTotemItem(item) ? 2 : 1;
 
   for (const { spiritName, builtIn } of [
@@ -632,7 +628,7 @@ function resolveSpiritEffects(
     }
     const key = spiritKey(spiritName);
     const effect = SPIRIT_EFFECTS[key];
-    const affinityMatches = spiritAffinityMatches(item, key);
+    const affinityMatches = !builtIn && spiritAffinityMatches(item, key);
     const baseModifiers = affinityMatches ? effect?.matchedModifiers ?? effect?.modifiers ?? {} : effect?.modifiers ?? {};
     const baseFlatStats = affinityMatches ? effect?.matchedFlatStats ?? effect?.flatStats ?? {} : effect?.flatStats ?? {};
 

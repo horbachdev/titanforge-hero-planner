@@ -97,6 +97,27 @@ describe('calculateHeroStats', () => {
     expect(affinity?.affinityBonuses.join(' ')).toContain('affinity');
   });
 
+  it('does not apply selected enchants or affinity bonuses to built-in elements', () => {
+    const item = data.items.find((entry) => entry.name === 'Arboreal Blade');
+    const natureElement = data.enchantments.find((entry) => entry.name === 'Nature Element');
+    const lightElement = data.enchantments.find((entry) => entry.name === 'Apotheosis Element');
+    expect(item).toBeDefined();
+    expect(natureElement).toBeDefined();
+    expect(lightElement).toBeDefined();
+
+    const itemWithAffinity = {
+      ...item!,
+      elementalAffinity: 'Earth'
+    };
+    const builtInLine = resolveGearLine(itemWithAffinity, 'normal', false, lightElement!.id, '', data);
+    const nativeElementScore = Object.values(natureElement!.elementScores).reduce((total, score) => total + score, 0);
+
+    expect(Object.values(builtInLine.elementScores).reduce((total, score) => total + score, 0)).toBe(nativeElementScore);
+    expect(builtInLine.elementSources).toContain('Nature Element built-in');
+    expect(builtInLine.elementSources).not.toContain(lightElement!.name);
+    expect(builtInLine.affinityBonuses.join(' ')).not.toContain('affinity');
+  });
+
   it('recognizes built-in conditional spirits without applying static boss-only modifiers', () => {
     const soldier = data.heroes.find((hero) => hero.id === 'soldier');
     const item = data.items.find((entry) => entry.id === 'mundra-s-masher');
@@ -172,6 +193,30 @@ describe('calculateHeroStats', () => {
     expect(withSpirit.stats.critChance - withoutSpirit.stats.critChance).toBe(3);
     expect(idolLine.spiritModifiers.hp).toBe(0.3);
     expect(idolLine.affinityBonuses.join(' ')).toContain('x2 spirit effect');
+  });
+
+  it('does not apply selected spirits or matched affinity to built-in spirits', () => {
+    const sword = data.items.find((entry) => entry.name === "Hero's Sword");
+    const titan = data.enchantments.find((entry) => entry.name === 'Titan Spirit');
+    const wolf = data.enchantments.find((entry) => entry.name === 'Wolf Spirit');
+    expect(sword).toBeDefined();
+    expect(titan).toBeDefined();
+    expect(wolf).toBeDefined();
+
+    const builtInSpiritItem = {
+      ...sword!,
+      spiritAffinity: 'Titan Solemnity',
+      builtInSpirit: 'Titan Spirit'
+    };
+    const builtInLine = resolveGearLine(builtInSpiritItem, 'normal', false, '', wolf!.id, data);
+    const selectedLine = resolveGearLine({ ...builtInSpiritItem, builtInSpirit: '' }, 'normal', false, '', titan!.id, data);
+
+    expect(builtInLine.spiritSources).toContain('Titan Spirit built-in');
+    expect(builtInLine.spiritSources).not.toContain('Wolf Spirit');
+    expect(builtInLine.spiritModifiers.hp).toBe(0.15);
+    expect(builtInLine.spiritModifiers.attack).toBe(0);
+    expect(builtInLine.affinityBonuses.join(' ')).not.toContain('Ress matched spirit columns');
+    expect(selectedLine.spiritModifiers.hp).toBe(0.2);
   });
 
   it('normalizes imported item crit and evasion percentages as percentage points', () => {
