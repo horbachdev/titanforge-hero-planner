@@ -216,10 +216,8 @@ export interface RosterConfig {
   schemaVersion: 1;
   id: string;
   name: string;
-  championId: string;
-  championRank: number;
-  championPowerUps: number;
-  builds: BuildConfig[];
+  heroBuildIds: Array<string | null>;
+  championBuildId: string;
 }
 
 export interface ChampionBuildConfig {

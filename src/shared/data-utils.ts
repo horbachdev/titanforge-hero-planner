@@ -112,18 +112,12 @@ export function defaultBuild(data: GameData): BuildConfig {
 }
 
 export function defaultRoster(data: GameData): RosterConfig {
-  const champion = data.champions[0];
-  const maxRank = champion
-    ? Math.max(...champion.rankRewards.filter((reward) => !reward.repeatable).map((reward) => reward.rank), 1)
-    : 1;
   return {
     schemaVersion: 1,
     id: createId('roster'),
     name: 'Main Roster',
-    championId: champion?.id ?? '',
-    championRank: maxRank,
-    championPowerUps: 0,
-    builds: []
+    heroBuildIds: [null, null, null, null, null],
+    championBuildId: ''
   };
 }
 

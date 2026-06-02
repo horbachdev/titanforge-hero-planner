@@ -7,68 +7,78 @@ describe('App', () => {
     window.localStorage.clear();
   });
 
-  it('renders the builder and stat surface', () => {
+  it('renders the create hero workflow with save, load, and reset', () => {
     render(<App />);
 
-    expect(screen.getByRole('heading', { name: 'Hero Builder' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Hero 1' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Save Build/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Save Copy/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Add to Main Roster/i })).toBeInTheDocument();
-    expect(screen.getByText('Element Points')).toBeInTheDocument();
-    expect(screen.getAllByText(/Element None/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Spirit None/i).length).toBeGreaterThan(0);
-    expect(screen.getByText('ATK')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Create Hero' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Create Hero' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Save Hero/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Reset' })).toBeInTheDocument();
+    expect(screen.getByLabelText('Load Hero')).toBeDisabled();
+
+    fireEvent.change(screen.getByDisplayValue('New Build'), { target: { value: 'Roster Hero A' } });
+    fireEvent.click(screen.getByRole('button', { name: /Save Hero/i }));
+
+    expect(screen.getByLabelText('Load Hero')).not.toBeDisabled();
+    expect(screen.getByText(/1 saved/i)).toBeInTheDocument();
   });
 
-  it('renders five hero build tabs and a champion build tab', () => {
+  it('lists saved heroes in the library and edit opens the hero builder', () => {
     render(<App />);
 
-    for (const tab of ['Hero 1', 'Hero 2', 'Hero 3', 'Hero 4', 'Hero 5', 'Champion']) {
-      expect(screen.getByRole('button', { name: tab })).toBeInTheDocument();
-    }
+    fireEvent.change(screen.getByDisplayValue('New Build'), { target: { value: 'Edit Me Hero' } });
+    fireEvent.click(screen.getByRole('button', { name: /Save Hero/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'Library' }));
+
+    expect(screen.getByRole('heading', { name: 'Library' })).toBeInTheDocument();
+    expect(screen.getByText('Edit Me Hero')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Edit' }));
+    expect(screen.getByRole('heading', { name: 'Create Hero' })).toBeInTheDocument();
+    expect(screen.getByDisplayValue('Edit Me Hero')).toBeInTheDocument();
   });
 
-  it('searches imported items in the item database', () => {
+  it('saves champions and exposes them in the library', () => {
     render(<App />);
 
-    fireEvent.click(screen.getByRole('button', { name: /Items/i }));
-    fireEvent.change(screen.getByPlaceholderText('Search items'), { target: { value: 'Avatar Core' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Create Champion' }));
+    expect(screen.getByRole('heading', { name: 'Create Champion' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Save Champion/i })).toBeInTheDocument();
 
-    expect(screen.getByText('Avatar Core')).toBeInTheDocument();
+    fireEvent.change(screen.getByDisplayValue('Champion 1'), { target: { value: 'Roster Champion A' } });
+    fireEvent.click(screen.getByRole('button', { name: /Save Champion/i }));
+    fireEvent.click(screen.getByRole('button', { name: 'Library' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Champions' }));
+
+    expect(screen.getByText('Roster Champion A')).toBeInTheDocument();
   });
 
-  it('shows roster management and champion controls', () => {
+  it('builds a roster from saved hero and champion references', () => {
     render(<App />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Roster' }));
+    fireEvent.change(screen.getByDisplayValue('New Build'), { target: { value: 'Roster Hero A' } });
+    fireEvent.click(screen.getByRole('button', { name: /Save Hero/i }));
 
-    expect(screen.getByRole('heading', { name: 'Roster' })).toBeInTheDocument();
-    expect(screen.getByText('Team Totals')).toBeInTheDocument();
-    expect(screen.getByText('Champion aura')).toBeInTheDocument();
-    expect(screen.getByText('Element Points')).toBeInTheDocument();
-    expect(screen.getByText(/autosaved locally/i)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Duplicate/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Delete/i })).toBeDisabled();
-    expect(screen.getByText('Saved Builds')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Create Champion' }));
+    fireEvent.change(screen.getByDisplayValue('Champion 1'), { target: { value: 'Roster Champion A' } });
+    fireEvent.click(screen.getByRole('button', { name: /Save Champion/i }));
 
-    fireEvent.click(screen.getByRole('button', { name: /New Roster/i }));
-    expect(screen.getAllByDisplayValue('Roster 2').length).toBeGreaterThan(0);
-    expect(screen.getByRole('button', { name: /Delete/i })).not.toBeDisabled();
-  });
+    fireEvent.click(screen.getByRole('button', { name: 'Roster Management' }));
+    expect(screen.getByRole('heading', { name: 'Roster Management' })).toBeInTheDocument();
+    expect(screen.getByText('Main Roster')).toBeInTheDocument();
+    expect(screen.getByText('0 / 5')).toBeInTheDocument();
 
-  it('shows the champion builder with champion gear controls', () => {
-    render(<App />);
+    const heroSelect = screen.getAllByLabelText('Load Hero')[0] as HTMLSelectElement;
+    const heroOption = Array.from(heroSelect.options).find((option) => option.textContent === 'Roster Hero A');
+    expect(heroOption).toBeDefined();
+    fireEvent.change(heroSelect, { target: { value: heroOption?.value } });
 
-    fireEvent.click(screen.getByRole('button', { name: 'Champion' }));
+    const championSelect = screen.getByLabelText('Load Champion') as HTMLSelectElement;
+    const championOption = Array.from(championSelect.options).find((option) => option.textContent === 'Roster Champion A');
+    expect(championOption).toBeDefined();
+    fireEvent.change(championSelect, { target: { value: championOption?.value } });
 
-    expect(screen.getByRole('heading', { name: 'Champion' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Champion Stats' })).toBeInTheDocument();
-    expect(screen.getAllByText('Argon').length).toBeGreaterThan(0);
-    expect(screen.getByText('Champion Gear')).toBeInTheDocument();
-    expect(screen.getAllByText('Familiar').length).toBeGreaterThan(0);
-    expect(screen.getAllByText('Aurasong').length).toBeGreaterThan(0);
-    expect(screen.getByRole('button', { name: /Set for Main Roster/i })).toBeInTheDocument();
-    expect(screen.queryByText('Rank Rewards')).not.toBeInTheDocument();
+    expect(screen.getByText('1 / 5')).toBeInTheDocument();
+    expect(screen.getAllByText('Roster Champion A').length).toBeGreaterThan(0);
   });
 });

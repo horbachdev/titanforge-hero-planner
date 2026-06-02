@@ -157,10 +157,28 @@ h3 {
   align-items: start;
 }
 
+.roster-workspace {
+  display: grid;
+  grid-template-columns: minmax(390px, 0.78fr) minmax(560px, 1fr) minmax(330px, 0.64fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.roster-workspace > .champion-builder-grid {
+  grid-column: 2 / -1;
+  width: 100%;
+}
+
 .io-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 18px;
+}
+
+.library-view,
+.roster-management-view {
+  width: min(1260px, 100%);
+  margin: 0 auto;
 }
 
 .panel {
@@ -171,6 +189,7 @@ h3 {
 }
 
 .builder-panel,
+.roster-panel,
 .stat-panel,
 .wide-panel,
 .io-grid .panel {
@@ -446,6 +465,10 @@ h3 {
 
 .storage-panel .action-row {
   margin-top: 0;
+}
+
+.storage-load-field {
+  margin-top: 2px;
 }
 
 .storage-panel-head,
@@ -816,6 +839,15 @@ h3 {
   font-weight: 800;
 }
 
+.roster-panel {
+  display: grid;
+  gap: 12px;
+}
+
+.roster-panel .panel-title {
+  margin-bottom: 0;
+}
+
 .saved-roster-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
@@ -889,6 +921,244 @@ h3 {
   color: #21332b;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.roster-slot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+  gap: 10px;
+}
+
+.roster-slot-card {
+  display: grid;
+  gap: 9px;
+  align-content: start;
+  min-width: 0;
+  padding: 11px;
+  border: 1px solid #d7dfda;
+  border-radius: 8px;
+  background: #fbfcfb;
+}
+
+.roster-slot-card.active {
+  border-color: #1f6a57;
+  background: #eff7f4;
+  box-shadow: inset 0 0 0 1px rgba(31, 106, 87, 0.18);
+}
+
+.roster-slot-card.champion-slot {
+  background: #fffcf4;
+}
+
+.roster-slot-card.champion-slot.active {
+  border-color: #7c5a21;
+  background: #fff8eb;
+  box-shadow: inset 0 0 0 1px rgba(124, 90, 33, 0.2);
+}
+
+.roster-slot-main {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  justify-content: start;
+  gap: 9px;
+  min-height: 42px;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  text-align: left;
+}
+
+.roster-slot-main:hover {
+  border: 0;
+}
+
+.roster-slot-main span,
+.roster-slot-main strong,
+.roster-slot-main small {
+  display: block;
+  min-width: 0;
+}
+
+.roster-slot-main strong {
+  overflow: hidden;
+  color: #1f3028;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.roster-slot-main small {
+  overflow: hidden;
+  margin-top: 2px;
+  color: #62726a;
+  font-size: 11px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.roster-slot-card .muted {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.slot-load-field {
+  gap: 5px;
+  color: #68786f;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.slot-load-field select {
+  min-height: 32px;
+  padding: 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.roster-slot-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.champion-slot .roster-slot-actions {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.roster-slot-actions button {
+  min-height: 32px;
+  padding: 0 8px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.team-total-panel {
+  display: grid;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid #e0e7e3;
+}
+
+.library-panel {
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+}
+
+.library-panel .panel-title {
+  margin-bottom: 0;
+}
+
+.library-filter {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  width: fit-content;
+  padding: 5px;
+  border: 1px solid #c9d3ce;
+  border-radius: 8px;
+  background: #f8faf9;
+}
+
+.library-filter button {
+  min-width: 92px;
+  min-height: 34px;
+  border-color: transparent;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.library-filter button.active {
+  color: #ffffff;
+  background: #245b49;
+}
+
+.library-section {
+  display: grid;
+  gap: 10px;
+}
+
+.library-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 4px;
+  border-top: 1px solid #e0e7e3;
+}
+
+.library-section-head span {
+  color: #64746c;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.library-list {
+  display: grid;
+  gap: 10px;
+}
+
+.library-card {
+  display: grid;
+  grid-template-columns: minmax(260px, 1.15fr) minmax(220px, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #d7dfda;
+  border-radius: 8px;
+  background: #fbfcfb;
+}
+
+.library-card-main {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 9px;
+  align-items: center;
+  min-width: 0;
+}
+
+.library-card-main span,
+.library-card-main strong,
+.library-card-main small {
+  display: block;
+  min-width: 0;
+}
+
+.library-card-main strong {
+  overflow: hidden;
+  color: #1f3028;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.library-card-main small {
+  overflow: hidden;
+  color: #64746c;
+  font-size: 12px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.library-card-actions {
+  display: flex;
+  gap: 7px;
+  justify-content: end;
+}
+
+.library-card-actions button {
+  min-height: 34px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.compact-aura-chip {
+  min-height: 48px;
 }
 
 .roster-list {
@@ -1215,8 +1485,13 @@ h3 {
   .topbar,
   .builder-grid,
   .roster-grid,
+  .roster-workspace,
   .io-grid {
     grid-template-columns: 1fr;
+  }
+
+  .roster-workspace > .champion-builder-grid {
+    grid-column: auto;
   }
 
   .topbar {
@@ -1234,8 +1509,11 @@ h3 {
   .gear-row,
   .roster-toolbar,
   .roster-actions,
+  .roster-slot-actions,
   .champion-controls,
   .roster-card,
+  .roster-slot-card,
+  .library-card,
   .saved-build-row,
   .summary-row,
   .champion-card-head,
@@ -1255,8 +1533,20 @@ h3 {
     display: grid;
   }
 
+  .roster-slot-actions {
+    grid-template-columns: 1fr;
+  }
+
   .saved-build-actions {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .library-card-actions {
+    justify-content: stretch;
+  }
+
+  .library-card-actions button {
+    flex: 1;
   }
 }

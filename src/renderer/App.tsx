@@ -4,7 +4,6 @@ import {
   Crown,
   Database,
   GitCompare,
-  Hammer,
   Plus,
   Save,
   Search,
@@ -48,6 +47,7 @@ import type {
   GameData,
   ItemData,
   PercentModifiers,
+  ResolvedBuild,
   ResolvedGearLine,
   ResolvedChampionBuild,
   RosterConfig,
@@ -58,17 +58,16 @@ import { ChampionToken, EnchantmentToken, HeroToken, ItemToken, SkillToken, Visu
 
 const data = rawGameData as GameData;
 const CURRENT_BUILD_KEY = 'shopTitansHeroBuilder.currentBuild';
-const HERO_BUILDS_KEY = 'shopTitansHeroBuilder.heroBuilds';
 const CHAMPION_BUILD_KEY = 'shopTitansHeroBuilder.championBuild';
 const SAVED_BUILDS_KEY = 'shopTitansHeroBuilder.savedBuilds';
+const SAVED_CHAMPIONS_KEY = 'shopTitansHeroBuilder.savedChampions';
 const ROSTERS_KEY = 'shopTitansHeroBuilder.rosters';
 const ACTIVE_ROSTER_KEY = 'shopTitansHeroBuilder.activeRoster';
 
-const HERO_BUILD_COUNT = 5;
-const heroTabs = [0, 1, 2, 3, 4] as const;
+const ROSTER_SLOT_COUNT = 5;
+const rosterSlots = [0, 1, 2, 3, 4] as const;
 
-type HeroTab = `hero-${0 | 1 | 2 | 3 | 4}`;
-type AppTab = HeroTab | 'champion' | 'roster' | 'compare' | 'items' | 'io';
+type AppTab = 'hero' | 'champion' | 'library' | 'roster';
 
 const statLabels: Array<[keyof StatBlock, string]> = [
   ['attack', 'ATK'],
@@ -82,17 +81,16 @@ const statLabels: Array<[keyof StatBlock, string]> = [
 ];
 
 export function App(): JSX.Element {
-  const [activeTab, setActiveTab] = useState<AppTab>('hero-0');
-  const [heroBuilds, setHeroBuilds] = useState<BuildConfig[]>(() => loadHeroBuilds());
+  const [activeTab, setActiveTab] = useState<AppTab>('hero');
+  const [build, setBuild] = useState<BuildConfig>(() => loadCurrentBuild());
   const [championBuild, setChampionBuild] = useState<ChampionBuildConfig>(() => loadChampionBuild());
   const [savedBuilds, setSavedBuilds] = useState<BuildConfig[]>(() => loadSavedBuilds());
+  const [savedChampionBuilds, setSavedChampionBuilds] = useState<ChampionBuildConfig[]>(() => loadSavedChampionBuilds());
   const [rosters, setRosters] = useState<RosterConfig[]>(() => loadRosters());
   const [activeRosterId, setActiveRosterId] = useState(() => window.localStorage.getItem(ACTIVE_ROSTER_KEY) ?? '');
   const [importText, setImportText] = useState('');
   const [ioMessage, setIoMessage] = useState('');
 
-  const activeHeroIndex = getActiveHeroIndex(activeTab);
-  const build = heroBuilds[activeHeroIndex] ?? heroBuilds[0] ?? defaultBuild(data);
   const activeRoster = rosters.find((roster) => roster.id === activeRosterId) ?? rosters[0] ?? defaultRoster(data);
   const baseHero = getBaseHero(data, build.heroClassId) ?? baseHeroOptions(data)[0] ?? data.heroes[0];
   const effectiveHero = getEffectiveHero(data, baseHero?.id ?? build.heroClassId, build.promoted) ?? baseHero;
@@ -112,16 +110,16 @@ export function App(): JSX.Element {
   }, [normalizedBuild]);
 
   useEffect(() => {
-    window.localStorage.setItem(HERO_BUILDS_KEY, JSON.stringify(heroBuilds));
-  }, [heroBuilds]);
-
-  useEffect(() => {
     window.localStorage.setItem(CHAMPION_BUILD_KEY, JSON.stringify(championBuild));
   }, [championBuild]);
 
   useEffect(() => {
     window.localStorage.setItem(SAVED_BUILDS_KEY, JSON.stringify(savedBuilds));
   }, [savedBuilds]);
+
+  useEffect(() => {
+    window.localStorage.setItem(SAVED_CHAMPIONS_KEY, JSON.stringify(savedChampionBuilds));
+  }, [savedChampionBuilds]);
 
   useEffect(() => {
     window.localStorage.setItem(ROSTERS_KEY, JSON.stringify(rosters));
@@ -134,16 +132,12 @@ export function App(): JSX.Element {
   }, [activeRoster.id]);
 
   function setActiveBuild(nextBuild: BuildConfig): void {
-    setHeroBuilds((current) => replaceHeroBuild(current, activeHeroIndex, nextBuild));
-    setActiveTab(`hero-${activeHeroIndex}` as HeroTab);
+    setBuild(nextBuild);
+    setActiveTab('hero');
   }
 
   function updateActiveBuild(updater: (current: BuildConfig) => BuildConfig): void {
-    setHeroBuilds((current) => {
-      const normalized = ensureHeroBuildCount(current);
-      const currentBuild = normalized[activeHeroIndex] ?? defaultBuild(data);
-      return normalized.map((entry, index) => (index === activeHeroIndex ? updater(currentBuild) : entry));
-    });
+    setBuild((current) => updater(current));
   }
 
   function updateBuild(patch: Partial<BuildConfig>): void {
@@ -197,38 +191,14 @@ export function App(): JSX.Element {
   function saveBuild(): void {
     const copy = { ...normalizedBuild, id: normalizedBuild.id || createId('build') };
     setSavedBuilds((current) => upsertBuild(current, copy));
+    setBuild(copy);
     setIoMessage(`Saved "${copy.name}".`);
   }
 
-  function saveBuildAsNew(): void {
-    const copy = {
-      ...normalizedBuild,
-      id: createId('build'),
-      name: `${normalizedBuild.name} Copy`
-    };
-    setSavedBuilds((current) => [...current, copy]);
-    setActiveBuild(copy);
-    setIoMessage(`Saved "${copy.name}".`);
-  }
-
-  function duplicateBuild(): void {
-    updateActiveBuild((current) => ({
-      ...current,
-      id: createId('build'),
-      name: `${current.name} Copy`
-    }));
-  }
-
-  function addCurrentToRoster(): void {
-    const rosterBuild = {
-      ...normalizedBuild,
-      id: normalizedBuild.id || createId('build')
-    };
-    setRosters((current) =>
-      current.map((roster) =>
-        roster.id === activeRoster.id ? { ...roster, builds: upsertBuild(roster.builds, rosterBuild) } : roster
-      )
-    );
+  function resetBuild(): void {
+    setBuild(defaultBuild(data));
+    setActiveTab('hero');
+    setIoMessage('');
   }
 
   function createRoster(): void {
@@ -242,7 +212,8 @@ export function App(): JSX.Element {
       ...activeRoster,
       id: createId('roster'),
       name: `${activeRoster.name} Copy`,
-      builds: activeRoster.builds.map((entry) => ({ ...entry }))
+      heroBuildIds: normalizeRosterHeroIds(activeRoster.heroBuildIds),
+      championBuildId: activeRoster.championBuildId
     };
     setRosters((current) => [...current, roster]);
     setActiveRosterId(roster.id);
@@ -289,12 +260,64 @@ export function App(): JSX.Element {
     );
   }
 
-  function useChampionBuildInRoster(): void {
-    updateRoster({
-      championId: championBuild.championId,
-      championRank: championBuild.rank,
-      championPowerUps: championBuild.powerUps
-    });
+  function saveChampionBuild(): void {
+    const copy = { ...championBuild, id: championBuild.id || createId('champion') };
+    setSavedChampionBuilds((current) => upsertChampionBuild(current, copy));
+    setChampionBuild(copy);
+    setIoMessage(`Saved "${copy.name}".`);
+  }
+
+  function loadChampionBuildForEdit(nextBuild: ChampionBuildConfig): void {
+    setChampionBuild(nextBuild);
+    setActiveTab('champion');
+  }
+
+  function resetChampionBuild(): void {
+    setChampionBuild(defaultChampionBuild(data));
+    setActiveTab('champion');
+    setIoMessage('');
+  }
+
+  function duplicateHeroBuild(buildToDuplicate: BuildConfig): void {
+    const copy = {
+      ...buildToDuplicate,
+      id: createId('build'),
+      name: `${buildToDuplicate.name} Copy`
+    };
+    setSavedBuilds((current) => [...current, copy]);
+    setBuild(copy);
+    setActiveTab('hero');
+  }
+
+  function duplicateChampionBuild(buildToDuplicate: ChampionBuildConfig): void {
+    const copy = {
+      ...buildToDuplicate,
+      id: createId('champion'),
+      name: `${buildToDuplicate.name} Copy`
+    };
+    setSavedChampionBuilds((current) => [...current, copy]);
+    setChampionBuild(copy);
+    setActiveTab('champion');
+  }
+
+  function deleteHeroBuild(buildId: string): void {
+    setSavedBuilds((current) => current.filter((entry) => entry.id !== buildId));
+    setRosters((current) =>
+      current.map((roster) => ({
+        ...roster,
+        heroBuildIds: normalizeRosterHeroIds(roster.heroBuildIds).map((entry) => (entry === buildId ? null : entry))
+      }))
+    );
+  }
+
+  function deleteChampionBuild(buildId: string): void {
+    setSavedChampionBuilds((current) => current.filter((entry) => entry.id !== buildId));
+    setRosters((current) =>
+      current.map((roster) => ({
+        ...roster,
+        championBuildId: roster.championBuildId === buildId ? '' : roster.championBuildId
+      }))
+    );
   }
 
   function importBuild(): void {
@@ -324,38 +347,27 @@ export function App(): JSX.Element {
           <h1>Hero Builder</h1>
         </div>
         <nav className="tabs" aria-label="Main views">
-          {heroTabs.map((index) => {
-            const tab = `hero-${index}` as HeroTab;
-            return (
-              <TabButton key={tab} active={activeTab === tab} onClick={() => setActiveTab(tab)} icon={<Hammer size={18} />}>
-                {`Hero ${index + 1}`}
-              </TabButton>
-            );
-          })}
+          <TabButton active={activeTab === 'hero'} onClick={() => setActiveTab('hero')} icon={<UserRound size={18} />}>
+            Create Hero
+          </TabButton>
           <TabButton active={activeTab === 'champion'} onClick={() => setActiveTab('champion')} icon={<Crown size={18} />}>
-            Champion
+            Create Champion
+          </TabButton>
+          <TabButton active={activeTab === 'library'} onClick={() => setActiveTab('library')} icon={<Database size={18} />}>
+            Library
           </TabButton>
           <TabButton active={activeTab === 'roster'} onClick={() => setActiveTab('roster')} icon={<UsersRound size={18} />}>
-            Roster
-          </TabButton>
-          <TabButton active={activeTab === 'compare'} onClick={() => setActiveTab('compare')} icon={<GitCompare size={18} />}>
-            Compare
-          </TabButton>
-          <TabButton active={activeTab === 'items'} onClick={() => setActiveTab('items')} icon={<Database size={18} />}>
-            Items
-          </TabButton>
-          <TabButton active={activeTab === 'io'} onClick={() => setActiveTab('io')} icon={<ArrowDownToLine size={18} />}>
-            JSON
+            Roster Management
           </TabButton>
         </nav>
       </header>
 
-      {isHeroTab(activeTab) && (
+      {activeTab === 'hero' && (
         <main className="builder-grid">
           <section className="panel builder-panel">
             <div className="panel-title">
               <UserRound size={19} />
-              <h2>Hero {activeHeroIndex + 1}</h2>
+              <h2>Create Hero</h2>
             </div>
             <div className="field-grid">
               <label>
@@ -493,37 +505,40 @@ export function App(): JSX.Element {
             <StatGrid stats={resolvedBuild.stats} />
             <div className="storage-panel">
               <div className="storage-panel-head">
-                <h3>Build Storage</h3>
-                <span>{savedBuilds.length} saved · {activeRoster.name}</span>
+                <h3>Hero Library</h3>
+                <span>{savedBuilds.length} saved</span>
               </div>
-            <div className="action-row">
-              <button type="button" className="primary-button" onClick={saveBuild}>
-                <Save size={17} />
-                Save Build
-              </button>
-                <button type="button" onClick={saveBuildAsNew}>
+              <label className="storage-load-field">
+                Load Hero
+                <select
+                  value=""
+                  disabled={savedBuilds.length === 0}
+                  onChange={(event) => {
+                    const nextBuild = savedBuilds.find((entry) => entry.id === event.target.value);
+                    if (nextBuild) {
+                      setActiveBuild(nextBuild);
+                    }
+                  }}
+                >
+                  <option value="">Choose saved hero</option>
+                  {savedBuilds.map((entry) => (
+                    <option key={entry.id} value={entry.id}>
+                      {entry.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <div className="action-row">
+                <button type="button" className="primary-button" onClick={saveBuild}>
                   <Save size={17} />
-                  Save Copy
+                  Save Hero
                 </button>
-              <button type="button" onClick={addCurrentToRoster}>
-                <UsersRound size={17} />
-                Add to {activeRoster.name}
-              </button>
-                <button type="button" onClick={duplicateBuild}>
-                  <Plus size={17} />
-                  New Draft
+                <button type="button" onClick={resetBuild}>
+                  Reset
                 </button>
               </div>
             </div>
             <ElementPointsPanel scores={resolvedBuild.elementScores} />
-            <SavedBuildList
-              builds={savedBuilds}
-              onLoad={setActiveBuild}
-              onDelete={setSavedBuilds}
-              onAddToRoster={(savedBuild) => updateRoster({ builds: upsertBuild(activeRoster.builds, savedBuild) })}
-              rosterName={activeRoster.name}
-              compact
-            />
             <GearSummary lines={resolvedBuild.gear} />
             {[...resolvedBuild.warnings, ...validationWarnings.map((warning) => warning.message)].length > 0 && (
               <div className="warning-box">
@@ -536,50 +551,49 @@ export function App(): JSX.Element {
         </main>
       )}
 
-      {activeTab === 'roster' && (
-        <RosterPanel
-          activeRoster={activeRoster}
-          rosters={rosters}
-          savedBuilds={savedBuilds}
-          onActiveRosterChange={setActiveRosterId}
-          onCreateRoster={createRoster}
-          onDuplicateRoster={duplicateRoster}
-          onDeleteRoster={deleteActiveRoster}
-          onUpdateRoster={updateRoster}
-          onLoadBuild={setActiveBuild}
-          onAddSavedBuild={(savedBuild) => updateRoster({ builds: upsertBuild(activeRoster.builds, savedBuild) })}
-          onDeleteSavedBuild={setSavedBuilds}
-          onRemoveBuild={(buildId) => updateRoster({ builds: activeRoster.builds.filter((entry) => entry.id !== buildId) })}
-        />
-      )}
-
-      {activeTab === 'compare' && (
-        <ComparePanel currentBuild={normalizedBuild} savedBuilds={savedBuilds} onLoad={setActiveBuild} onDelete={setSavedBuilds} />
-      )}
-
-      {activeTab === 'items' && <ItemBrowser />}
-
       {activeTab === 'champion' && (
         <ChampionBuildPanel
           build={championBuild}
           resolved={resolvedChampionBuild}
-          activeRoster={activeRoster}
+          savedChampionBuilds={savedChampionBuilds}
           onChange={updateChampionBuild}
           onChangeChampion={changeChampion}
           onChangeEquipment={updateChampionEquipment}
-          onUseInRoster={useChampionBuildInRoster}
+          onSave={saveChampionBuild}
+          onLoad={loadChampionBuildForEdit}
+          onReset={resetChampionBuild}
         />
       )}
 
-      {activeTab === 'io' && (
-        <JsonPanel
-          exportText={serializeBuild(normalizedBuild)}
-          importText={importText}
-          message={ioMessage}
-          onImportTextChange={setImportText}
-          onImport={importBuild}
-          onCopy={copyExport}
+      {activeTab === 'library' && (
+        <LibraryPanel
+          savedBuilds={savedBuilds}
+          savedChampionBuilds={savedChampionBuilds}
+          onEditHero={setActiveBuild}
+          onEditChampion={loadChampionBuildForEdit}
+          onDuplicateHero={duplicateHeroBuild}
+          onDuplicateChampion={duplicateChampionBuild}
+          onDeleteHero={deleteHeroBuild}
+          onDeleteChampion={deleteChampionBuild}
         />
+      )}
+
+      {activeTab === 'roster' && (
+        <main className="roster-management-view">
+          <RosterPanel
+            activeRoster={activeRoster}
+            rosters={rosters}
+            savedBuilds={savedBuilds}
+            savedChampionBuilds={savedChampionBuilds}
+            onActiveRosterChange={setActiveRosterId}
+            onCreateRoster={createRoster}
+            onDuplicateRoster={duplicateRoster}
+            onDeleteRoster={deleteActiveRoster}
+            onUpdateRoster={updateRoster}
+            onEditHero={setActiveBuild}
+            onEditChampion={loadChampionBuildForEdit}
+          />
+        </main>
       )}
     </div>
   );
@@ -739,36 +753,35 @@ function RosterPanel({
   activeRoster,
   rosters,
   savedBuilds,
+  savedChampionBuilds,
   onActiveRosterChange,
   onCreateRoster,
   onDuplicateRoster,
   onDeleteRoster,
   onUpdateRoster,
-  onLoadBuild,
-  onAddSavedBuild,
-  onDeleteSavedBuild,
-  onRemoveBuild
+  onEditHero,
+  onEditChampion
 }: {
   activeRoster: RosterConfig;
   rosters: RosterConfig[];
   savedBuilds: BuildConfig[];
+  savedChampionBuilds: ChampionBuildConfig[];
   onActiveRosterChange: (id: string) => void;
   onCreateRoster: () => void;
   onDuplicateRoster: () => void;
   onDeleteRoster: () => void;
   onUpdateRoster: (patch: Partial<RosterConfig>) => void;
-  onLoadBuild: (build: BuildConfig) => void;
-  onAddSavedBuild: (build: BuildConfig) => void;
-  onDeleteSavedBuild: (updater: (builds: BuildConfig[]) => BuildConfig[]) => void;
-  onRemoveBuild: (id: string) => void;
+  onEditHero: (build: BuildConfig) => void;
+  onEditChampion: (build: ChampionBuildConfig) => void;
 }): JSX.Element {
-  const activeChampion = data.champions.find((champion) => champion.id === activeRoster.championId) ?? data.champions[0];
-  const resolvedChampion = activeChampion
-    ? resolveChampion(activeChampion, data, activeRoster.championRank, activeRoster.championPowerUps)
-    : null;
-  const resolved = activeRoster.builds.map((build) =>
-    calculateHeroStats(build, data, { championSkillId: resolvedChampion?.leaderSkill?.id })
+  const heroBuildIds = normalizeRosterHeroIds(activeRoster.heroBuildIds);
+  const slotBuilds = heroBuildIds.map((buildId) => savedBuilds.find((entry) => entry.id === buildId) ?? null);
+  const championBuild = savedChampionBuilds.find((entry) => entry.id === activeRoster.championBuildId) ?? null;
+  const resolvedChampion = championBuild ? calculateChampionBuildStats(championBuild, data) : null;
+  const resolvedSlots = slotBuilds.map((build) =>
+    build ? calculateHeroStats(build, data, { championSkillId: resolvedChampion?.leaderSkill?.id }) : null
   );
+  const resolved = resolvedSlots.filter((entry): entry is ResolvedBuild => Boolean(entry));
   const totals = resolved.reduce(
     (acc, entry) => ({
       attack: acc.attack + entry.stats.attack,
@@ -784,140 +797,296 @@ function RosterPanel({
   );
   const totalElementScores = resolved.reduce((acc, entry) => mergeElementScores(acc, entry.elementScores), {} as ElementScores);
   const rosterSummaries = rosters.map((roster) => {
-    const rosterChampion = data.champions.find((champion) => champion.id === roster.championId) ?? data.champions[0];
-    const rosterChampionResolved = rosterChampion
-      ? resolveChampion(rosterChampion, data, roster.championRank, roster.championPowerUps)
-      : null;
-    const rosterPower = roster.builds
-      .map((build) => calculateHeroStats(build, data, { championSkillId: rosterChampionResolved?.leaderSkill?.id }))
-      .reduce((total, entry) => total + entry.stats.power, 0);
+    const rosterHeroIds = normalizeRosterHeroIds(roster.heroBuildIds);
+    const rosterChampionBuild = savedChampionBuilds.find((entry) => entry.id === roster.championBuildId) ?? null;
+    const rosterChampionResolved = rosterChampionBuild ? calculateChampionBuildStats(rosterChampionBuild, data) : null;
+    const rosterResolved = rosterHeroIds
+      .map((buildId) => savedBuilds.find((entry) => entry.id === buildId) ?? null)
+      .filter((build): build is BuildConfig => Boolean(build))
+      .map((build) => calculateHeroStats(build, data, { championSkillId: rosterChampionResolved?.leaderSkill?.id }));
     return {
       roster,
-      championName: rosterChampion?.name ?? 'None',
-      heroCount: roster.builds.length,
-      power: rosterPower
+      championName: rosterChampionBuild?.name ?? 'No champion',
+      heroCount: rosterResolved.length,
+      power: rosterResolved.reduce((total, entry) => total + entry.stats.power, 0)
     };
   });
 
+  function setHeroSlot(slotIndex: number, buildId: string): void {
+    const nextHeroBuildIds = [...heroBuildIds];
+    nextHeroBuildIds[slotIndex] = buildId || null;
+    onUpdateRoster({ heroBuildIds: nextHeroBuildIds });
+  }
+
   return (
-    <main className="roster-grid">
-      <section className="panel builder-panel">
-        <div className="panel-title">
-          <UsersRound size={19} />
-          <h2>Roster</h2>
+    <section className="panel roster-panel">
+      <div className="panel-title">
+        <UsersRound size={19} />
+        <h2>Roster Management</h2>
+      </div>
+      <div className="roster-save-state">
+        <Save size={15} />
+        <span>{rosters.length} saved roster{rosters.length === 1 ? '' : 's'} | autosaved locally</span>
+      </div>
+      <div className="saved-roster-grid">
+        {rosterSummaries.map((summary) => (
+          <button
+            key={summary.roster.id}
+            type="button"
+            className={summary.roster.id === activeRoster.id ? 'saved-roster-card active' : 'saved-roster-card'}
+            onClick={() => onActiveRosterChange(summary.roster.id)}
+          >
+            <strong>{summary.roster.name}</strong>
+            <span>{summary.heroCount} / 5 heroes</span>
+            <span>{summary.championName}</span>
+            <span>PWR {summary.power.toLocaleString()}</span>
+          </button>
+        ))}
+      </div>
+      <div className="roster-toolbar">
+        <label>
+          Active roster
+          <select value={activeRoster.id} onChange={(event) => onActiveRosterChange(event.target.value)}>
+            {rosters.map((roster) => (
+              <option key={roster.id} value={roster.id}>
+                {roster.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Roster name
+          <input value={activeRoster.name} onChange={(event) => onUpdateRoster({ name: event.target.value })} />
+        </label>
+        <button type="button" onClick={onCreateRoster}>
+          <Plus size={17} />
+          New Roster
+        </button>
+        <div className="roster-actions">
+          <button type="button" onClick={onDuplicateRoster}>
+            <Plus size={17} />
+            Duplicate
+          </button>
+          <button type="button" disabled={rosters.length <= 1} onClick={onDeleteRoster}>
+            <Trash2 size={17} />
+            Delete
+          </button>
         </div>
-        <div className="roster-toolbar">
-          <label>
-            Active roster
-            <select value={activeRoster.id} onChange={(event) => onActiveRosterChange(event.target.value)}>
-              {rosters.map((roster) => (
-                <option key={roster.id} value={roster.id}>
-                  {roster.name}
+      </div>
+      <div className="roster-overview">
+        <div>
+          <span>Heroes</span>
+          <strong>{resolved.length} / 5</strong>
+        </div>
+        <div>
+          <span>Champion</span>
+          <strong>{championBuild?.name ?? 'None'}</strong>
+        </div>
+        <div>
+          <span>Team Power</span>
+          <strong>{totals.power.toLocaleString()}</strong>
+        </div>
+      </div>
+      <div className="roster-aura-note">
+        <ChampionToken champion={resolvedChampion?.champion ?? undefined} />
+        <span>
+          {resolvedChampion?.leaderSkill
+            ? `${championBuild?.name ?? 'Champion'} affects this roster with ${resolvedChampion.leaderSkill.name}.`
+            : 'No champion aura is active for this roster.'}
+        </span>
+      </div>
+      <div className="roster-slot-grid">
+        {rosterSlots.map((slotIndex) => {
+          const slotBuild = slotBuilds[slotIndex];
+          const slotResolved = resolvedSlots[slotIndex];
+          return (
+            <article className="roster-slot-card" key={slotIndex}>
+              <div className="roster-slot-main static-slot-main">
+                <HeroToken hero={slotResolved?.hero ?? undefined} />
+                <span>
+                  <strong>Hero Slot {slotIndex + 1}</strong>
+                  <small>{slotBuild ? `${slotBuild.name} | ${slotResolved?.hero?.name ?? 'Unknown'}` : 'Empty slot'}</small>
+                </span>
+              </div>
+              {slotResolved ? <StatStrip stats={slotResolved.stats} /> : <p className="muted">Optional hero slot.</p>}
+              {slotResolved && <ElementPointStrip scores={slotResolved.elementScores} compact />}
+              <label className="slot-load-field">
+                Load Hero
+                <select value={heroBuildIds[slotIndex] ?? ''} onChange={(event) => setHeroSlot(slotIndex, event.target.value)}>
+                  <option value="">Empty</option>
+                  {savedBuilds.map((savedBuild) => (
+                    <option key={savedBuild.id} value={savedBuild.id}>
+                      {savedBuild.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <div className="roster-slot-actions">
+                <button type="button" disabled={!slotBuild} onClick={() => slotBuild && onEditHero(slotBuild)}>
+                  Edit
+                </button>
+                <button type="button" disabled={!slotBuild} onClick={() => setHeroSlot(slotIndex, '')}>
+                  Remove
+                </button>
+              </div>
+            </article>
+          );
+        })}
+        <article className="roster-slot-card champion-slot">
+          <div className="roster-slot-main static-slot-main">
+            <ChampionToken champion={resolvedChampion?.champion ?? undefined} />
+            <span>
+              <strong>Champion Slot</strong>
+              <small>{championBuild ? `${championBuild.name} | ${resolvedChampion?.leaderSkill?.name ?? 'No aura'}` : 'No champion'}</small>
+            </span>
+          </div>
+          <label className="slot-load-field">
+            Load Champion
+            <select value={activeRoster.championBuildId} onChange={(event) => onUpdateRoster({ championBuildId: event.target.value })}>
+              <option value="">Empty</option>
+              {savedChampionBuilds.map((savedChampion) => (
+                <option key={savedChampion.id} value={savedChampion.id}>
+                  {savedChampion.name}
                 </option>
               ))}
             </select>
           </label>
-          <label>
-            Roster name
-            <input value={activeRoster.name} onChange={(event) => onUpdateRoster({ name: event.target.value })} />
-          </label>
-          <button type="button" onClick={onCreateRoster}>
-            <Plus size={17} />
-            New Roster
-          </button>
-          <div className="roster-actions">
-            <button type="button" onClick={onDuplicateRoster}>
-              <Plus size={17} />
-              Duplicate
+          <div className="roster-slot-actions">
+            <button type="button" disabled={!championBuild} onClick={() => championBuild && onEditChampion(championBuild)}>
+              Edit
             </button>
-            <button type="button" disabled={rosters.length <= 1} onClick={onDeleteRoster}>
-              <Trash2 size={17} />
-              Delete
+            <button type="button" disabled={!championBuild} onClick={() => onUpdateRoster({ championBuildId: '' })}>
+              Remove
             </button>
           </div>
-        </div>
-        <div className="roster-save-state">
-          <Save size={15} />
-          <span>{rosters.length} saved roster{rosters.length === 1 ? '' : 's'} · autosaved locally</span>
-        </div>
-        <div className="saved-roster-grid">
-          {rosterSummaries.map((summary) => (
-            <button
-              key={summary.roster.id}
-              type="button"
-              className={summary.roster.id === activeRoster.id ? 'saved-roster-card active' : 'saved-roster-card'}
-              onClick={() => onActiveRosterChange(summary.roster.id)}
-            >
-              <strong>{summary.roster.name}</strong>
-              <span>{summary.heroCount} heroes</span>
-              <span>{summary.championName}</span>
-              <span>PWR {summary.power.toLocaleString()}</span>
-            </button>
-          ))}
-        </div>
-        <ChampionRosterControls activeRoster={activeRoster} onUpdateRoster={onUpdateRoster} />
-        <div className="roster-aura-note">
-          <ChampionToken champion={activeChampion} />
-          <span>
-            {resolvedChampion?.leaderSkill
-              ? `${activeChampion?.name ?? 'Champion'} rank ${resolvedChampion.rank} affects every build in this roster with ${resolvedChampion.leaderSkill.name}.`
-              : 'No champion aura is active for this roster.'}
-          </span>
-        </div>
-        <div className="roster-overview">
-          <div>
-            <span>Heroes</span>
-            <strong>{resolved.length}</strong>
-          </div>
-          <div>
-            <span>Champion</span>
-            <strong>{activeChampion?.name ?? 'None'}</strong>
-          </div>
-          <div>
-            <span>Team Power</span>
-            <strong>{totals.power.toLocaleString()}</strong>
-          </div>
-        </div>
-        <div className="saved-build-picker">
-          <SavedBuildList
-            builds={savedBuilds}
-            onLoad={onLoadBuild}
-            onDelete={onDeleteSavedBuild}
-            onAddToRoster={onAddSavedBuild}
-            rosterName={activeRoster.name}
-          />
-        </div>
-        <div className="roster-list">
-          {resolved.length === 0 && <p className="muted">No heroes in this roster yet.</p>}
-          {resolved.map((entry) => (
-            <article className="roster-card" key={entry.build.id}>
-              <div>
-                <HeroToken hero={entry.hero} />
-                <div>
-                  <strong>{entry.build.name}</strong>
-                  <span>{entry.hero?.name ?? 'Unknown'}</span>
-                </div>
-              </div>
-              <StatStrip stats={entry.stats} />
-              <ElementPointStrip scores={entry.elementScores} compact />
-              <div className="roster-card-actions">
-                <button type="button" onClick={() => onLoadBuild(entry.build)}>Load</button>
-                <button type="button" className="icon-button" aria-label={`Remove ${entry.build.name}`} onClick={() => onRemoveBuild(entry.build.id)}>
-                  <Trash2 size={16} />
-                </button>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-      <aside className="panel stat-panel">
-        <div className="panel-title">
-          <Sparkles size={19} />
-          <h2>Team Totals</h2>
-        </div>
+        </article>
+      </div>
+      <div className="team-total-panel">
+        <h3>Team Totals</h3>
         <StatGrid stats={totals} />
         <ElementPointsPanel scores={totalElementScores} />
-      </aside>
+      </div>
+    </section>
+  );
+}
+
+function LibraryPanel({
+  savedBuilds,
+  savedChampionBuilds,
+  onEditHero,
+  onEditChampion,
+  onDuplicateHero,
+  onDuplicateChampion,
+  onDeleteHero,
+  onDeleteChampion
+}: {
+  savedBuilds: BuildConfig[];
+  savedChampionBuilds: ChampionBuildConfig[];
+  onEditHero: (build: BuildConfig) => void;
+  onEditChampion: (build: ChampionBuildConfig) => void;
+  onDuplicateHero: (build: BuildConfig) => void;
+  onDuplicateChampion: (build: ChampionBuildConfig) => void;
+  onDeleteHero: (id: string) => void;
+  onDeleteChampion: (id: string) => void;
+}): JSX.Element {
+  const [filter, setFilter] = useState<'all' | 'heroes' | 'champions'>('all');
+  const showHeroes = filter === 'all' || filter === 'heroes';
+  const showChampions = filter === 'all' || filter === 'champions';
+
+  return (
+    <main className="library-view">
+      <section className="panel library-panel">
+        <div className="panel-title">
+          <Database size={19} />
+          <h2>Library</h2>
+        </div>
+        <div className="library-filter" role="group" aria-label="Library filter">
+          <button type="button" className={filter === 'all' ? 'active' : undefined} onClick={() => setFilter('all')}>
+            All
+          </button>
+          <button type="button" className={filter === 'heroes' ? 'active' : undefined} onClick={() => setFilter('heroes')}>
+            Heroes
+          </button>
+          <button type="button" className={filter === 'champions' ? 'active' : undefined} onClick={() => setFilter('champions')}>
+            Champions
+          </button>
+        </div>
+
+        {showHeroes && (
+          <section className="library-section">
+            <div className="library-section-head">
+              <h3>Heroes</h3>
+              <span>{savedBuilds.length}</span>
+            </div>
+            {savedBuilds.length === 0 && <p className="muted">No saved heroes yet.</p>}
+            <div className="library-list">
+              {savedBuilds.map((entry) => {
+                const resolved = calculateHeroStats(entry, data);
+                return (
+                  <article className="library-card" key={entry.id}>
+                    <div className="library-card-main">
+                      <HeroToken hero={resolved.hero} />
+                      <span>
+                        <strong>{entry.name}</strong>
+                        <small>{resolved.hero?.name ?? 'Unknown'} | Lv {entry.level} | PWR {resolved.stats.power.toLocaleString()}</small>
+                      </span>
+                    </div>
+                    <StatStrip stats={resolved.stats} />
+                    <ElementPointStrip scores={resolved.elementScores} compact />
+                    <div className="library-card-actions">
+                      <button type="button" onClick={() => onEditHero(entry)}>Edit</button>
+                      <button type="button" onClick={() => onDuplicateHero(entry)}>Duplicate</button>
+                      <button type="button" className="icon-button" aria-label={`Delete ${entry.name}`} onClick={() => onDeleteHero(entry.id)}>
+                        <Trash2 size={15} />
+                      </button>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </section>
+        )}
+
+        {showChampions && (
+          <section className="library-section">
+            <div className="library-section-head">
+              <h3>Champions</h3>
+              <span>{savedChampionBuilds.length}</span>
+            </div>
+            {savedChampionBuilds.length === 0 && <p className="muted">No saved champions yet.</p>}
+            <div className="library-list">
+              {savedChampionBuilds.map((entry) => {
+                const resolved = calculateChampionBuildStats(entry, data);
+                return (
+                  <article className="library-card" key={entry.id}>
+                    <div className="library-card-main">
+                      <ChampionToken champion={resolved.champion ?? undefined} />
+                      <span>
+                        <strong>{entry.name}</strong>
+                        <small>
+                          {resolved.champion?.name ?? 'Unknown'} | Rank {entry.rank} | PWR {resolved.stats.power.toLocaleString()}
+                        </small>
+                      </span>
+                    </div>
+                    <div className="active-aura-chip compact-aura-chip">
+                      <SkillToken skill={resolved.leaderSkill ?? undefined} />
+                      <span>Aura</span>
+                      <strong>{resolved.leaderSkill?.name ?? 'None'}</strong>
+                    </div>
+                    <div className="library-card-actions">
+                      <button type="button" onClick={() => onEditChampion(entry)}>Edit</button>
+                      <button type="button" onClick={() => onDuplicateChampion(entry)}>Duplicate</button>
+                      <button type="button" className="icon-button" aria-label={`Delete ${entry.name}`} onClick={() => onDeleteChampion(entry.id)}>
+                        <Trash2 size={15} />
+                      </button>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </section>
+        )}
+      </section>
     </main>
   );
 }
@@ -1074,31 +1243,34 @@ function ItemRow({ item }: { item: ItemData }): JSX.Element {
 function ChampionBuildPanel({
   build,
   resolved,
-  activeRoster,
+  savedChampionBuilds,
   onChange,
   onChangeChampion,
   onChangeEquipment,
-  onUseInRoster
+  onSave,
+  onLoad,
+  onReset
 }: {
   build: ChampionBuildConfig;
   resolved: ResolvedChampionBuild;
-  activeRoster: RosterConfig;
+  savedChampionBuilds: ChampionBuildConfig[];
   onChange: (patch: Partial<ChampionBuildConfig>) => void;
   onChangeChampion: (championId: string) => void;
   onChangeEquipment: (slot: 'familiar' | 'aurasong', patch: Partial<EquipmentSelection>) => void;
-  onUseInRoster: () => void;
+  onSave: () => void;
+  onLoad: (build: ChampionBuildConfig) => void;
+  onReset: () => void;
 }): JSX.Element {
   const champion = resolved.champion ?? data.champions.find((entry) => entry.id === build.championId) ?? data.champions[0];
   const maxRank = champion ? getChampionMaxRank(champion) : 1;
   const rankResolved = champion ? resolveChampion(champion, data, build.rank, build.powerUps) : null;
-  const isRosterChampion = activeRoster.championId === build.championId;
 
   return (
-    <main className="builder-grid champion-builder-grid">
+    <div className="builder-grid champion-builder-grid">
       <section className="panel builder-panel">
         <div className="panel-title">
           <Crown size={19} />
-          <h2>Champion</h2>
+          <h2>Create Champion</h2>
         </div>
         <div className="field-grid champion-field-grid">
           <label>
@@ -1236,11 +1408,40 @@ function ChampionBuildPanel({
         </div>
         <StatGrid stats={resolved.stats} />
         <ElementPointsPanel scores={resolved.elementScores} />
-        <div className="action-row">
-          <button type="button" className={isRosterChampion ? 'primary-button' : undefined} onClick={onUseInRoster}>
-            <UsersRound size={17} />
-            Set for {activeRoster.name}
-          </button>
+        <div className="storage-panel">
+          <div className="storage-panel-head">
+            <h3>Champion Library</h3>
+            <span>{savedChampionBuilds.length} saved</span>
+          </div>
+          <label className="storage-load-field">
+            Load Champion
+            <select
+              value=""
+              disabled={savedChampionBuilds.length === 0}
+              onChange={(event) => {
+                const nextBuild = savedChampionBuilds.find((entry) => entry.id === event.target.value);
+                if (nextBuild) {
+                  onLoad(nextBuild);
+                }
+              }}
+            >
+              <option value="">Choose saved champion</option>
+              {savedChampionBuilds.map((entry) => (
+                <option key={entry.id} value={entry.id}>
+                  {entry.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <div className="action-row">
+            <button type="button" className="primary-button" onClick={onSave}>
+              <Save size={17} />
+              Save Champion
+            </button>
+            <button type="button" onClick={onReset}>
+              Reset
+            </button>
+          </div>
         </div>
         <div className="champion-section-label">Base at rank {rankResolved?.rank ?? build.rank}</div>
         <div className="champion-base-stats">
@@ -1270,7 +1471,7 @@ function ChampionBuildPanel({
           </div>
         )}
       </aside>
-    </main>
+    </div>
   );
 }
 
@@ -1315,69 +1516,6 @@ function JsonPanel({
         {message && <pre className="io-message">{message}</pre>}
       </section>
     </main>
-  );
-}
-
-function ChampionRosterControls({
-  activeRoster,
-  onUpdateRoster
-}: {
-  activeRoster: RosterConfig;
-  onUpdateRoster: (patch: Partial<RosterConfig>) => void;
-}): JSX.Element {
-  const champion = data.champions.find((entry) => entry.id === activeRoster.championId) ?? data.champions[0];
-  const maxRank = champion ? getChampionMaxRank(champion) : 1;
-  const resolved = champion ? resolveChampion(champion, data, activeRoster.championRank, activeRoster.championPowerUps) : null;
-  return (
-    <div className="champion-controls">
-      <label>
-        Roster champion
-        <div className="select-with-token">
-          <ChampionToken champion={champion} />
-          <select
-            value={champion?.id ?? ''}
-            onChange={(event) => {
-              const nextChampion = data.champions.find((entry) => entry.id === event.target.value);
-              onUpdateRoster({
-                championId: event.target.value,
-                championRank: nextChampion ? getChampionMaxRank(nextChampion) : 1,
-                championPowerUps: 0
-              });
-            }}
-          >
-            {data.champions.map((entry) => (
-              <option key={entry.id} value={entry.id}>
-                {entry.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      </label>
-      <label>
-        Rank
-        <input
-          type="number"
-          min={1}
-          max={maxRank}
-          value={resolved?.rank ?? 1}
-          onChange={(event) => onUpdateRoster({ championRank: clampNumber(event.target.valueAsNumber, 1, maxRank) })}
-        />
-      </label>
-      <label>
-        +X power-ups
-        <input
-          type="number"
-          min={0}
-          value={activeRoster.championPowerUps}
-          onChange={(event) => onUpdateRoster({ championPowerUps: clampNumber(event.target.valueAsNumber, 0, 999) })}
-        />
-      </label>
-      <div className="active-aura-chip">
-        <SkillToken skill={resolved?.leaderSkill ?? undefined} />
-        <span>Champion aura</span>
-        <strong>{resolved?.leaderSkill?.name ?? 'None'}</strong>
-      </div>
-    </div>
   );
 }
 
@@ -1709,6 +1847,14 @@ function upsertBuild(builds: BuildConfig[], build: BuildConfig): BuildConfig[] {
   return builds.map((entry, entryIndex) => (entryIndex === index ? build : entry));
 }
 
+function upsertChampionBuild(builds: ChampionBuildConfig[], build: ChampionBuildConfig): ChampionBuildConfig[] {
+  const index = builds.findIndex((entry) => entry.id === build.id);
+  if (index === -1) {
+    return [...builds, build];
+  }
+  return builds.map((entry, entryIndex) => (entryIndex === index ? build : entry));
+}
+
 function loadCurrentBuild(): BuildConfig {
   const stored = window.localStorage.getItem(CURRENT_BUILD_KEY);
   if (!stored) {
@@ -1718,41 +1864,36 @@ function loadCurrentBuild(): BuildConfig {
   return parsed.ok ? { ...defaultBuild(data), ...parsed.build } : defaultBuild(data);
 }
 
-function loadHeroBuilds(): BuildConfig[] {
-  try {
-    const parsed = JSON.parse(window.localStorage.getItem(HERO_BUILDS_KEY) ?? '[]');
-    if (Array.isArray(parsed) && parsed.length > 0) {
-      return ensureHeroBuildCount(parsed.filter((entry) => parseBuildJsonDetailed(JSON.stringify(entry), data).ok) as BuildConfig[]);
-    }
-  } catch {
-    // Fall through to the current-build migration.
-  }
-  const defaults = createDefaultHeroBuilds();
-  return replaceHeroBuild(defaults, 0, loadCurrentBuild());
-}
-
-function createDefaultHeroBuilds(): BuildConfig[] {
-  return Array.from({ length: HERO_BUILD_COUNT }, (_, index) => ({
+function createDefaultRosterSlotBuild(slotIndex: number): BuildConfig {
+  return {
     ...defaultBuild(data),
-    name: `Hero ${index + 1}`
-  }));
+    id: createId('build'),
+    name: `Hero Slot ${slotIndex + 1}`
+  };
 }
 
-function ensureHeroBuildCount(builds: BuildConfig[]): BuildConfig[] {
-  const defaults = createDefaultHeroBuilds();
-  return defaults.map((fallback, index) => {
-    const candidate = builds[index];
-    if (!candidate) {
-      return fallback;
+function normalizeRosterSlots(value: unknown): Array<BuildConfig | null> {
+  const source = Array.isArray(value) ? value : [];
+  return Array.from({ length: ROSTER_SLOT_COUNT }, (_, index) => {
+    const candidate = source[index];
+    if (!candidate || typeof candidate !== 'object') {
+      return null;
     }
     const parsed = parseBuildJsonDetailed(JSON.stringify(candidate), data);
-    return parsed.ok ? { ...fallback, ...parsed.build } : fallback;
+    return parsed.ok ? parsed.build : null;
   });
 }
 
-function replaceHeroBuild(builds: BuildConfig[], index: number, build: BuildConfig): BuildConfig[] {
-  const normalized = ensureHeroBuildCount(builds);
-  return normalized.map((entry, entryIndex) => (entryIndex === index ? build : entry));
+function normalizeRosterHeroIds(value: unknown, legacyBuilds?: unknown): Array<string | null> {
+  const source = Array.isArray(value) ? value : [];
+  const ids = Array.from({ length: ROSTER_SLOT_COUNT }, (_, index) => {
+    const candidate = source[index];
+    return typeof candidate === 'string' && candidate.length > 0 ? candidate : null;
+  });
+  if (ids.some(Boolean)) {
+    return ids;
+  }
+  return normalizeRosterSlots(legacyBuilds).map((entry) => entry?.id ?? null);
 }
 
 function loadChampionBuild(): ChampionBuildConfig {
@@ -1804,17 +1945,6 @@ function normalizeEquipmentSelection(value: unknown, slotId: string): EquipmentS
   };
 }
 
-function isHeroTab(tab: AppTab): tab is HeroTab {
-  return tab.startsWith('hero-');
-}
-
-function getActiveHeroIndex(tab: AppTab): number {
-  if (!isHeroTab(tab)) {
-    return 0;
-  }
-  return clampNumber(Number(tab.replace('hero-', '')), 0, HERO_BUILD_COUNT - 1);
-}
-
 function loadSavedBuilds(): BuildConfig[] {
   try {
     const parsed = JSON.parse(window.localStorage.getItem(SAVED_BUILDS_KEY) ?? '[]');
@@ -1822,6 +1952,18 @@ function loadSavedBuilds(): BuildConfig[] {
       return [];
     }
     return parsed.filter((entry) => parseBuildJsonDetailed(JSON.stringify(entry), data).ok) as BuildConfig[];
+  } catch {
+    return [];
+  }
+}
+
+function loadSavedChampionBuilds(): ChampionBuildConfig[] {
+  try {
+    const parsed = JSON.parse(window.localStorage.getItem(SAVED_CHAMPIONS_KEY) ?? '[]');
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+    return parsed.map((entry) => normalizeChampionBuild(entry)).filter(Boolean) as ChampionBuildConfig[];
   } catch {
     return [];
   }
@@ -1843,26 +1985,14 @@ function normalizeRoster(value: unknown): RosterConfig | null {
   if (!value || typeof value !== 'object') {
     return null;
   }
-  const candidate = value as Partial<RosterConfig> & { championSkillId?: string };
+  const candidate = value as Partial<RosterConfig> & { builds?: unknown; championSkillId?: string };
   const fallback = defaultRoster(data);
-  const migratedChampion = candidate.championSkillId
-    ? data.champions.find((champion) => champion.leaderSkillIds.includes(candidate.championSkillId ?? ''))
-    : undefined;
-  const champion =
-    data.champions.find((entry) => entry.id === candidate.championId) ?? migratedChampion ?? data.champions[0];
-  const migratedRank =
-    champion && candidate.championSkillId
-      ? champion.rankRewards.find((reward) => reward.leaderSkillId === candidate.championSkillId)?.rank
-      : undefined;
-  const maxRank = champion ? getChampionMaxRank(champion) : 1;
   return {
     schemaVersion: 1,
     id: typeof candidate.id === 'string' ? candidate.id : fallback.id,
     name: typeof candidate.name === 'string' ? candidate.name : fallback.name,
-    championId: champion?.id ?? fallback.championId,
-    championRank: clampNumber(Number(candidate.championRank ?? migratedRank ?? maxRank), 1, maxRank),
-    championPowerUps: clampNumber(Number(candidate.championPowerUps ?? 0), 0, 999),
-    builds: Array.isArray(candidate.builds) ? candidate.builds : []
+    heroBuildIds: normalizeRosterHeroIds(candidate.heroBuildIds, candidate.builds),
+    championBuildId: typeof candidate.championBuildId === 'string' ? candidate.championBuildId : fallback.championBuildId
   };
 }
 
