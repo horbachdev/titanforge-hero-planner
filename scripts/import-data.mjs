@@ -1,24 +1,31 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import * as XLSXModule from 'xlsx';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = resolve(__dirname, '..');
+const XLSX = XLSXModule.default ?? XLSXModule;
 
 const OFFICIAL_SHEET_ID = '1WLa7X8h3O0-aGKxeAlCL7bnN8-FhGd3t7pz2RCzSg8c';
 const RESS_SHEET_ID = '1LM8yySoXgyxute3xv5qKqBOt86Xcr41LEDncdrPp4EA';
-const OFFICIAL_TABS = ['Home', 'Blueprints', 'Heroes', 'Hero Levels', 'Skills', 'Quests', 'Enchantments'];
+const OFFICIAL_TABS = ['Home', 'Blueprints', 'Heroes', 'Hero Levels', 'Skills', 'Champions', 'Quests', 'Enchantments'];
+const OFFICIAL_CSV_TABS = OFFICIAL_TABS.filter((tab) => tab !== 'Champions');
 const OUTPUT_PATH = resolve(rootDir, 'src/data/generated/game-data.json');
 const RAW_RESS_PATH = resolve(rootDir, 'data/raw/ress-hero-quest-simulator.xlsx');
 
 async function main() {
   const sheets = new Map();
 
-  for (const tab of OFFICIAL_TABS) {
+  for (const tab of OFFICIAL_CSV_TABS) {
     process.stdout.write(`Fetching ${tab}...\n`);
     const csv = await fetchCsv(OFFICIAL_SHEET_ID, tab);
     sheets.set(tab, parseCsv(csv));
   }
+
+  process.stdout.write('Fetching official workbook for Champions...\n');
+  const officialWorkbook = await fetchXlsx(OFFICIAL_SHEET_ID);
+  const championRows = readXlsxRows(officialWorkbook, 'Champions');
 
   const ressVersion = await readRessVersion();
   const metadata = readMetadata(sheets.get('Home') ?? [], ressVersion);
@@ -30,7 +37,7 @@ async function main() {
     heroLevels: parseHeroLevels(sheets.get('Hero Levels') ?? []),
     items: parseItems(sheets.get('Blueprints') ?? []),
     skills,
-    champions: parseChampions(skills),
+    champions: parseChampions(skills, championRows),
     enchantments: parseEnchantments(sheets.get('Enchantments') ?? []),
     quests: parseQuests(sheets.get('Quests') ?? [])
   };
@@ -49,6 +56,31 @@ async function fetchCsv(sheetId, tab) {
     throw new Error(`Failed to fetch ${tab}: ${response.status} ${response.statusText}`);
   }
   return response.text();
+}
+
+async function fetchXlsx(sheetId) {
+  const url = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=xlsx`;
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Failed to download workbook: ${response.status} ${response.statusText}`);
+  }
+  return XLSX.read(Buffer.from(await response.arrayBuffer()), {
+    cellDates: false,
+    cellFormula: false,
+    type: 'buffer'
+  });
+}
+
+function readXlsxRows(workbook, tab) {
+  const sheet = workbook.Sheets[tab];
+  if (!sheet) {
+    throw new Error(`Missing workbook sheet "${tab}".`);
+  }
+  return XLSX.utils.sheet_to_json(sheet, {
+    header: 1,
+    defval: '',
+    raw: false
+  });
 }
 
 async function readRessVersion() {
@@ -313,26 +345,204 @@ function linkHeroMetadata(heroes, skills) {
   return heroes;
 }
 
-function parseChampions(skills) {
-  const championMap = new Map();
+function parseChampions(skills, rows) {
+  const leaderSkillIdsByChampion = new Map();
   for (const skill of skills.filter((entry) => entry.type === 'Leader')) {
     const classLabel = skill.classes[0] ?? '';
     const match = classLabel.match(/^(.+?)\s+\((Guest Champion|Champion)\)$/i);
     if (!match) {
       continue;
     }
-    const name = match[1].trim();
-    const id = slugify(name);
-    const champion = championMap.get(id) ?? {
-      id,
-      name,
-      guest: /guest/i.test(match[2]),
-      leaderSkillIds: []
-    };
-    champion.leaderSkillIds.push(skill.id);
-    championMap.set(id, champion);
+    const id = slugify(match[1]);
+    leaderSkillIdsByChampion.set(id, [...(leaderSkillIdsByChampion.get(id) ?? []), skill.id]);
   }
-  return [...championMap.values()].sort((left, right) => left.name.localeCompare(right.name));
+
+  return parseChampionSheet(rows, skills, leaderSkillIdsByChampion).sort((left, right) => left.name.localeCompare(right.name));
+}
+
+function parseChampionSheet(rows, skills, leaderSkillIdsByChampion) {
+  const leaderSkillByName = new Map(
+    skills.filter((skill) => skill.type === 'Leader').map((skill) => [normalizeName(skill.name), skill])
+  );
+  const elementBreakpoints = parseChampionElementBreakpoints(rows);
+  const champions = [];
+
+  for (let rowIndex = 0; rowIndex < rows.length; rowIndex += 1) {
+    const row = rows[rowIndex] ?? [];
+    if (!isChampionStart(row)) {
+      continue;
+    }
+
+    const nextStart = findNextChampionBlock(rows, rowIndex + 1);
+    const blockRows = rows.slice(rowIndex, nextStart === -1 ? rows.length : nextStart);
+    const parsedName = parseChampionName(clean(row[1]));
+    const leaderSkillIds = leaderSkillIdsByChampion.get(parsedName.id) ?? [];
+    const rankRewards = parseChampionRankRewards(blockRows, leaderSkillByName, leaderSkillIds);
+
+    champions.push({
+      id: parsedName.id,
+      name: parsedName.name,
+      guest: parsedName.guest,
+      role: championRole(clean(blockRows[3]?.[2])),
+      element: clean(blockRows[1]?.[2]),
+      unlockCost: clean(blockRows[2]?.[2]),
+      prerequisite: clean(blockRows[0]?.[4]),
+      baseStats: {
+        hp: numberValue(blockRows[0]?.[6]),
+        attack: numberValue(blockRows[1]?.[6]),
+        defense: numberValue(blockRows[2]?.[6]),
+        evasion: percentOrNumber(blockRows[3]?.[6]),
+        critChance: percentOrNumber(blockRows[1]?.[4]),
+        critDamage: multiplierValue(blockRows[2]?.[4]),
+        threat: numberValue(blockRows[3]?.[4]),
+        power: 0
+      },
+      leaderSkillIds,
+      rankRewards,
+      elementBreakpoints
+    });
+
+    if (nextStart === -1) {
+      break;
+    }
+    rowIndex = nextStart - 1;
+  }
+
+  return champions;
+}
+
+function isChampionStart(row) {
+  return Boolean(
+    clean(row[1]) &&
+      /^Prerequisite$/i.test(clean(row[3])) &&
+      /^HP$/i.test(clean(row[5]))
+  );
+}
+
+function findNextChampionBlock(rows, startIndex) {
+  for (let index = startIndex; index < rows.length; index += 1) {
+    if (isChampionStart(rows[index] ?? [])) {
+      return index;
+    }
+  }
+  return -1;
+}
+
+function parseChampionName(rawName) {
+  const guest = /\(Guest Champion\)/i.test(rawName);
+  const name = titleCase(rawName.replace(/\(Guest Champion\)/i, '').trim());
+  return {
+    id: slugify(name),
+    name,
+    guest
+  };
+}
+
+function championRole(value) {
+  if (/fighter/i.test(value)) {
+    return 'fighter';
+  }
+  if (/rogue/i.test(value)) {
+    return 'rogue';
+  }
+  if (/spellcaster/i.test(value)) {
+    return 'spellcaster';
+  }
+  return 'champion';
+}
+
+function parseChampionElementBreakpoints(rows) {
+  const breakpoints = [];
+  for (const row of rows) {
+    const rank = numberValue(row[8]);
+    if (rank <= 0 || /^Rank$/i.test(clean(row[8]))) {
+      continue;
+    }
+    breakpoints.push({
+      rank,
+      elementValue: numberValue(row[9])
+    });
+  }
+  return breakpoints;
+}
+
+function parseChampionRankRewards(blockRows, leaderSkillByName, leaderSkillIds) {
+  const rewards = [];
+
+  for (const row of blockRows.slice(5)) {
+    const rankLabel = clean(row[1]);
+    const rewardText = clean(row[3]);
+    const repeatable = /\+X/i.test(rankLabel);
+    const rank = numberValue(rankLabel);
+
+    if (rank > 0) {
+      rewards.push({
+        rank,
+        rankLabel,
+        coinsNeeded: numberValue(row[2]),
+        coinsFormula: repeatable ? clean(row[2]) : '',
+        reward: rewardText,
+        statGains: parseChampionStatGains(rewardText),
+        leaderSkillId: rewards.length === 0 ? leaderSkillIds[0] ?? '' : leaderSkillIdFromReward(rewardText, leaderSkillByName),
+        repeatable
+      });
+      continue;
+    }
+
+    if (rewardText && rewards.length > 0) {
+      const previous = rewards[rewards.length - 1];
+      previous.reward = [previous.reward, rewardText].filter(Boolean).join(' | ');
+      previous.statGains = addFlatStatBlocks(previous.statGains, parseChampionStatGains(rewardText));
+      previous.leaderSkillId ||= leaderSkillIdFromReward(rewardText, leaderSkillByName);
+    }
+  }
+
+  return rewards;
+}
+
+function leaderSkillIdFromReward(rewardText, leaderSkillByName) {
+  const match = rewardText.match(/Leader Skill Upgraded:\s*(.+)$/i);
+  if (!match) {
+    return '';
+  }
+  return leaderSkillByName.get(normalizeName(match[1]))?.id ?? '';
+}
+
+function parseChampionStatGains(rewardText) {
+  return {
+    attack: sumFlat(rewardText, [/\+(\d+(?:\.\d+)?)\s+Attack\b/gi]),
+    defense: sumFlat(rewardText, [/\+(\d+(?:\.\d+)?)\s+Defense\b/gi]),
+    hp: sumFlat(rewardText, [/\+(\d+(?:\.\d+)?)\s+Health\b/gi]),
+    evasion: 0,
+    critChance: 0,
+    critDamage: 0,
+    threat: 0
+  };
+}
+
+function zeroStatBlock() {
+  return {
+    attack: 0,
+    defense: 0,
+    hp: 0,
+    evasion: 0,
+    critChance: 0,
+    critDamage: 0,
+    threat: 0,
+    power: 0
+  };
+}
+
+function addFlatStatBlocks(left, right) {
+  return {
+    attack: left.attack + right.attack,
+    defense: left.defense + right.defense,
+    hp: left.hp + right.hp,
+    evasion: left.evasion + right.evasion,
+    critChance: left.critChance + right.critChance,
+    critDamage: left.critDamage + right.critDamage,
+    threat: left.threat + right.threat
+  };
 }
 
 function parseQuests(rows) {
@@ -471,7 +681,8 @@ function percentOrNumber(value) {
   if (!cleaned) {
     return 0;
   }
-  return numberValue(cleaned.replace('%', ''));
+  const parsed = numberValue(cleaned.replace('%', ''));
+  return parsed > 0 && parsed < 1 ? parsed * 100 : parsed;
 }
 
 function multiplierValue(value) {

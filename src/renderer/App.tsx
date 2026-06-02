@@ -1,6 +1,7 @@
 import {
   ArrowDownToLine,
   ArrowUpFromLine,
+  Crown,
   Database,
   GitCompare,
   Hammer,
@@ -21,24 +22,31 @@ import {
   baseHeroOptions,
   createId,
   defaultBuild,
+  defaultChampionBuild,
   defaultRoster,
   emptyEquipmentForHero,
   getBaseHero,
   getEffectiveHero,
-  getHero,
   getMaxTierForLevel,
   normalizeEquipmentForHero,
   slotLabel
 } from '../shared/data-utils';
-import { calculateHeroStats, getStarforgeStatMultiplier } from '../shared/engine';
+import {
+  calculateChampionBuildStats,
+  calculateHeroStats,
+  getChampionMaxRank,
+  getStarforgeStatMultiplier,
+  resolveChampion
+} from '../shared/engine';
 import type {
   BuildConfig,
-  ChampionData,
-  EnchantmentData,
+  ChampionBuildConfig,
+  ElementScores,
   EquipmentSelection,
   GameData,
   ItemData,
   ResolvedGearLine,
+  ResolvedChampionBuild,
   RosterConfig,
   SkillData,
   StatBlock
@@ -47,11 +55,17 @@ import { ChampionToken, EnchantmentToken, HeroToken, ItemToken, SkillToken, Visu
 
 const data = rawGameData as GameData;
 const CURRENT_BUILD_KEY = 'shopTitansHeroBuilder.currentBuild';
+const HERO_BUILDS_KEY = 'shopTitansHeroBuilder.heroBuilds';
+const CHAMPION_BUILD_KEY = 'shopTitansHeroBuilder.championBuild';
 const SAVED_BUILDS_KEY = 'shopTitansHeroBuilder.savedBuilds';
 const ROSTERS_KEY = 'shopTitansHeroBuilder.rosters';
 const ACTIVE_ROSTER_KEY = 'shopTitansHeroBuilder.activeRoster';
 
-type AppTab = 'builder' | 'roster' | 'compare' | 'items' | 'io';
+const HERO_BUILD_COUNT = 5;
+const heroTabs = [0, 1, 2, 3, 4] as const;
+
+type HeroTab = `hero-${0 | 1 | 2 | 3 | 4}`;
+type AppTab = HeroTab | 'champion' | 'roster' | 'compare' | 'items' | 'io';
 
 const statLabels: Array<[keyof StatBlock, string]> = [
   ['attack', 'ATK'],
@@ -65,14 +79,17 @@ const statLabels: Array<[keyof StatBlock, string]> = [
 ];
 
 export function App(): JSX.Element {
-  const [activeTab, setActiveTab] = useState<AppTab>('builder');
-  const [build, setBuild] = useState<BuildConfig>(() => loadCurrentBuild());
+  const [activeTab, setActiveTab] = useState<AppTab>('hero-0');
+  const [heroBuilds, setHeroBuilds] = useState<BuildConfig[]>(() => loadHeroBuilds());
+  const [championBuild, setChampionBuild] = useState<ChampionBuildConfig>(() => loadChampionBuild());
   const [savedBuilds, setSavedBuilds] = useState<BuildConfig[]>(() => loadSavedBuilds());
   const [rosters, setRosters] = useState<RosterConfig[]>(() => loadRosters());
   const [activeRosterId, setActiveRosterId] = useState(() => window.localStorage.getItem(ACTIVE_ROSTER_KEY) ?? '');
   const [importText, setImportText] = useState('');
   const [ioMessage, setIoMessage] = useState('');
 
+  const activeHeroIndex = getActiveHeroIndex(activeTab);
+  const build = heroBuilds[activeHeroIndex] ?? heroBuilds[0] ?? defaultBuild(data);
   const activeRoster = rosters.find((roster) => roster.id === activeRosterId) ?? rosters[0] ?? defaultRoster(data);
   const baseHero = getBaseHero(data, build.heroClassId) ?? baseHeroOptions(data)[0] ?? data.heroes[0];
   const effectiveHero = getEffectiveHero(data, baseHero?.id ?? build.heroClassId, build.promoted) ?? baseHero;
@@ -80,16 +97,24 @@ export function App(): JSX.Element {
     ? {
         ...build,
         heroClassId: baseHero?.id ?? build.heroClassId,
-        championSkillId: build.championSkillId ?? '',
         equipment: normalizeEquipmentForHero(build, effectiveHero)
       }
     : build;
   const resolvedBuild = useMemo(() => calculateHeroStats(normalizedBuild, data), [normalizedBuild]);
+  const resolvedChampionBuild = useMemo(() => calculateChampionBuildStats(championBuild, data), [championBuild]);
   const validationWarnings = validateBuildConfig(normalizedBuild, data);
 
   useEffect(() => {
     window.localStorage.setItem(CURRENT_BUILD_KEY, serializeBuild(normalizedBuild));
   }, [normalizedBuild]);
+
+  useEffect(() => {
+    window.localStorage.setItem(HERO_BUILDS_KEY, JSON.stringify(heroBuilds));
+  }, [heroBuilds]);
+
+  useEffect(() => {
+    window.localStorage.setItem(CHAMPION_BUILD_KEY, JSON.stringify(championBuild));
+  }, [championBuild]);
 
   useEffect(() => {
     window.localStorage.setItem(SAVED_BUILDS_KEY, JSON.stringify(savedBuilds));
@@ -105,8 +130,21 @@ export function App(): JSX.Element {
     }
   }, [activeRoster.id]);
 
+  function setActiveBuild(nextBuild: BuildConfig): void {
+    setHeroBuilds((current) => replaceHeroBuild(current, activeHeroIndex, nextBuild));
+    setActiveTab(`hero-${activeHeroIndex}` as HeroTab);
+  }
+
+  function updateActiveBuild(updater: (current: BuildConfig) => BuildConfig): void {
+    setHeroBuilds((current) => {
+      const normalized = ensureHeroBuildCount(current);
+      const currentBuild = normalized[activeHeroIndex] ?? defaultBuild(data);
+      return normalized.map((entry, index) => (index === activeHeroIndex ? updater(currentBuild) : entry));
+    });
+  }
+
   function updateBuild(patch: Partial<BuildConfig>): void {
-    setBuild((current) => ({ ...current, ...patch }));
+    updateActiveBuild((current) => ({ ...current, ...patch }));
   }
 
   function changeHero(heroClassId: string): void {
@@ -114,7 +152,7 @@ export function App(): JSX.Element {
     if (!nextHero) {
       return;
     }
-    setBuild((current) => ({
+    updateActiveBuild((current) => ({
       ...current,
       heroClassId: nextHero.id,
       promoted: false,
@@ -123,7 +161,7 @@ export function App(): JSX.Element {
   }
 
   function setPromoted(promoted: boolean): void {
-    setBuild((current) => {
+    updateActiveBuild((current) => {
       const nextHero = getEffectiveHero(data, current.heroClassId, promoted) ?? getBaseHero(data, current.heroClassId);
       return {
         ...current,
@@ -134,16 +172,19 @@ export function App(): JSX.Element {
   }
 
   function updateEquipment(slotId: string, patch: Partial<EquipmentSelection>): void {
-    setBuild((current) => ({
-      ...current,
-      equipment: normalizeEquipmentForHero(current, effectiveHero).map((entry) =>
-        entry.slotId === slotId ? { ...entry, ...patch } : entry
-      )
-    }));
+    updateActiveBuild((current) => {
+      const hero = getEffectiveHero(data, current.heroClassId, current.promoted) ?? getBaseHero(data, current.heroClassId) ?? effectiveHero;
+      return {
+        ...current,
+        equipment: hero
+          ? normalizeEquipmentForHero(current, hero).map((entry) => (entry.slotId === slotId ? { ...entry, ...patch } : entry))
+          : current.equipment
+      };
+    });
   }
 
   function updateSkill(index: number, skillId: string): void {
-    setBuild((current) => {
+    updateActiveBuild((current) => {
       const skills = [...current.skills];
       skills[index] = skillId;
       return { ...current, skills };
@@ -157,7 +198,7 @@ export function App(): JSX.Element {
   }
 
   function duplicateBuild(): void {
-    setBuild((current) => ({
+    updateActiveBuild((current) => ({
       ...current,
       id: createId('build'),
       name: `${current.name} Copy`
@@ -167,7 +208,6 @@ export function App(): JSX.Element {
   function addCurrentToRoster(): void {
     const rosterBuild = {
       ...normalizedBuild,
-      championSkillId: activeRoster.championSkillId,
       id: normalizedBuild.id || createId('build')
     };
     setRosters((current) =>
@@ -187,13 +227,49 @@ export function App(): JSX.Element {
     setRosters((current) => current.map((roster) => (roster.id === activeRoster.id ? { ...roster, ...patch } : roster)));
   }
 
+  function updateChampionBuild(patch: Partial<ChampionBuildConfig>): void {
+    setChampionBuild((current) => normalizeChampionBuild({ ...current, ...patch }) ?? defaultChampionBuild(data));
+  }
+
+  function changeChampion(championId: string): void {
+    const champion = data.champions.find((entry) => entry.id === championId);
+    setChampionBuild((current) =>
+      normalizeChampionBuild({
+        ...current,
+        championId,
+        rank: champion ? getChampionMaxRank(champion) : 1,
+        powerUps: 0
+      }) ?? defaultChampionBuild(data)
+    );
+  }
+
+  function updateChampionEquipment(slot: 'familiar' | 'aurasong', patch: Partial<EquipmentSelection>): void {
+    setChampionBuild((current) =>
+      normalizeChampionBuild({
+        ...current,
+        [slot]: {
+          ...current[slot],
+          ...patch
+        }
+      }) ?? current
+    );
+  }
+
+  function useChampionBuildInRoster(): void {
+    updateRoster({
+      championId: championBuild.championId,
+      championRank: championBuild.rank,
+      championPowerUps: championBuild.powerUps
+    });
+  }
+
   function importBuild(): void {
     const result = parseBuildJsonDetailed(importText, data);
     if (!result.ok) {
       setIoMessage(result.errors.map((error) => `${error.field}: ${error.message}`).join('\n'));
       return;
     }
-    setBuild(result.build);
+    setActiveBuild(result.build);
     setIoMessage(
       result.warnings.length > 0
         ? result.warnings.map((warning) => `${warning.field}: ${warning.message}`).join('\n')
@@ -214,8 +290,16 @@ export function App(): JSX.Element {
           <h1>Hero Builder</h1>
         </div>
         <nav className="tabs" aria-label="Main views">
-          <TabButton active={activeTab === 'builder'} onClick={() => setActiveTab('builder')} icon={<Hammer size={18} />}>
-            Builder
+          {heroTabs.map((index) => {
+            const tab = `hero-${index}` as HeroTab;
+            return (
+              <TabButton key={tab} active={activeTab === tab} onClick={() => setActiveTab(tab)} icon={<Hammer size={18} />}>
+                {`Hero ${index + 1}`}
+              </TabButton>
+            );
+          })}
+          <TabButton active={activeTab === 'champion'} onClick={() => setActiveTab('champion')} icon={<Crown size={18} />}>
+            Champion
           </TabButton>
           <TabButton active={activeTab === 'roster'} onClick={() => setActiveTab('roster')} icon={<UsersRound size={18} />}>
             Roster
@@ -232,12 +316,12 @@ export function App(): JSX.Element {
         </nav>
       </header>
 
-      {activeTab === 'builder' && (
+      {isHeroTab(activeTab) && (
         <main className="builder-grid">
           <section className="panel builder-panel">
             <div className="panel-title">
               <UserRound size={19} />
-              <h2>Hero</h2>
+              <h2>Hero {activeHeroIndex + 1}</h2>
             </div>
             <div className="field-grid">
               <label>
@@ -278,14 +362,9 @@ export function App(): JSX.Element {
               </label>
             </div>
 
-            <div className="champion-row">
-              <ChampionSkillSelect value={build.championSkillId ?? ''} onChange={(championSkillId) => updateBuild({ championSkillId })} />
-            </div>
-
             <div className="hero-meta-row">
               <InfoChip label="Active class" value={effectiveHero?.name ?? 'Unknown'} kind="hero" />
               <InfoChip label="Innate" value={resolvedBuild.innateSkills.map((skill) => skill.name).join(', ') || 'None'} kind="skill" />
-              <InfoChip label="Champion aura" value={resolvedBuild.championSkill?.name ?? 'None'} kind="champion" />
             </div>
 
             <div className="seed-row">
@@ -385,14 +464,15 @@ export function App(): JSX.Element {
               </button>
               <button type="button" onClick={addCurrentToRoster}>
                 <UsersRound size={17} />
-                Add to Roster
+                Add to {activeRoster.name}
               </button>
               <button type="button" onClick={duplicateBuild}>
                 <Plus size={17} />
                 Duplicate
               </button>
             </div>
-            <SavedBuildList builds={savedBuilds} onLoad={setBuild} onDelete={setSavedBuilds} compact />
+            <ElementPointsPanel scores={resolvedBuild.elementScores} />
+            <SavedBuildList builds={savedBuilds} onLoad={setActiveBuild} onDelete={setSavedBuilds} compact />
             <GearSummary lines={resolvedBuild.gear} />
             {[...resolvedBuild.warnings, ...validationWarnings.map((warning) => warning.message)].length > 0 && (
               <div className="warning-box">
@@ -413,19 +493,29 @@ export function App(): JSX.Element {
           onActiveRosterChange={setActiveRosterId}
           onCreateRoster={createRoster}
           onUpdateRoster={updateRoster}
-          onLoadBuild={setBuild}
-          onAddSavedBuild={(savedBuild) =>
-            updateRoster({ builds: upsertBuild(activeRoster.builds, { ...savedBuild, championSkillId: activeRoster.championSkillId }) })
-          }
+          onLoadBuild={setActiveBuild}
+          onAddSavedBuild={(savedBuild) => updateRoster({ builds: upsertBuild(activeRoster.builds, savedBuild) })}
           onRemoveBuild={(buildId) => updateRoster({ builds: activeRoster.builds.filter((entry) => entry.id !== buildId) })}
         />
       )}
 
       {activeTab === 'compare' && (
-        <ComparePanel currentBuild={normalizedBuild} savedBuilds={savedBuilds} onLoad={setBuild} onDelete={setSavedBuilds} />
+        <ComparePanel currentBuild={normalizedBuild} savedBuilds={savedBuilds} onLoad={setActiveBuild} onDelete={setSavedBuilds} />
       )}
 
       {activeTab === 'items' && <ItemBrowser />}
+
+      {activeTab === 'champion' && (
+        <ChampionBuildPanel
+          build={championBuild}
+          resolved={resolvedChampionBuild}
+          activeRoster={activeRoster}
+          onChange={updateChampionBuild}
+          onChangeChampion={changeChampion}
+          onChangeEquipment={updateChampionEquipment}
+          onUseInRoster={useChampionBuildInRoster}
+        />
+      )}
 
       {activeTab === 'io' && (
         <JsonPanel
@@ -543,9 +633,10 @@ function GearRow({ slotLabel, allowedTypes, selection, resolvedLine, buildLevel,
               <span key={label}>{label} {value}</span>
             ))}
           </div>
+          <ElementPointStrip scores={resolvedLine.elementScores} />
           <div className="source-row">
-            {selectedItem.builtInElement && <span>Built-in: {selectedItem.builtInElement}</span>}
-            {selectedItem.builtInSpirit && <span>Built-in: {selectedItem.builtInSpirit}</span>}
+            {resolvedLine.elementSources.map((source) => <span key={`element-${source}`}>Element: {source}</span>)}
+            {resolvedLine.spiritSources.map((source) => <span key={`spirit-${source}`}>Spirit: {source}</span>)}
             {selectedItem.elementalAffinity && <span>Element affinity: {selectedItem.elementalAffinity}</span>}
             {selectedItem.spiritAffinity && <span>Spirit affinity: {selectedItem.spiritAffinity}</span>}
             {resolvedLine.affinityBonuses.map((bonus) => <span key={bonus}>{bonus}</span>)}
@@ -577,8 +668,12 @@ function RosterPanel({
   onAddSavedBuild: (build: BuildConfig) => void;
   onRemoveBuild: (id: string) => void;
 }): JSX.Element {
+  const activeChampion = data.champions.find((champion) => champion.id === activeRoster.championId) ?? data.champions[0];
+  const resolvedChampion = activeChampion
+    ? resolveChampion(activeChampion, data, activeRoster.championRank, activeRoster.championPowerUps)
+    : null;
   const resolved = activeRoster.builds.map((build) =>
-    calculateHeroStats({ ...build, championSkillId: activeRoster.championSkillId }, data)
+    calculateHeroStats(build, data, { championSkillId: resolvedChampion?.leaderSkill?.id })
   );
   const totals = resolved.reduce(
     (acc, entry) => ({
@@ -593,6 +688,7 @@ function RosterPanel({
     }),
     { attack: 0, defense: 0, hp: 0, evasion: 0, critChance: 0, critDamage: 0, threat: 0, power: 0 }
   );
+  const totalElementScores = resolved.reduce((acc, entry) => mergeElementScores(acc, entry.elementScores), {} as ElementScores);
 
   return (
     <main className="roster-grid">
@@ -621,10 +717,29 @@ function RosterPanel({
             New Roster
           </button>
         </div>
-        <ChampionSkillSelect
-          value={activeRoster.championSkillId}
-          onChange={(championSkillId) => onUpdateRoster({ championSkillId })}
-        />
+        <ChampionRosterControls activeRoster={activeRoster} onUpdateRoster={onUpdateRoster} />
+        <div className="roster-aura-note">
+          <ChampionToken champion={activeChampion} />
+          <span>
+            {resolvedChampion?.leaderSkill
+              ? `${activeChampion?.name ?? 'Champion'} rank ${resolvedChampion.rank} affects every build in this roster with ${resolvedChampion.leaderSkill.name}.`
+              : 'No champion aura is active for this roster.'}
+          </span>
+        </div>
+        <div className="roster-overview">
+          <div>
+            <span>Heroes</span>
+            <strong>{resolved.length}</strong>
+          </div>
+          <div>
+            <span>Champion</span>
+            <strong>{activeChampion?.name ?? 'None'}</strong>
+          </div>
+          <div>
+            <span>Team Power</span>
+            <strong>{totals.power.toLocaleString()}</strong>
+          </div>
+        </div>
         <div className="saved-build-picker">
           <h3>Saved Builds</h3>
           <div className="saved-build-list">
@@ -637,6 +752,7 @@ function RosterPanel({
           </div>
         </div>
         <div className="roster-list">
+          {resolved.length === 0 && <p className="muted">No heroes in this roster yet.</p>}
           {resolved.map((entry) => (
             <article className="roster-card" key={entry.build.id}>
               <div>
@@ -647,6 +763,7 @@ function RosterPanel({
                 </div>
               </div>
               <StatStrip stats={entry.stats} />
+              <ElementPointStrip scores={entry.elementScores} compact />
               <div className="roster-card-actions">
                 <button type="button" onClick={() => onLoadBuild(entry.build)}>Load</button>
                 <button type="button" className="icon-button" aria-label={`Remove ${entry.build.name}`} onClick={() => onRemoveBuild(entry.build.id)}>
@@ -663,6 +780,7 @@ function RosterPanel({
           <h2>Team Totals</h2>
         </div>
         <StatGrid stats={totals} />
+        <ElementPointsPanel scores={totalElementScores} />
       </aside>
     </main>
   );
@@ -817,6 +935,231 @@ function ItemRow({ item }: { item: ItemData }): JSX.Element {
   );
 }
 
+function ChampionBuildPanel({
+  build,
+  resolved,
+  activeRoster,
+  onChange,
+  onChangeChampion,
+  onChangeEquipment,
+  onUseInRoster
+}: {
+  build: ChampionBuildConfig;
+  resolved: ResolvedChampionBuild;
+  activeRoster: RosterConfig;
+  onChange: (patch: Partial<ChampionBuildConfig>) => void;
+  onChangeChampion: (championId: string) => void;
+  onChangeEquipment: (slot: 'familiar' | 'aurasong', patch: Partial<EquipmentSelection>) => void;
+  onUseInRoster: () => void;
+}): JSX.Element {
+  const champion = resolved.champion ?? data.champions.find((entry) => entry.id === build.championId) ?? data.champions[0];
+  const maxRank = champion ? getChampionMaxRank(champion) : 1;
+  const rankResolved = champion ? resolveChampion(champion, data, build.rank, build.powerUps) : null;
+  const isRosterChampion = activeRoster.championId === build.championId;
+
+  return (
+    <main className="builder-grid champion-builder-grid">
+      <section className="panel builder-panel">
+        <div className="panel-title">
+          <Crown size={19} />
+          <h2>Champion</h2>
+        </div>
+        <div className="field-grid champion-field-grid">
+          <label>
+            Build name
+            <input value={build.name} onChange={(event) => onChange({ name: event.target.value })} />
+          </label>
+          <label>
+            Champion
+            <div className="select-with-token">
+              <ChampionToken champion={champion} />
+              <select value={champion?.id ?? ''} onChange={(event) => onChangeChampion(event.target.value)}>
+                {data.champions.map((entry) => (
+                  <option key={entry.id} value={entry.id}>
+                    {entry.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </label>
+          <label>
+            Rank
+            <input
+              type="number"
+              min={1}
+              max={maxRank}
+              value={build.rank}
+              onChange={(event) => onChange({ rank: clampNumber(event.target.valueAsNumber, 1, maxRank) })}
+            />
+          </label>
+          <label>
+            Level
+            <input
+              type="number"
+              min={1}
+              max={50}
+              value={build.level}
+              onChange={(event) => onChange({ level: clampNumber(event.target.valueAsNumber, 1, 50) })}
+            />
+          </label>
+          <label>
+            +X power-ups
+            <input
+              type="number"
+              min={0}
+              value={build.powerUps}
+              onChange={(event) => onChange({ powerUps: clampNumber(event.target.valueAsNumber, 0, 999) })}
+            />
+          </label>
+          <label className="checkbox-field">
+            <input
+              type="checkbox"
+              checked={build.championSoul}
+              onChange={(event) => onChange({ championSoul: event.target.checked })}
+            />
+            Champion Soul
+          </label>
+        </div>
+
+        <div className="hero-meta-row">
+          <InfoChip label="Active champion" value={champion?.name ?? 'Unknown'} kind="champion" />
+          <InfoChip label="Aura" value={resolved.leaderSkill?.name ?? 'None'} kind="skill" />
+        </div>
+
+        <div className="champion-meta champion-builder-meta">
+          <span>{champion?.guest ? 'Guest champion' : 'Champion'}</span>
+          <span>{champion?.role ?? 'unknown'}</span>
+          <span>{champion?.element || 'No element'}</span>
+          <span>Unlock {champion?.unlockCost || 'Free'}</span>
+          <span>{champion?.prerequisite || 'No prerequisite'}</span>
+          <span>Max rank {maxRank}</span>
+        </div>
+
+        <div className="seed-row champion-seeds">
+          <label>
+            ATK seeds
+            <input
+              type="number"
+              min={0}
+              value={build.seeds.attack}
+              onChange={(event) =>
+                onChange({ seeds: { ...build.seeds, attack: clampNumber(event.target.valueAsNumber, 0, 999) } })
+              }
+            />
+          </label>
+          <label>
+            DEF seeds
+            <input
+              type="number"
+              min={0}
+              value={build.seeds.defense}
+              onChange={(event) =>
+                onChange({ seeds: { ...build.seeds, defense: clampNumber(event.target.valueAsNumber, 0, 999) } })
+              }
+            />
+          </label>
+          <label>
+            HP seeds
+            <input
+              type="number"
+              min={0}
+              value={build.seeds.hp}
+              onChange={(event) =>
+                onChange({ seeds: { ...build.seeds, hp: clampNumber(event.target.valueAsNumber, 0, 999) } })
+              }
+            />
+          </label>
+        </div>
+
+        <section className="subsection">
+          <h3>Champion Gear</h3>
+          <div className="gear-list">
+            <GearRow
+              slotLabel="Familiar"
+              allowedTypes={['Familiar']}
+              selection={build.familiar}
+              resolvedLine={resolved.gear.find((entry) => entry.slotId === 'familiar')}
+              buildLevel={build.level}
+              onChange={(patch) => onChangeEquipment('familiar', patch)}
+            />
+            <GearRow
+              slotLabel="Aurasong"
+              allowedTypes={['Aurasong']}
+              selection={build.aurasong}
+              resolvedLine={resolved.gear.find((entry) => entry.slotId === 'aurasong')}
+              buildLevel={build.level}
+              onChange={(patch) => onChangeEquipment('aurasong', patch)}
+            />
+          </div>
+        </section>
+
+        {champion && (
+          <section className="subsection">
+            <h3>Rank Rewards</h3>
+            <div className="rank-reward-list champion-rank-list">
+              {champion.rankRewards.map((reward) => (
+                <div key={`${reward.rankLabel}-${reward.reward}`}>
+                  <span>Rank {reward.rankLabel}</span>
+                  <strong>{reward.coinsFormula || (reward.coinsNeeded > 0 ? `${reward.coinsNeeded} coins` : 'Final upgrade')}</strong>
+                  <p>{reward.reward || 'Unlocks base leader skill.'}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+      </section>
+
+      <aside className="panel stat-panel">
+        <div className="panel-title">
+          <Sparkles size={19} />
+          <h2>Champion Stats</h2>
+        </div>
+        <StatGrid stats={resolved.stats} />
+        <ElementPointsPanel scores={resolved.elementScores} />
+        <div className="action-row">
+          <button type="button" className={isRosterChampion ? 'primary-button' : undefined} onClick={onUseInRoster}>
+            <UsersRound size={17} />
+            Set for {activeRoster.name}
+          </button>
+        </div>
+        <div className="champion-section-label">Base at rank {rankResolved?.rank ?? build.rank}</div>
+        <div className="champion-base-stats">
+          {championBaseStatEntries(rankResolved?.stats ?? resolved.stats).map(([label, value]) => (
+            <span key={label}>
+              {label} <strong>{value}</strong>
+            </span>
+          ))}
+        </div>
+        <div className="active-aura-chip champion-aura-chip">
+          <SkillToken skill={resolved.leaderSkill ?? undefined} />
+          <span>Champion aura</span>
+          <strong>{resolved.leaderSkill?.name ?? 'None'}</strong>
+        </div>
+        <GearSummary lines={resolved.gear} />
+        {champion && champion.elementBreakpoints.length > 0 && (
+          <>
+            <div className="champion-section-label">Element breakpoints</div>
+            <div className="element-breakpoints">
+              {champion.elementBreakpoints.map((breakpoint) => (
+                <span key={`${champion.id}-${breakpoint.rank}`}>
+                  R{breakpoint.rank} <strong>{breakpoint.elementValue}</strong>
+                </span>
+              ))}
+            </div>
+          </>
+        )}
+        {resolved.warnings.length > 0 && (
+          <div className="warning-box">
+            {resolved.warnings.map((warning) => (
+              <p key={warning}>{warning}</p>
+            ))}
+          </div>
+        )}
+      </aside>
+    </main>
+  );
+}
+
 function JsonPanel({
   exportText,
   importText,
@@ -861,32 +1204,66 @@ function JsonPanel({
   );
 }
 
-function ChampionSkillSelect({ value, onChange }: { value: string; onChange: (value: string) => void }): JSX.Element {
-  const skill = data.skills.find((entry) => entry.id === value);
-  const champion = championForSkill(value);
+function ChampionRosterControls({
+  activeRoster,
+  onUpdateRoster
+}: {
+  activeRoster: RosterConfig;
+  onUpdateRoster: (patch: Partial<RosterConfig>) => void;
+}): JSX.Element {
+  const champion = data.champions.find((entry) => entry.id === activeRoster.championId) ?? data.champions[0];
+  const maxRank = champion ? getChampionMaxRank(champion) : 1;
+  const resolved = champion ? resolveChampion(champion, data, activeRoster.championRank, activeRoster.championPowerUps) : null;
   return (
-    <label>
-      Champion aura
-      <div className="select-with-token">
-        <ChampionToken champion={champion} />
-        <select value={value} onChange={(event) => onChange(event.target.value)}>
-          <option value="">None</option>
-          {data.champions.map((entry) => (
-            <optgroup key={entry.id} label={entry.name}>
-              {entry.leaderSkillIds.map((skillId) => {
-                const leaderSkill = data.skills.find((candidate) => candidate.id === skillId);
-                return leaderSkill ? (
-                  <option key={leaderSkill.id} value={leaderSkill.id}>
-                    {leaderSkill.name}
-                  </option>
-                ) : null;
-              })}
-            </optgroup>
-          ))}
-        </select>
-        {skill && <SkillToken skill={skill} />}
+    <div className="champion-controls">
+      <label>
+        Roster champion
+        <div className="select-with-token">
+          <ChampionToken champion={champion} />
+          <select
+            value={champion?.id ?? ''}
+            onChange={(event) => {
+              const nextChampion = data.champions.find((entry) => entry.id === event.target.value);
+              onUpdateRoster({
+                championId: event.target.value,
+                championRank: nextChampion ? getChampionMaxRank(nextChampion) : 1,
+                championPowerUps: 0
+              });
+            }}
+          >
+            {data.champions.map((entry) => (
+              <option key={entry.id} value={entry.id}>
+                {entry.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </label>
+      <label>
+        Rank
+        <input
+          type="number"
+          min={1}
+          max={maxRank}
+          value={resolved?.rank ?? 1}
+          onChange={(event) => onUpdateRoster({ championRank: clampNumber(event.target.valueAsNumber, 1, maxRank) })}
+        />
+      </label>
+      <label>
+        +X power-ups
+        <input
+          type="number"
+          min={0}
+          value={activeRoster.championPowerUps}
+          onChange={(event) => onUpdateRoster({ championPowerUps: clampNumber(event.target.valueAsNumber, 0, 999) })}
+        />
+      </label>
+      <div className="active-aura-chip">
+        <SkillToken skill={resolved?.leaderSkill ?? undefined} />
+        <span>Champion aura</span>
+        <strong>{resolved?.leaderSkill?.name ?? 'None'}</strong>
       </div>
-    </label>
+    </div>
   );
 }
 
@@ -966,6 +1343,41 @@ function StatStrip({ stats }: { stats: StatBlock }): JSX.Element {
   );
 }
 
+function ElementPointsPanel({ scores }: { scores: ElementScores }): JSX.Element {
+  const entries = elementScoreEntries(scores);
+  return (
+    <div className="element-points-panel">
+      <h3>Element Points</h3>
+      {entries.length === 0 ? (
+        <p className="muted">No element points.</p>
+      ) : (
+        <div className="element-point-grid">
+          {entries.map(([key, value]) => (
+            <span key={key}>
+              {formatElementLabel(key)}
+              <strong>{value}</strong>
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ElementPointStrip({ scores, compact = false }: { scores: ElementScores; compact?: boolean }): JSX.Element | null {
+  const entries = elementScoreEntries(scores);
+  if (entries.length === 0) {
+    return null;
+  }
+  return (
+    <div className={compact ? 'element-point-strip compact' : 'element-point-strip'}>
+      {entries.map(([key, value]) => (
+        <span key={key}>{formatElementLabel(key)} {value}</span>
+      ))}
+    </div>
+  );
+}
+
 function InfoChip({ label, value, kind }: { label: string; value: string; kind: 'hero' | 'skill' | 'champion' }): JSX.Element {
   return (
     <div className="info-chip">
@@ -1019,8 +1431,15 @@ function skillClassMatches(classLabel: string, hero: NonNullable<ReturnType<type
   return normalizedLabel.includes('all spellcaster') && hero.role === 'spellcaster';
 }
 
-function championForSkill(skillId: string): ChampionData | undefined {
-  return data.champions.find((champion) => champion.leaderSkillIds.includes(skillId));
+function championBaseStatEntries(stats: StatBlock): Array<[string, string]> {
+  return [
+    ['ATK', stats.attack.toLocaleString()],
+    ['DEF', stats.defense.toLocaleString()],
+    ['HP', stats.hp.toLocaleString()],
+    ['EVA', `${stats.evasion.toLocaleString()}%`],
+    ['CRIT', `${stats.critChance.toLocaleString()}%`],
+    ['Threat', stats.threat.toLocaleString()]
+  ];
 }
 
 function itemStatEntries(stats: { attack: number; defense: number; hp: number; evasion: number; critChance: number }): Array<[string, string]> {
@@ -1028,14 +1447,55 @@ function itemStatEntries(stats: { attack: number; defense: number; hp: number; e
     ['ATK', stats.attack, false],
     ['DEF', stats.defense, false],
     ['HP', stats.hp, false],
-    ['EVA', stats.evasion, true],
-    ['CRIT', stats.critChance, true]
+    ['EVA', normalizeDisplayPercentStat(stats.evasion), true],
+    ['CRIT', normalizeDisplayPercentStat(stats.critChance), true]
   ]
     .filter(([, value]) => Number(value) > 0)
     .map(([label, value, isPercent]) => [
       String(label),
       `${Number(value).toLocaleString()}${isPercent ? '%' : ''}`
     ]) as Array<[string, string]>;
+}
+
+function elementScoreEntries(scores: ElementScores): Array<[string, number]> {
+  const order = ['fire', 'water', 'air', 'earth', 'light', 'dark', 'luxurious', 'gold', 'all'];
+  return Object.entries(scores)
+    .filter(([, value]) => value > 0)
+    .sort((left, right) => {
+      const leftIndex = order.indexOf(left[0]);
+      const rightIndex = order.indexOf(right[0]);
+      if (leftIndex !== -1 || rightIndex !== -1) {
+        return (leftIndex === -1 ? Number.MAX_SAFE_INTEGER : leftIndex) - (rightIndex === -1 ? Number.MAX_SAFE_INTEGER : rightIndex);
+      }
+      return left[0].localeCompare(right[0]);
+    });
+}
+
+function formatElementLabel(key: string): string {
+  const labels: Record<string, string> = {
+    fire: 'Fire',
+    water: 'Water',
+    air: 'Air',
+    earth: 'Earth',
+    light: 'Light',
+    dark: 'Dark',
+    luxurious: 'Gold',
+    gold: 'Gold',
+    all: 'All'
+  };
+  return labels[key] ?? key;
+}
+
+function mergeElementScores(left: ElementScores, right: ElementScores): ElementScores {
+  const merged = { ...left };
+  for (const [key, value] of Object.entries(right)) {
+    merged[key] = (merged[key] ?? 0) + value;
+  }
+  return merged;
+}
+
+function normalizeDisplayPercentStat(value: number): number {
+  return value > 0 && value < 1 ? Math.round(value * 10000) / 100 : value;
 }
 
 function upsertBuild(builds: BuildConfig[], build: BuildConfig): BuildConfig[] {
@@ -1055,6 +1515,103 @@ function loadCurrentBuild(): BuildConfig {
   return parsed.ok ? { ...defaultBuild(data), ...parsed.build } : defaultBuild(data);
 }
 
+function loadHeroBuilds(): BuildConfig[] {
+  try {
+    const parsed = JSON.parse(window.localStorage.getItem(HERO_BUILDS_KEY) ?? '[]');
+    if (Array.isArray(parsed) && parsed.length > 0) {
+      return ensureHeroBuildCount(parsed.filter((entry) => parseBuildJsonDetailed(JSON.stringify(entry), data).ok) as BuildConfig[]);
+    }
+  } catch {
+    // Fall through to the current-build migration.
+  }
+  const defaults = createDefaultHeroBuilds();
+  return replaceHeroBuild(defaults, 0, loadCurrentBuild());
+}
+
+function createDefaultHeroBuilds(): BuildConfig[] {
+  return Array.from({ length: HERO_BUILD_COUNT }, (_, index) => ({
+    ...defaultBuild(data),
+    name: `Hero ${index + 1}`
+  }));
+}
+
+function ensureHeroBuildCount(builds: BuildConfig[]): BuildConfig[] {
+  const defaults = createDefaultHeroBuilds();
+  return defaults.map((fallback, index) => {
+    const candidate = builds[index];
+    if (!candidate) {
+      return fallback;
+    }
+    const parsed = parseBuildJsonDetailed(JSON.stringify(candidate), data);
+    return parsed.ok ? { ...fallback, ...parsed.build } : fallback;
+  });
+}
+
+function replaceHeroBuild(builds: BuildConfig[], index: number, build: BuildConfig): BuildConfig[] {
+  const normalized = ensureHeroBuildCount(builds);
+  return normalized.map((entry, entryIndex) => (entryIndex === index ? build : entry));
+}
+
+function loadChampionBuild(): ChampionBuildConfig {
+  try {
+    const parsed = JSON.parse(window.localStorage.getItem(CHAMPION_BUILD_KEY) ?? 'null');
+    return normalizeChampionBuild(parsed) ?? defaultChampionBuild(data);
+  } catch {
+    return defaultChampionBuild(data);
+  }
+}
+
+function normalizeChampionBuild(value: unknown): ChampionBuildConfig | null {
+  if (!value || typeof value !== 'object') {
+    return null;
+  }
+  const fallback = defaultChampionBuild(data);
+  const candidate = value as Partial<ChampionBuildConfig>;
+  const champion = data.champions.find((entry) => entry.id === candidate.championId) ?? data.champions[0];
+  const maxRank = champion ? getChampionMaxRank(champion) : 1;
+  return {
+    schemaVersion: 1,
+    id: typeof candidate.id === 'string' ? candidate.id : fallback.id,
+    name: typeof candidate.name === 'string' ? candidate.name : fallback.name,
+    championId: champion?.id ?? fallback.championId,
+    rank: clampNumber(Number(candidate.rank ?? fallback.rank), 1, maxRank),
+    level: clampNumber(Number(candidate.level ?? fallback.level), 1, 50),
+    powerUps: clampNumber(Number(candidate.powerUps ?? fallback.powerUps), 0, 999),
+    championSoul: Boolean(candidate.championSoul ?? fallback.championSoul),
+    seeds: {
+      attack: clampNumber(Number(candidate.seeds?.attack ?? fallback.seeds.attack), 0, 999),
+      defense: clampNumber(Number(candidate.seeds?.defense ?? fallback.seeds.defense), 0, 999),
+      hp: clampNumber(Number(candidate.seeds?.hp ?? fallback.seeds.hp), 0, 999)
+    },
+    familiar: normalizeEquipmentSelection(candidate.familiar, 'familiar'),
+    aurasong: normalizeEquipmentSelection(candidate.aurasong, 'aurasong')
+  };
+}
+
+function normalizeEquipmentSelection(value: unknown, slotId: string): EquipmentSelection {
+  const candidate = value && typeof value === 'object' ? (value as Partial<EquipmentSelection>) : {};
+  const quality = ITEM_QUALITIES.includes(candidate.quality as EquipmentSelection['quality']) ? candidate.quality : 'normal';
+  return {
+    slotId,
+    itemId: typeof candidate.itemId === 'string' ? candidate.itemId : '',
+    quality: quality ?? 'normal',
+    elementId: typeof candidate.elementId === 'string' ? candidate.elementId : '',
+    spiritId: typeof candidate.spiritId === 'string' ? candidate.spiritId : '',
+    starforged: Boolean(candidate.starforged)
+  };
+}
+
+function isHeroTab(tab: AppTab): tab is HeroTab {
+  return tab.startsWith('hero-');
+}
+
+function getActiveHeroIndex(tab: AppTab): number {
+  if (!isHeroTab(tab)) {
+    return 0;
+  }
+  return clampNumber(Number(tab.replace('hero-', '')), 0, HERO_BUILD_COUNT - 1);
+}
+
 function loadSavedBuilds(): BuildConfig[] {
   try {
     const parsed = JSON.parse(window.localStorage.getItem(SAVED_BUILDS_KEY) ?? '[]');
@@ -1071,12 +1628,39 @@ function loadRosters(): RosterConfig[] {
   try {
     const parsed = JSON.parse(window.localStorage.getItem(ROSTERS_KEY) ?? '[]');
     if (Array.isArray(parsed) && parsed.length > 0) {
-      return parsed as RosterConfig[];
+      return parsed.map((entry) => normalizeRoster(entry)).filter(Boolean) as RosterConfig[];
     }
   } catch {
     // Fall through to default roster.
   }
   return [defaultRoster(data)];
+}
+
+function normalizeRoster(value: unknown): RosterConfig | null {
+  if (!value || typeof value !== 'object') {
+    return null;
+  }
+  const candidate = value as Partial<RosterConfig> & { championSkillId?: string };
+  const fallback = defaultRoster(data);
+  const migratedChampion = candidate.championSkillId
+    ? data.champions.find((champion) => champion.leaderSkillIds.includes(candidate.championSkillId ?? ''))
+    : undefined;
+  const champion =
+    data.champions.find((entry) => entry.id === candidate.championId) ?? migratedChampion ?? data.champions[0];
+  const migratedRank =
+    champion && candidate.championSkillId
+      ? champion.rankRewards.find((reward) => reward.leaderSkillId === candidate.championSkillId)?.rank
+      : undefined;
+  const maxRank = champion ? getChampionMaxRank(champion) : 1;
+  return {
+    schemaVersion: 1,
+    id: typeof candidate.id === 'string' ? candidate.id : fallback.id,
+    name: typeof candidate.name === 'string' ? candidate.name : fallback.name,
+    championId: champion?.id ?? fallback.championId,
+    championRank: clampNumber(Number(candidate.championRank ?? migratedRank ?? maxRank), 1, maxRank),
+    championPowerUps: clampNumber(Number(candidate.championPowerUps ?? 0), 0, 999),
+    builds: Array.isArray(candidate.builds) ? candidate.builds : []
+  };
 }
 
 function formatStat(key: keyof StatBlock, value: number): string {

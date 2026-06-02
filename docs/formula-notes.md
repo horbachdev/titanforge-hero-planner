@@ -7,7 +7,11 @@ This MVP implements the stat engine as pure TypeScript and keeps all imported ga
 - Hero base stats are imported from the official `Heroes` tab.
 - Base classes are linked to Titan Soul promotion classes; the Builder promotion toggle now resolves stats against the promoted class when available.
 - The highest imported `Innate` skill for the active class is applied and displayed.
-- Champion `Leader` skills are imported as champion aura options and applied as party modifiers.
+- Champion element, unlock cost, class type, base stats, element breakpoints, and rank rewards are imported from the official `Champions` tab via the XLSX workbook export.
+- The UI mirrors Ress' party builder shape with five hero build tabs and one `Champion` build tab.
+- Champion builds support rank, level, Champion Soul, seeds, Familiar, and Aurasong gear. Champion seeds use Ress' visible scaling pattern: ATK and DEF seeds add `+4`, HP seeds add `+1`.
+- Champion `Leader` skills are resolved from the selected roster champion rank and applied only when calculating roster/team stats.
+- Repeatable champion `(+X)` power-up rows are stored as repeatable rank rewards and can be added in the roster champion control.
 - Gear base ATK, DEF, HP, EVA, and CRIT are imported from the official `Blueprints` tab.
 - Quality multipliers are applied to item ATK, DEF, and HP.
 - Starforge is a per-equipped-item toggle. If the item has a Starforged milestone matching `+25% Base ATK, DEF and HP`, the engine applies a `1.25` multiplier to that item's base ATK, DEF, and HP before quality scaling.

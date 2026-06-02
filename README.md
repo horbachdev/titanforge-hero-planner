@@ -23,9 +23,10 @@ Generated data lives in `src/data/generated/game-data.json`.
 The importer reads:
 
 - Official Shop Titans Data Spreadsheet: `client v26.5.0`
+- Official tabs including `Blueprints`, `Heroes`, `Hero Levels`, `Skills`, `Champions`, `Quests`, and `Enchantments`
 - Ress' Hero & Quest Simulator workbook: `V9.4`
 
-Rerun `pnpm.cmd run import:data` when the source sheets change. The app consumes generated JSON only; engine logic does not fetch live data at runtime.
+Rerun `pnpm.cmd run import:data` when the source sheets change. Most official tabs are imported as CSV; the `Champions` tab is imported from the official XLSX export because its merged header cells contain required data that is missing from the CSV export. The app consumes generated JSON only; engine logic does not fetch live data at runtime.
 
 ## MVP Status
 
@@ -33,8 +34,9 @@ Implemented:
 
 - Electron + Vite + React + TypeScript shell
 - Build-time CSV/XLSX importer
-- Hero class, Titan Soul promotion toggle, level, seeds, innate skills, learned skills, gear, quality, element, spirit, and Starforge selection
-- Champion leader skill selection for party-wide stat effects
+- Five Ress-style hero build tabs (`Hero 1` through `Hero 5`) with class, Titan Soul promotion toggle, level, seeds, innate skills, learned skills, gear, quality, element, spirit, and Starforge selection
+- Champion build tab with champion, rank, level, Champion Soul, seeds, Familiar, Aurasong, gear quality, enchants, and party-wide leader skill handoff to rosters
+- Roster-only Champion aura application with rank, repeatable `+X` power-ups, and party-wide leader skill effects
 - Roster management with saved hero builds and team totals
 - Pure TypeScript stat calculation engine
 - Build comparison

@@ -114,6 +114,8 @@ export interface EnchantmentData {
   elementScores: Record<string, number>;
 }
 
+export type ElementScores = Record<string, number>;
+
 export interface SkillData {
   id: string;
   name: string;
@@ -127,11 +129,34 @@ export interface SkillData {
   flatStats: FlatStatModifiers;
 }
 
+export interface ChampionRankReward {
+  rank: number;
+  rankLabel: string;
+  coinsNeeded: number;
+  coinsFormula: string;
+  reward: string;
+  statGains: FlatStatModifiers;
+  leaderSkillId: string;
+  repeatable: boolean;
+}
+
+export interface ChampionElementBreakpoint {
+  rank: number;
+  elementValue: number;
+}
+
 export interface ChampionData {
   id: string;
   name: string;
   guest: boolean;
+  role: HeroRole;
+  element: string;
+  unlockCost: string;
+  prerequisite: string;
+  baseStats: StatBlock;
   leaderSkillIds: string[];
+  rankRewards: ChampionRankReward[];
+  elementBreakpoints: ChampionElementBreakpoint[];
 }
 
 export interface QuestData {
@@ -181,7 +206,6 @@ export interface BuildConfig {
   name: string;
   heroClassId: string;
   promoted: boolean;
-  championSkillId?: string;
   level: number;
   seeds: SeedConfig;
   skills: string[];
@@ -192,8 +216,24 @@ export interface RosterConfig {
   schemaVersion: 1;
   id: string;
   name: string;
-  championSkillId: string;
+  championId: string;
+  championRank: number;
+  championPowerUps: number;
   builds: BuildConfig[];
+}
+
+export interface ChampionBuildConfig {
+  schemaVersion: 1;
+  id: string;
+  name: string;
+  championId: string;
+  rank: number;
+  level: number;
+  powerUps: number;
+  championSoul: boolean;
+  seeds: SeedConfig;
+  familiar: EquipmentSelection;
+  aurasong: EquipmentSelection;
 }
 
 export interface ResolvedGearLine {
@@ -207,6 +247,9 @@ export interface ResolvedGearLine {
   starforged: boolean;
   baseStats: ItemStats;
   elementStats: ItemStats;
+  elementScores: ElementScores;
+  spiritModifiers: PercentModifiers;
+  spiritFlatStats: FlatStatModifiers;
   stats: ItemStats;
   elementSources: string[];
   spiritSources: string[];
@@ -225,6 +268,27 @@ export interface ResolvedBuild {
   championSkill: SkillData | null;
   warnings: string[];
   gear: ResolvedGearLine[];
+  elementScores: ElementScores;
+  sourceVersion: string;
+}
+
+export interface ResolvedChampion {
+  champion: ChampionData;
+  rank: number;
+  powerUps: number;
+  stats: StatBlock;
+  leaderSkill: SkillData | null;
+  appliedRewards: ChampionRankReward[];
+}
+
+export interface ResolvedChampionBuild {
+  build: ChampionBuildConfig;
+  champion: ChampionData | null;
+  stats: StatBlock;
+  leaderSkill: SkillData | null;
+  gear: ResolvedGearLine[];
+  elementScores: ElementScores;
+  warnings: string[];
   sourceVersion: string;
 }
 

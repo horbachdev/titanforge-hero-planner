@@ -1,6 +1,9 @@
 import { QUALITY_MULTIPLIERS, getBaseHero, getEffectiveHero, getMaxTierForLevel, slotLabel } from './data-utils';
 import type {
   BuildConfig,
+  ChampionData,
+  ChampionBuildConfig,
+  ElementScores,
   EnchantmentData,
   FlatStatModifiers,
   GameData,
@@ -9,6 +12,8 @@ import type {
   ItemStats,
   PercentModifiers,
   ResolvedBuild,
+  ResolvedChampionBuild,
+  ResolvedChampion,
   ResolvedGearLine,
   SkillData,
   StatBlock
@@ -41,44 +46,135 @@ const EMPTY_FLAT_STATS: FlatStatModifiers = {
   threat: 0
 };
 
-const SPIRIT_MODIFIERS: Record<string, Partial<PercentModifiers>> = {
-  ram: { defense: 0.05 },
-  wolf: { attack: 0.05 },
-  ox: { defense: 0.05 },
-  eagle: { critChance: 0.05 },
-  viper: { critDamage: 0.25 },
-  cat: { evasion: 0.03 },
-  bunny: { evasion: 0.03 },
-  xolotl: { attack: 0.05 },
-  rhino: { defense: 0.08 },
-  owl: { critChance: 0.03, critDamage: 0.15 },
-  armadillo: { defense: 0.1 },
-  lizard: { hp: 0.1 },
-  horse: { hp: 0.05 },
-  hippo: { hp: 0.08 },
-  shark: { attack: 0.05, critChance: 0.02 },
-  walrus: { defense: 0.08 },
-  lion: { attack: 0.05, defense: 0.05 },
-  bear: { hp: 0.05 },
-  mammoth: { hp: 0.1 },
-  dinosaur: { attack: 0.1 },
-  tiger: { attack: 0.05, critDamage: 0.25 },
-  quetzalcoatl: { attack: 0.08 },
-  phoenix: { hp: 0.1 },
-  hydra: { attack: 0.08, critChance: 0.03 },
-  tarrasque: { defense: 0.12 },
-  carbuncle: { evasion: 0.04 },
-  chimera: { attack: 0.06, defense: 0.06 },
-  kraken: { critDamage: 0.35 },
-  behemoth: { attack: 0.12 },
-  ouroboros: { hp: 0.12 },
-  bahamut: { attack: 0.1, defense: 0.1 },
-  leviathan: { defense: 0.1, hp: 0.08 },
-  griffin: { evasion: 0.05, critChance: 0.03 },
-  titan: { hp: 0.15 }
+interface SpiritEffect {
+  modifiers?: Partial<PercentModifiers>;
+  flatStats?: Partial<FlatStatModifiers>;
+  matchedModifiers?: Partial<PercentModifiers>;
+  matchedFlatStats?: Partial<FlatStatModifiers>;
+}
+
+const SPIRIT_EFFECTS: Record<string, SpiritEffect> = {
+  wolf: {
+    modifiers: { attack: 0.05 },
+    matchedModifiers: { attack: 0.1 }
+  },
+  ram: {
+    modifiers: { defense: 0.05 },
+    matchedModifiers: { defense: 0.1 }
+  },
+  eagle: {
+    modifiers: { critChance: 0.02 },
+    matchedModifiers: { critChance: 0.03 }
+  },
+  ox: {
+    modifiers: { hp: 0.03 },
+    matchedModifiers: { hp: 0.05 }
+  },
+  viper: {
+    modifiers: { critDamage: 0.15 },
+    matchedModifiers: { critDamage: 0.2 }
+  },
+  cat: {
+    modifiers: { evasion: 0.02 },
+    matchedModifiers: { evasion: 0.03 }
+  },
+  bear: {
+    modifiers: { attack: 0.05 },
+    flatStats: { hp: 15 },
+    matchedModifiers: { attack: 0.07 },
+    matchedFlatStats: { hp: 20 }
+  },
+  walrus: {
+    modifiers: { hp: 0.05 },
+    matchedModifiers: { hp: 0.08 }
+  },
+  mammoth: {
+    modifiers: { defense: 0.1 },
+    flatStats: { threat: 10 },
+    matchedModifiers: { defense: 0.13 },
+    matchedFlatStats: { threat: 10 }
+  },
+  lion: {
+    modifiers: { attack: 0.05, evasion: 0.01 },
+    matchedModifiers: { attack: 0.07, evasion: 0.02 }
+  },
+  tiger: {
+    modifiers: { defense: 0.05, evasion: 0.01 },
+    matchedModifiers: { defense: 0.07, evasion: 0.02 }
+  },
+  phoenix: {
+    modifiers: { hp: 0.04 },
+    matchedModifiers: { hp: 0.05 }
+  },
+  hydra: {
+    flatStats: { defense: 100, hp: 25 },
+    matchedFlatStats: { defense: 125, hp: 35 }
+  },
+  tarrasque: {
+    modifiers: { defense: 0.2 },
+    matchedModifiers: { defense: 0.25 }
+  },
+  carbuncle: {
+    modifiers: { evasion: 0.02, critChance: 0.02 },
+    matchedModifiers: { evasion: 0.03, critChance: 0.03 }
+  },
+  chimera: {
+    modifiers: { attack: 0.1, critDamage: 0.1 },
+    matchedModifiers: { attack: 0.15, critDamage: 0.15 }
+  },
+  kraken: {
+    modifiers: { attack: 0.1 },
+    flatStats: { attack: 100 },
+    matchedModifiers: { attack: 0.15 },
+    matchedFlatStats: { attack: 125 }
+  },
+  christmas: {
+    modifiers: { hp: 0.04 },
+    flatStats: { hp: 20 },
+    matchedModifiers: { hp: 0.1 },
+    matchedFlatStats: { hp: 40 }
+  },
+  bunny: {
+    modifiers: { hp: 0.02, evasion: 0.01 },
+    matchedModifiers: { hp: 0.03, evasion: 0.02 }
+  },
+  bahamut: {
+    modifiers: { hp: 0.03 },
+    flatStats: { hp: 50 },
+    matchedModifiers: { hp: 0.05 },
+    matchedFlatStats: { hp: 70 }
+  },
+  behemoth: {
+    modifiers: { attack: 0.13, defense: 0.05 },
+    matchedModifiers: { attack: 0.18, defense: 0.08 }
+  },
+  griffin: {
+    modifiers: { defense: 0.08, evasion: 0.03 },
+    matchedModifiers: { defense: 0.1, evasion: 0.04 }
+  },
+  leviathan: {
+    modifiers: { attack: 0.08, critChance: 0.03 },
+    matchedModifiers: { attack: 0.1, critChance: 0.04 }
+  },
+  ouroboros: {
+    modifiers: { defense: 0.1 },
+    matchedModifiers: { defense: 0.15 }
+  },
+  ouruboros: {
+    modifiers: { defense: 0.1 },
+    matchedModifiers: { defense: 0.15 }
+  },
+  titan: {
+    modifiers: { hp: 0.15 },
+    matchedModifiers: { hp: 0.2 }
+  }
 };
 
-export function calculateHeroStats(build: BuildConfig, data: GameData): ResolvedBuild {
+export interface StatCalculationContext {
+  championSkillId?: string;
+}
+
+export function calculateHeroStats(build: BuildConfig, data: GameData, context: StatCalculationContext = {}): ResolvedBuild {
   const warnings: string[] = [];
   const baseHero = getBaseHero(data, build.heroClassId) ?? null;
   const hero = getEffectiveHero(data, build.heroClassId, build.promoted) ?? baseHero;
@@ -95,10 +191,11 @@ export function calculateHeroStats(build: BuildConfig, data: GameData): Resolved
   const modifiers = { ...EMPTY_MODIFIERS };
   const flatStats = { ...EMPTY_FLAT_STATS };
   const gearLines: ResolvedGearLine[] = [];
+  const elementScores: ElementScores = {};
   const maxTier = getMaxTierForLevel(data, build.level);
   const innateSkills = resolveInnateSkills(hero, data);
-  const championSkill = build.championSkillId
-    ? data.skills.find((candidate) => candidate.id === build.championSkillId) ?? null
+  const championSkill = context.championSkillId
+    ? data.skills.find((candidate) => candidate.id === context.championSkillId) ?? null
     : null;
   const championEffectMultiplier = 1 + innateSkills.reduce((total, skill) => total + championSkillBoost(skill), 0);
 
@@ -138,7 +235,9 @@ export function calculateHeroStats(build: BuildConfig, data: GameData): Resolved
 
     const resolvedGear = resolveGearLine(item, selection.quality, selection.starforged, selection.elementId, selection.spiritId, data);
     itemStats = addItemStats(itemStats, resolvedGear.stats);
-    addModifiers(modifiers, resolveSpiritModifiers(item, selection.spiritId, data.enchantments).modifiers);
+    addModifiers(modifiers, resolvedGear.spiritModifiers);
+    addFlatStats(flatStats, resolvedGear.spiritFlatStats);
+    addElementScores(elementScores, resolvedGear.elementScores);
 
     gearLines.push({
       ...resolvedGear,
@@ -204,6 +303,7 @@ export function calculateHeroStats(build: BuildConfig, data: GameData): Resolved
     championSkill,
     warnings,
     gear: gearLines,
+    elementScores,
     sourceVersion: data.metadata.officialSpreadsheetVersion
   };
 }
@@ -218,7 +318,7 @@ export function resolveGearLine(
 ): ResolvedGearLine {
   const baseStats = resolveItemStats(item, quality, starforged);
   const elementEffects = resolveElementStats(item, elementId, data.enchantments);
-  const spiritEffects = resolveSpiritModifiers(item, spiritId, data.enchantments);
+  const spiritEffects = resolveSpiritEffects(item, spiritId, data.enchantments);
 
   return {
     slotId: '',
@@ -231,6 +331,9 @@ export function resolveGearLine(
     starforged,
     baseStats,
     elementStats: elementEffects.stats,
+    elementScores: elementEffects.elementScores,
+    spiritModifiers: spiritEffects.modifiers,
+    spiritFlatStats: spiritEffects.flatStats,
     stats: addItemStats(baseStats, elementEffects.stats),
     elementSources: elementEffects.sources,
     spiritSources: spiritEffects.sources,
@@ -247,8 +350,8 @@ export function resolveItemStats(item: ItemData, quality: string, starforged: bo
     attack: roundShopTitans(item.stats.attack * starforgeMultiplier * qualityMultiplier),
     defense: roundShopTitans(item.stats.defense * starforgeMultiplier * qualityMultiplier),
     hp: roundShopTitans(item.stats.hp * starforgeMultiplier * qualityMultiplier),
-    evasion: roundPercent(item.stats.evasion),
-    critChance: roundPercent(item.stats.critChance)
+    evasion: roundPercent(normalizePercentStat(item.stats.evasion)),
+    critChance: roundPercent(normalizePercentStat(item.stats.critChance))
   };
 }
 
@@ -257,6 +360,164 @@ export function getStarforgeStatMultiplier(item: ItemData): number {
     /\+25%\s+Base\s+ATK,\s*DEF\s+and\s+HP/i.test(entry.description)
   );
   return milestone ? 1.25 : 1;
+}
+
+export function getChampionMaxRank(champion: ChampionData): number {
+  return Math.max(...champion.rankRewards.filter((reward) => !reward.repeatable).map((reward) => reward.rank), 1);
+}
+
+export function getChampionLeaderSkillId(champion: ChampionData, rank: number): string {
+  const matchingReward = champion.rankRewards
+    .filter((reward) => !reward.repeatable && reward.rank <= rank && reward.leaderSkillId)
+    .sort((left, right) => right.rank - left.rank)[0];
+  return matchingReward?.leaderSkillId ?? champion.leaderSkillIds[0] ?? '';
+}
+
+export function resolveChampion(
+  champion: ChampionData,
+  data: GameData,
+  rank = getChampionMaxRank(champion),
+  powerUps = 0
+): ResolvedChampion {
+  const maxRank = getChampionMaxRank(champion);
+  const boundedRank = clamp(Math.round(rank), 1, maxRank);
+  const boundedPowerUps = Math.max(0, Math.round(powerUps));
+  const regularRewards = champion.rankRewards.filter((reward) => !reward.repeatable && reward.rank <= boundedRank);
+  const repeatableReward = champion.rankRewards.find((reward) => reward.repeatable);
+  const flatStats = regularRewards.reduce(
+    (total, reward) => addFlatStatBlocks(total, reward.statGains),
+    { ...EMPTY_FLAT_STATS }
+  );
+
+  if (repeatableReward && boundedPowerUps > 0) {
+    const repeatedStats = scaleFlatStats(repeatableReward.statGains, boundedPowerUps);
+    Object.assign(flatStats, addFlatStatBlocks(flatStats, repeatedStats));
+  }
+
+  const stats: StatBlock = {
+    attack: champion.baseStats.attack + flatStats.attack,
+    defense: champion.baseStats.defense + flatStats.defense,
+    hp: champion.baseStats.hp + flatStats.hp,
+    evasion: champion.baseStats.evasion + flatStats.evasion,
+    critChance: champion.baseStats.critChance + flatStats.critChance,
+    critDamage: champion.baseStats.critDamage + flatStats.critDamage,
+    threat: champion.baseStats.threat + flatStats.threat,
+    power: 0
+  };
+  stats.power = calculatePower(stats);
+
+  const leaderSkillId = getChampionLeaderSkillId(champion, boundedRank);
+  return {
+    champion,
+    rank: boundedRank,
+    powerUps: boundedPowerUps,
+    stats,
+    leaderSkill: data.skills.find((skill) => skill.id === leaderSkillId) ?? null,
+    appliedRewards: regularRewards
+  };
+}
+
+export function calculateChampionBuildStats(build: ChampionBuildConfig, data: GameData): ResolvedChampionBuild {
+  const warnings: string[] = [];
+  const champion = data.champions.find((entry) => entry.id === build.championId) ?? null;
+
+  if (!champion) {
+    return {
+      build,
+      champion: null,
+      stats: zeroStats(),
+      leaderSkill: null,
+      gear: [],
+      elementScores: {},
+      warnings: [`Champion "${build.championId}" was not found.`],
+      sourceVersion: data.metadata.officialSpreadsheetVersion
+    };
+  }
+
+  const resolvedChampion = resolveChampion(champion, data, build.championSoul ? build.rank + 2 : build.rank, build.powerUps);
+  const soulMultiplier = build.championSoul ? 1.5 : 1;
+  const championStats = {
+    ...resolvedChampion.stats,
+    attack: roundShopTitans(resolvedChampion.stats.attack * soulMultiplier),
+    defense: roundShopTitans(resolvedChampion.stats.defense * soulMultiplier),
+    hp: roundShopTitans(resolvedChampion.stats.hp * soulMultiplier)
+  };
+  const modifiers = { ...EMPTY_MODIFIERS };
+  const flatStats = { ...EMPTY_FLAT_STATS };
+  const gearLines: ResolvedGearLine[] = [];
+  const elementScores: ElementScores = {};
+  let itemStats: ItemStats = { ...EMPTY_ITEM_STATS };
+
+  for (const [selection, expectedType, label] of [
+    [build.familiar, 'Familiar', 'Familiar'],
+    [build.aurasong, 'Aurasong', 'Aurasong']
+  ] as Array<[ChampionBuildConfig['familiar'], string, string]>) {
+    if (!selection.itemId) {
+      gearLines.push(emptyGearLine(selection.slotId, label, selection));
+      continue;
+    }
+
+    const item = data.items.find((candidate) => candidate.id === selection.itemId);
+    if (!item) {
+      warnings.push(`${label} item "${selection.itemId}" was not found.`);
+      gearLines.push({
+        ...emptyGearLine(selection.slotId, label, selection),
+        itemId: selection.itemId,
+        itemName: selection.itemId,
+        warnings: [`${label} item "${selection.itemId}" was not found.`]
+      });
+      continue;
+    }
+
+    if (item.type !== expectedType) {
+      warnings.push(`${item.name} is a ${item.type}, not a ${expectedType}.`);
+    }
+
+    const resolvedGear = resolveGearLine(item, selection.quality, selection.starforged, selection.elementId, selection.spiritId, data);
+    itemStats = addItemStats(itemStats, resolvedGear.stats);
+    addModifiers(modifiers, resolvedGear.spiritModifiers);
+    addFlatStats(flatStats, resolvedGear.spiritFlatStats);
+    addElementScores(elementScores, resolvedGear.elementScores);
+    gearLines.push({
+      ...resolvedGear,
+      slotId: selection.slotId,
+      slotLabel: label
+    });
+  }
+
+  const rawStats: StatBlock = {
+    attack: championStats.attack + itemStats.attack + build.seeds.attack * 4 + flatStats.attack,
+    defense: championStats.defense + itemStats.defense + build.seeds.defense * 4 + flatStats.defense,
+    hp: championStats.hp + itemStats.hp + build.seeds.hp + flatStats.hp,
+    evasion: championStats.evasion + itemStats.evasion + flatStats.evasion,
+    critChance: championStats.critChance + itemStats.critChance + flatStats.critChance,
+    critDamage: championStats.critDamage + flatStats.critDamage,
+    threat: championStats.threat + flatStats.threat,
+    power: 0
+  };
+
+  const stats: StatBlock = {
+    attack: roundShopTitans(rawStats.attack * (1 + modifiers.attack)),
+    defense: roundShopTitans(rawStats.defense * (1 + modifiers.defense)),
+    hp: roundShopTitans(rawStats.hp * (1 + modifiers.hp)),
+    evasion: clamp(roundPercent(rawStats.evasion + modifiers.evasion * 100), 0, 75),
+    critChance: clamp(roundPercent(rawStats.critChance + modifiers.critChance * 100), 0, 100),
+    critDamage: roundPercent(rawStats.critDamage + modifiers.critDamage),
+    threat: rawStats.threat,
+    power: 0
+  };
+  stats.power = calculatePower(stats);
+
+  return {
+    build,
+    champion,
+    stats,
+    leaderSkill: resolvedChampion.leaderSkill,
+    gear: gearLines,
+    elementScores,
+    warnings,
+    sourceVersion: data.metadata.officialSpreadsheetVersion
+  };
 }
 
 function resolveInnateSkills(hero: HeroData | null | undefined, data: GameData): SkillData[] {
@@ -305,33 +566,34 @@ function resolveElementStats(
   item: ItemData,
   elementId: string,
   enchantments: EnchantmentData[]
-): { stats: ItemStats; sources: string[]; affinityBonuses: string[] } {
+): { stats: ItemStats; elementScores: ElementScores; sources: string[]; affinityBonuses: string[] } {
   const sources: string[] = [];
   const affinityBonuses: string[] = [];
-  let score = 0;
+  const elementScores: ElementScores = {};
 
   const selected = enchantments.find((candidate) => candidate.id === elementId);
   if (selected) {
-    const bonus = elementAffinityBonus(item, selected);
-    score += elementScore(selected) + bonus;
+    addElementScoreSource(elementScores, selected, elementAffinityBonus(item, selected));
     sources.push(selected.name);
+    const bonus = elementAffinityBonus(item, selected);
     if (bonus > 0) {
       affinityBonuses.push(`${item.elementalAffinity} affinity: +${bonus} Element`);
     }
   }
 
-  const builtInElement = enchantments.find((candidate) => candidate.name === item.builtInElement);
+  const builtInElement = findEnchantmentByName(enchantments, item.builtInElement, 'Element');
   if (builtInElement) {
-    const bonus = elementAffinityBonus(item, builtInElement);
-    score += elementScore(builtInElement) + bonus;
+    addElementScoreSource(elementScores, builtInElement, elementAffinityBonus(item, builtInElement));
     sources.push(`${builtInElement.name} built-in`);
+    const bonus = elementAffinityBonus(item, builtInElement);
     if (bonus > 0) {
       affinityBonuses.push(`${item.elementalAffinity} affinity on built-in: +${bonus} Element`);
     }
   }
 
+  const score = totalElementScore(elementScores);
   if (score === 0) {
-    return { stats: { ...EMPTY_ITEM_STATS }, sources, affinityBonuses };
+    return { stats: { ...EMPTY_ITEM_STATS }, elementScores, sources, affinityBonuses };
   }
 
   return {
@@ -342,43 +604,88 @@ function resolveElementStats(
       evasion: 0,
       critChance: 0
     },
+    elementScores,
     sources,
     affinityBonuses
   };
 }
 
-function resolveSpiritModifiers(
+function resolveSpiritEffects(
   item: ItemData,
   spiritId: string,
   enchantments: EnchantmentData[]
-): { modifiers: PercentModifiers; sources: string[]; affinityBonuses: string[] } {
+): { modifiers: PercentModifiers; flatStats: FlatStatModifiers; sources: string[]; affinityBonuses: string[] } {
   const modifiers = { ...EMPTY_MODIFIERS };
+  const flatStats = { ...EMPTY_FLAT_STATS };
   const sources: string[] = [];
   const affinityBonuses: string[] = [];
   const selectedSpirit = enchantments.find((candidate) => candidate.id === spiritId)?.name ?? '';
+  const builtInSpirit = findEnchantmentByName(enchantments, item.builtInSpirit, 'Spirit')?.name ?? item.builtInSpirit;
+  const slotMultiplier = isTotemItem(item) ? 2 : 1;
 
-  for (const spiritName of [selectedSpirit, item.builtInSpirit]) {
+  for (const { spiritName, builtIn } of [
+    { spiritName: selectedSpirit, builtIn: false },
+    { spiritName: builtInSpirit, builtIn: true }
+  ]) {
     if (!spiritName) {
       continue;
     }
     const key = spiritKey(spiritName);
-    const baseModifiers = SPIRIT_MODIFIERS[key] ?? {};
-    const affinityMultiplier = spiritAffinityMatches(item, key) ? 1.25 : 1;
-    addModifiers(modifiers, scaleModifiers(baseModifiers, affinityMultiplier));
-    sources.push(spiritName === item.builtInSpirit ? `${spiritName} built-in` : spiritName);
-    if (affinityMultiplier > 1) {
-      affinityBonuses.push(`${item.spiritAffinity} affinity: +25% spirit effect`);
+    const effect = SPIRIT_EFFECTS[key];
+    const affinityMatches = spiritAffinityMatches(item, key);
+    const baseModifiers = affinityMatches ? effect?.matchedModifiers ?? effect?.modifiers ?? {} : effect?.modifiers ?? {};
+    const baseFlatStats = affinityMatches ? effect?.matchedFlatStats ?? effect?.flatStats ?? {} : effect?.flatStats ?? {};
+
+    addModifiers(modifiers, scaleModifiers(baseModifiers, slotMultiplier));
+    addFlatStats(flatStats, scaleFlatStats(baseFlatStats, slotMultiplier));
+    sources.push(builtIn ? `${spiritName} built-in` : spiritName);
+    if (affinityMatches) {
+      affinityBonuses.push(`${item.spiritAffinity} affinity: Ress matched spirit columns`);
+    }
+    if (slotMultiplier > 1) {
+      affinityBonuses.push(`${item.type}: x2 spirit effect`);
     }
   }
 
-  return { modifiers, sources, affinityBonuses };
+  return { modifiers, flatStats, sources, affinityBonuses };
 }
 
-function elementScore(enchantment: EnchantmentData | undefined): number {
-  if (!enchantment || enchantment.type !== 'Element') {
-    return 0;
+function findEnchantmentByName(
+  enchantments: EnchantmentData[],
+  name: string,
+  type: 'Element' | 'Spirit'
+): EnchantmentData | undefined {
+  const normalizedName = normalizeEnchantmentName(name);
+  if (!normalizedName) {
+    return undefined;
   }
-  return Object.values(enchantment.elementScores).reduce((total, score) => total + score, 0);
+  return enchantments.find(
+    (candidate) => candidate.type === type && normalizeEnchantmentName(candidate.name) === normalizedName
+  );
+}
+
+function addElementScoreSource(target: ElementScores, enchantment: EnchantmentData, affinityBonus: number): void {
+  for (const [key, score] of Object.entries(enchantment.elementScores)) {
+    target[key] = (target[key] ?? 0) + score;
+  }
+
+  const primaryElement = primaryElementScoreKey(enchantment);
+  if (affinityBonus > 0 && primaryElement) {
+    target[primaryElement] = (target[primaryElement] ?? 0) + affinityBonus;
+  }
+}
+
+function normalizeEnchantmentName(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/[\u2019']/g, '')
+    .replace(/\(.+?\)/g, '')
+    .replace(/\b(element|spirit)\b/g, '')
+    .replace(/[^a-z0-9]+/g, '');
+}
+
+function totalElementScore(scores: ElementScores): number {
+  return Object.values(scores).reduce((total, score) => total + score, 0);
 }
 
 function elementAffinityBonus(item: ItemData, enchantment: EnchantmentData): number {
@@ -407,6 +714,12 @@ function primaryElementKey(enchantment: EnchantmentData): string {
   return key === 'luxurious' ? 'gold' : key ?? '';
 }
 
+function primaryElementScoreKey(enchantment: EnchantmentData): string {
+  const [key] =
+    Object.entries(enchantment.elementScores).sort((left, right) => right[1] - left[1])[0] ?? [];
+  return key ?? '';
+}
+
 function spiritAffinityMatches(item: ItemData, key: string): boolean {
   return item.spiritAffinity
     .split(',')
@@ -415,10 +728,14 @@ function spiritAffinityMatches(item: ItemData, key: string): boolean {
     .includes(key);
 }
 
+function isTotemItem(item: ItemData): boolean {
+  return /^(Idol|Totem)$/i.test(item.type);
+}
+
 function spiritKey(value: string): string {
   return value
     .toLowerCase()
-    .replace(/'s/g, '')
+    .replace(/[\u2019']s/g, '')
     .replace(/\b(spirit|ferocity|endurance|accuracy|lethality|grace|hops|robustness|tenacity|wisdom|regeneration|bloodlust|vitality|senses|power|solemnity|presence|pride|tradition|sovereignty|violence|whimsy|malignity|cruelty|eternity|assurance|freedom|serenity|wile|immortality|onslaught|terror|nonchalance)\b/g, '')
     .trim()
     .split(/\s+/)[0];
@@ -455,12 +772,21 @@ function emptyGearLine(slotId: string, label: string, selection?: { quality?: st
     starforged: selection?.starforged ?? false,
     baseStats: { ...EMPTY_ITEM_STATS },
     elementStats: { ...EMPTY_ITEM_STATS },
+    elementScores: {},
+    spiritModifiers: { ...EMPTY_MODIFIERS },
+    spiritFlatStats: { ...EMPTY_FLAT_STATS },
     stats: { ...EMPTY_ITEM_STATS },
     elementSources: [],
     spiritSources: [],
     affinityBonuses: [],
     warnings: []
   };
+}
+
+function addElementScores(target: ElementScores, source: ElementScores): void {
+  for (const [key, value] of Object.entries(source)) {
+    target[key] = (target[key] ?? 0) + value;
+  }
 }
 
 function addItemStats(left: ItemStats, right: ItemStats): ItemStats {
@@ -490,6 +816,18 @@ function addFlatStats(target: FlatStatModifiers, source: Partial<FlatStatModifie
   target.critChance += source.critChance ?? 0;
   target.critDamage += source.critDamage ?? 0;
   target.threat += source.threat ?? 0;
+}
+
+function addFlatStatBlocks(left: FlatStatModifiers, right: Partial<FlatStatModifiers>): FlatStatModifiers {
+  return {
+    attack: left.attack + (right.attack ?? 0),
+    defense: left.defense + (right.defense ?? 0),
+    hp: left.hp + (right.hp ?? 0),
+    evasion: left.evasion + (right.evasion ?? 0),
+    critChance: left.critChance + (right.critChance ?? 0),
+    critDamage: left.critDamage + (right.critDamage ?? 0),
+    threat: left.threat + (right.threat ?? 0)
+  };
 }
 
 function scaleModifiers(source: Partial<PercentModifiers>, multiplier: number): PercentModifiers {
@@ -538,6 +876,10 @@ function roundShopTitans(value: number): number {
 
 function roundPercent(value: number): number {
   return Math.round(value * 100) / 100;
+}
+
+function normalizePercentStat(value: number): number {
+  return value > 0 && value < 1 ? value * 100 : value;
 }
 
 function clamp(value: number, min: number, max: number): number {

@@ -1,7 +1,7 @@
 import rawGameData from '../data/generated/game-data.json';
 import { parseBuildJson, serializeBuild } from './build-io';
-import { emptyEquipmentForHero } from './data-utils';
-import { calculateHeroStats } from './engine';
+import { defaultChampionBuild, emptyEquipmentForHero } from './data-utils';
+import { calculateChampionBuildStats, calculateHeroStats, resolveGearLine } from './engine';
 import type { BuildConfig, GameData } from './types';
 
 const data = rawGameData as GameData;
@@ -32,7 +32,7 @@ describe('calculateHeroStats', () => {
     expect(promoted.innateSkills[0]?.name).toBe('Sellsword Lord');
   });
 
-  it('applies champion leader skills to the resolved hero', () => {
+  it('applies champion leader skills through roster context', () => {
     const soldier = data.heroes.find((hero) => hero.id === 'soldier');
     const championSkill = data.skills.find((skill) => skill.id === 'aura-of-the-paladin');
     expect(soldier).toBeDefined();
@@ -44,7 +44,6 @@ describe('calculateHeroStats', () => {
       name: 'Champion Test',
       heroClassId: soldier!.id,
       promoted: false,
-      championSkillId: '',
       level: 40,
       seeds: { attack: 0, defense: 0, hp: 0 },
       skills: ['', '', '', ''],
@@ -52,7 +51,7 @@ describe('calculateHeroStats', () => {
     };
 
     const withoutChampion = calculateHeroStats(build, data);
-    const withChampion = calculateHeroStats({ ...build, championSkillId: championSkill!.id }, data);
+    const withChampion = calculateHeroStats(build, data, { championSkillId: championSkill!.id });
 
     expect(withChampion.championSkill?.name).toBe('Aura of the Paladin');
     expect(withChampion.stats.attack).toBeGreaterThan(withoutChampion.stats.attack);
@@ -98,6 +97,92 @@ describe('calculateHeroStats', () => {
     expect(affinity?.affinityBonuses.join(' ')).toContain('affinity');
   });
 
+  it('recognizes built-in conditional spirits without applying static boss-only modifiers', () => {
+    const soldier = data.heroes.find((hero) => hero.id === 'soldier');
+    const item = data.items.find((entry) => entry.id === 'mundra-s-masher');
+    expect(soldier).toBeDefined();
+    expect(item).toBeDefined();
+
+    const build: BuildConfig = {
+      schemaVersion: 1,
+      id: 'built-in-spirit-test',
+      name: 'Built-in Spirit Test',
+      heroClassId: soldier!.id,
+      promoted: false,
+      level: 50,
+      seeds: { attack: 0, defense: 0, hp: 0 },
+      skills: ['', '', '', ''],
+      equipment: emptyEquipmentForHero(soldier!).map((entry) =>
+        entry.slotId === 'slot-1' ? { ...entry, itemId: item!.id } : entry
+      )
+    };
+
+    const withoutBuiltInSpirit: GameData = {
+      ...data,
+      items: data.items.map((entry) => (entry.id === item!.id ? { ...entry, builtInSpirit: '' } : entry))
+    };
+    const withSpirit = calculateHeroStats(build, data);
+    const withoutSpirit = calculateHeroStats(build, withoutBuiltInSpirit);
+    const gearLine = withSpirit.gear.find((line) => line.itemId === item!.id);
+
+    expect(gearLine?.spiritSources).toContain("Mundra's Spirit built-in");
+    expect(withSpirit.stats.attack).toBe(withoutSpirit.stats.attack);
+  });
+
+  it('applies Ress spirit stats and doubles them on idol/totem slots', () => {
+    const soldier = data.heroes.find((hero) => hero.id === 'soldier');
+    const sword = data.items.find((entry) => entry.name === "Hero's Sword");
+    const idol = data.items.find((entry) => entry.type === 'Idol');
+    const leviathan = data.enchantments.find((entry) => entry.name === 'Leviathan Spirit');
+    const titan = data.enchantments.find((entry) => entry.name === 'Titan Spirit');
+    expect(soldier).toBeDefined();
+    expect(sword).toBeDefined();
+    expect(idol).toBeDefined();
+    expect(leviathan).toBeDefined();
+    expect(titan).toBeDefined();
+
+    const baseEquipment = emptyEquipmentForHero(soldier!);
+    const baseBuild: BuildConfig = {
+      schemaVersion: 1,
+      id: 'spirit-test',
+      name: 'Spirit Test',
+      heroClassId: soldier!.id,
+      promoted: false,
+      level: 50,
+      seeds: { attack: 0, defense: 0, hp: 0 },
+      skills: ['', '', '', ''],
+      equipment: baseEquipment.map((entry) =>
+        entry.slotId === 'slot-1' ? { ...entry, itemId: sword!.id } : entry
+      )
+    };
+
+    const withoutSpirit = calculateHeroStats(baseBuild, data);
+    const withSpirit = calculateHeroStats(
+      {
+        ...baseBuild,
+        equipment: baseBuild.equipment.map((entry) =>
+          entry.slotId === 'slot-1' ? { ...entry, spiritId: leviathan!.id } : entry
+        )
+      },
+      data
+    );
+    const idolLine = resolveGearLine(idol!, 'normal', false, '', titan!.id, data);
+
+    expect(withSpirit.stats.attack).toBeGreaterThan(withoutSpirit.stats.attack);
+    expect(withSpirit.stats.critChance - withoutSpirit.stats.critChance).toBe(3);
+    expect(idolLine.spiritModifiers.hp).toBe(0.3);
+    expect(idolLine.affinityBonuses.join(' ')).toContain('x2 spirit effect');
+  });
+
+  it('normalizes imported item crit and evasion percentages as percentage points', () => {
+    const critItem = data.items.find((entry) => entry.stats.critChance > 0);
+    expect(critItem).toBeDefined();
+    expect(critItem!.stats.critChance).toBeGreaterThanOrEqual(1);
+
+    const resolvedLine = resolveGearLine(critItem!, 'normal', false, '', '', data);
+    expect(resolvedLine.stats.critChance).toBe(critItem!.stats.critChance);
+  });
+
   it('applies per-item Starforge stat milestones when toggled', () => {
     const mage = data.heroes.find((hero) => hero.id === 'mage');
     const item = data.items.find((entry) => entry.id === 'avatar-core');
@@ -134,6 +219,21 @@ describe('calculateHeroStats', () => {
 
     expect(starforged.stats.defense).toBeGreaterThan(regular.stats.defense);
     expect(starforged.stats.hp).toBeGreaterThan(regular.stats.hp);
+  });
+
+  it('calculates champion build stats with Champion Soul and Ress seed scaling', () => {
+    const baseBuild = { ...defaultChampionBuild(data), championSoul: false, seeds: { attack: 0, defense: 0, hp: 0 } };
+    const regular = calculateChampionBuildStats(baseBuild, data);
+    const seeded = calculateChampionBuildStats(
+      { ...baseBuild, seeds: { attack: 1, defense: 1, hp: 1 } },
+      data
+    );
+    const souled = calculateChampionBuildStats({ ...baseBuild, championSoul: true }, data);
+
+    expect(seeded.stats.attack - regular.stats.attack).toBe(4);
+    expect(seeded.stats.defense - regular.stats.defense).toBe(4);
+    expect(seeded.stats.hp - regular.stats.hp).toBe(1);
+    expect(souled.stats.attack).toBeGreaterThan(regular.stats.attack);
   });
 
   it('applies parsed skill attack modifiers', () => {

@@ -11,8 +11,19 @@ describe('App', () => {
     render(<App />);
 
     expect(screen.getByRole('heading', { name: 'Hero Builder' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Hero 1' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Save Build/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Add to Main Roster/i })).toBeInTheDocument();
+    expect(screen.getByText('Element Points')).toBeInTheDocument();
     expect(screen.getByText('ATK')).toBeInTheDocument();
+  });
+
+  it('renders five hero build tabs and a champion build tab', () => {
+    render(<App />);
+
+    for (const tab of ['Hero 1', 'Hero 2', 'Hero 3', 'Hero 4', 'Hero 5', 'Champion']) {
+      expect(screen.getByRole('button', { name: tab })).toBeInTheDocument();
+    }
   });
 
   it('searches imported items in the item database', () => {
@@ -32,5 +43,20 @@ describe('App', () => {
     expect(screen.getByRole('heading', { name: 'Roster' })).toBeInTheDocument();
     expect(screen.getByText('Team Totals')).toBeInTheDocument();
     expect(screen.getByText('Champion aura')).toBeInTheDocument();
+    expect(screen.getByText('Element Points')).toBeInTheDocument();
+  });
+
+  it('shows the champion builder with champion gear controls', () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Champion' }));
+
+    expect(screen.getByRole('heading', { name: 'Champion' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Champion Stats' })).toBeInTheDocument();
+    expect(screen.getAllByText('Argon').length).toBeGreaterThan(0);
+    expect(screen.getByText('Champion Gear')).toBeInTheDocument();
+    expect(screen.getAllByText('Familiar').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('Aurasong').length).toBeGreaterThan(0);
+    expect(screen.getByRole('button', { name: /Set for Main Roster/i })).toBeInTheDocument();
   });
 });

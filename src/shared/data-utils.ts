@@ -1,4 +1,4 @@
-import type { BuildConfig, EquipmentSelection, GameData, HeroData, HeroSlot, ItemQuality, RosterConfig } from './types';
+import type { BuildConfig, ChampionBuildConfig, EquipmentSelection, GameData, HeroData, HeroSlot, ItemQuality, RosterConfig } from './types';
 
 export const QUALITY_MULTIPLIERS: Record<ItemQuality, number> = {
   normal: 1,
@@ -100,7 +100,6 @@ export function defaultBuild(data: GameData): BuildConfig {
     name: 'New Build',
     heroClassId: hero?.id ?? '',
     promoted: false,
-    championSkillId: '',
     level: 40,
     seeds: {
       attack: 0,
@@ -113,12 +112,56 @@ export function defaultBuild(data: GameData): BuildConfig {
 }
 
 export function defaultRoster(data: GameData): RosterConfig {
+  const champion = data.champions[0];
+  const maxRank = champion
+    ? Math.max(...champion.rankRewards.filter((reward) => !reward.repeatable).map((reward) => reward.rank), 1)
+    : 1;
   return {
     schemaVersion: 1,
     id: createId('roster'),
     name: 'Main Roster',
-    championSkillId: data.champions[0]?.leaderSkillIds.at(-1) ?? '',
+    championId: champion?.id ?? '',
+    championRank: maxRank,
+    championPowerUps: 0,
     builds: []
+  };
+}
+
+export function defaultChampionBuild(data: GameData): ChampionBuildConfig {
+  const champion = data.champions.find((entry) => entry.id === 'argon') ?? data.champions[0];
+  const maxRank = champion
+    ? Math.max(...champion.rankRewards.filter((reward) => !reward.repeatable).map((reward) => reward.rank), 1)
+    : 1;
+  return {
+    schemaVersion: 1,
+    id: createId('champion'),
+    name: 'Champion 1',
+    championId: champion?.id ?? '',
+    rank: maxRank,
+    level: 40,
+    powerUps: 0,
+    championSoul: true,
+    seeds: {
+      attack: 0,
+      defense: 0,
+      hp: 0
+    },
+    familiar: {
+      slotId: 'familiar',
+      itemId: '',
+      quality: 'normal',
+      elementId: '',
+      spiritId: '',
+      starforged: false
+    },
+    aurasong: {
+      slotId: 'aurasong',
+      itemId: '',
+      quality: 'normal',
+      elementId: '',
+      spiritId: '',
+      starforged: false
+    }
   };
 }
 

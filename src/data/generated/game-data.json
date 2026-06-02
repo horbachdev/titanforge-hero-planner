@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "generatedAt": "2026-06-01T12:02:44.259Z",
+    "generatedAt": "2026-06-01T12:52:37.848Z",
     "officialSpreadsheetId": "1WLa7X8h3O0-aGKxeAlCL7bnN8-FhGd3t7pz2RCzSg8c",
     "officialSpreadsheetVersion": "client v26.5.0 / spreadsheet v1.0.5.1160",
     "ressSpreadsheetId": "1LM8yySoXgyxute3xv5qKqBOt86Xcr41LEDncdrPp4EA",
@@ -10,6 +10,7 @@
       "Heroes",
       "Hero Levels",
       "Skills",
+      "Champions",
       "Quests",
       "Enchantments"
     ]
@@ -4508,7 +4509,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Earth",
       "spiritAffinity": "",
@@ -4888,7 +4889,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "",
       "spiritAffinity": "",
@@ -5952,7 +5953,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Dark",
       "spiritAffinity": "",
@@ -6256,7 +6257,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.07
+        "critChance": 7
       },
       "elementalAffinity": "",
       "spiritAffinity": "",
@@ -6940,7 +6941,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "",
       "spiritAffinity": "Ouroboros Eternity",
@@ -7244,7 +7245,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Light",
       "spiritAffinity": "Ouroboros Eternity",
@@ -7472,7 +7473,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "",
       "spiritAffinity": "",
@@ -8688,7 +8689,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Dark",
       "spiritAffinity": "Ram Robustness",
@@ -10968,7 +10969,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "",
       "spiritAffinity": "Shark Bloodlust",
@@ -11424,7 +11425,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "",
       "spiritAffinity": "",
@@ -11576,7 +11577,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "All",
       "spiritAffinity": "",
@@ -11728,7 +11729,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "",
       "spiritAffinity": "",
@@ -11956,7 +11957,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Dark",
       "spiritAffinity": "",
@@ -12108,7 +12109,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Air",
       "spiritAffinity": "",
@@ -12260,7 +12261,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "",
       "spiritAffinity": "",
@@ -12487,7 +12488,7 @@
         "attack": 300,
         "defense": 0,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Water",
@@ -12868,7 +12869,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Fire",
       "spiritAffinity": "",
@@ -13172,7 +13173,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Air",
       "spiritAffinity": "",
@@ -13248,7 +13249,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "",
       "spiritAffinity": "",
@@ -13628,7 +13629,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.1
+        "critChance": 10
       },
       "elementalAffinity": "Earth, Dark",
       "spiritAffinity": "",
@@ -13931,7 +13932,7 @@
         "attack": 710,
         "defense": 0,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Air",
@@ -14236,7 +14237,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.1
+        "critChance": 10
       },
       "elementalAffinity": "Dark",
       "spiritAffinity": "",
@@ -14311,7 +14312,7 @@
         "attack": 930,
         "defense": 0,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Dark",
@@ -14616,7 +14617,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.1
+        "critChance": 10
       },
       "elementalAffinity": "Air, Dark",
       "spiritAffinity": "",
@@ -14767,7 +14768,7 @@
         "attack": 1260,
         "defense": 0,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Air",
@@ -14844,7 +14845,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.1
+        "critChance": 10
       },
       "elementalAffinity": "",
       "spiritAffinity": "Dinosaur Senses",
@@ -16288,7 +16289,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.1
+        "critChance": 10
       },
       "elementalAffinity": "",
       "spiritAffinity": "",
@@ -16516,7 +16517,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "",
       "spiritAffinity": "Christmas Spirit",
@@ -16820,7 +16821,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "",
       "spiritAffinity": "",
@@ -19252,7 +19253,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Earth",
       "spiritAffinity": "",
@@ -19556,7 +19557,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "",
       "spiritAffinity": "",
@@ -19784,7 +19785,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "",
       "spiritAffinity": "",
@@ -20164,7 +20165,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Dark, Earth",
       "spiritAffinity": "",
@@ -20468,7 +20469,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Gold",
       "spiritAffinity": "",
@@ -22520,7 +22521,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Earth",
       "spiritAffinity": "",
@@ -22672,7 +22673,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "",
       "spiritAffinity": "",
@@ -23204,7 +23205,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "",
       "spiritAffinity": "",
@@ -23432,7 +23433,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Air",
       "spiritAffinity": "",
@@ -23735,7 +23736,7 @@
         "attack": 230,
         "defense": 0,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "",
@@ -23964,7 +23965,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Dark",
       "spiritAffinity": "",
@@ -24344,7 +24345,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Light, Dark",
       "spiritAffinity": "",
@@ -24800,7 +24801,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "",
       "spiritAffinity": "",
@@ -25104,7 +25105,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.07
+        "critChance": 7
       },
       "elementalAffinity": "",
       "spiritAffinity": "",
@@ -26776,7 +26777,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Light",
       "spiritAffinity": "Viper Lethality",
@@ -27231,7 +27232,7 @@
         "attack": 230,
         "defense": 0,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Earth",
@@ -27384,7 +27385,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "All",
       "spiritAffinity": "",
@@ -27536,7 +27537,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "",
       "spiritAffinity": "",
@@ -28904,7 +28905,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Dark",
       "spiritAffinity": "",
@@ -29891,7 +29892,7 @@
         "attack": 1340,
         "defense": 0,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "",
@@ -34223,7 +34224,7 @@
         "attack": 1300,
         "defense": 0,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "",
@@ -34376,7 +34377,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "",
       "spiritAffinity": "Dinosaur Senses",
@@ -35516,7 +35517,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "",
       "spiritAffinity": "",
@@ -36276,7 +36277,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Light",
       "spiritAffinity": "Christmas Spirit",
@@ -36732,7 +36733,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Air",
       "spiritAffinity": "",
@@ -37112,7 +37113,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Gold",
       "spiritAffinity": "",
@@ -37415,7 +37416,7 @@
         "attack": 96,
         "defense": 0,
         "hp": 0,
-        "evasion": 0.13,
+        "evasion": 13,
         "critChance": 0
       },
       "elementalAffinity": "Air",
@@ -40228,7 +40229,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Fire, Air",
       "spiritAffinity": "Phoenix Immortality",
@@ -47296,7 +47297,7 @@
         "defense": 0,
         "hp": 55,
         "evasion": 0,
-        "critChance": 0.07
+        "critChance": 7
       },
       "elementalAffinity": "Water",
       "spiritAffinity": "",
@@ -47371,7 +47372,7 @@
         "attack": 0,
         "defense": 0,
         "hp": 55,
-        "evasion": 0.07,
+        "evasion": 7,
         "critChance": 0
       },
       "elementalAffinity": "Dark",
@@ -48968,7 +48969,7 @@
         "defense": 0,
         "hp": 158,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "All",
       "spiritAffinity": "",
@@ -49803,7 +49804,7 @@
         "attack": 290,
         "defense": 0,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Earth",
@@ -50108,7 +50109,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Dark",
       "spiritAffinity": "",
@@ -55504,7 +55505,7 @@
         "defense": 400,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Earth",
       "spiritAffinity": "",
@@ -56644,7 +56645,7 @@
         "defense": 735,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Earth",
       "spiritAffinity": "Tiger Power",
@@ -57327,7 +57328,7 @@
         "attack": 0,
         "defense": 86,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Air",
@@ -58011,7 +58012,7 @@
         "attack": 0,
         "defense": 185,
         "hp": 0,
-        "evasion": 0.06,
+        "evasion": 6,
         "critChance": 0
       },
       "elementalAffinity": "",
@@ -58239,7 +58240,7 @@
         "attack": 0,
         "defense": 205,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Gold",
@@ -58771,7 +58772,7 @@
         "attack": 0,
         "defense": 300,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "",
@@ -59835,7 +59836,7 @@
         "attack": 0,
         "defense": 670,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Air",
@@ -59912,7 +59913,7 @@
         "defense": 670,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Dark",
       "spiritAffinity": "",
@@ -60139,7 +60140,7 @@
         "attack": 0,
         "defense": 690,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "",
@@ -61279,7 +61280,7 @@
         "attack": 0,
         "defense": 140,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Dark",
@@ -61887,7 +61888,7 @@
         "attack": 0,
         "defense": 210,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "",
@@ -63027,7 +63028,7 @@
         "attack": 0,
         "defense": 450,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Light",
@@ -63787,7 +63788,7 @@
         "attack": 0,
         "defense": 650,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Fire, Air",
@@ -67436,7 +67437,7 @@
         "defense": 755,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "",
       "spiritAffinity": "",
@@ -68803,7 +68804,7 @@
         "attack": 0,
         "defense": 160,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "",
@@ -69639,7 +69640,7 @@
         "attack": 0,
         "defense": 235,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Earth",
@@ -71235,7 +71236,7 @@
         "attack": 0,
         "defense": 670,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "",
@@ -71312,7 +71313,7 @@
         "defense": 670,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Dark",
       "spiritAffinity": "",
@@ -74960,7 +74961,7 @@
         "defense": 590,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Fire, Air",
       "spiritAffinity": "Phoenix Immortality",
@@ -75188,7 +75189,7 @@
         "defense": 665,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "All",
       "spiritAffinity": "",
@@ -78608,7 +78609,7 @@
         "defense": 650,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Earth",
       "spiritAffinity": "Tiger Power",
@@ -79063,7 +79064,7 @@
         "attack": 0,
         "defense": 37,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "",
@@ -79443,7 +79444,7 @@
         "attack": 0,
         "defense": 78,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Air",
@@ -80279,7 +80280,7 @@
         "attack": 0,
         "defense": 170,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "",
@@ -80659,7 +80660,7 @@
         "attack": 0,
         "defense": 190,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Dark",
@@ -80887,7 +80888,7 @@
         "attack": 0,
         "defense": 240,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Air",
@@ -81267,7 +81268,7 @@
         "attack": 0,
         "defense": 310,
         "hp": 0,
-        "evasion": 0.07,
+        "evasion": 7,
         "critChance": 0
       },
       "elementalAffinity": "",
@@ -81495,7 +81496,7 @@
         "attack": 0,
         "defense": 418,
         "hp": 0,
-        "evasion": 0.07,
+        "evasion": 7,
         "critChance": 0
       },
       "elementalAffinity": "",
@@ -81876,7 +81877,7 @@
         "defense": 490,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "",
       "spiritAffinity": "Ouroboros Eternity",
@@ -82104,7 +82105,7 @@
         "defense": 550,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Earth",
       "spiritAffinity": "",
@@ -85676,7 +85677,7 @@
         "defense": 710,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Earth",
       "spiritAffinity": "Tiger Power",
@@ -86511,7 +86512,7 @@
         "attack": 0,
         "defense": 82,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Water",
@@ -86967,7 +86968,7 @@
         "attack": 0,
         "defense": 125,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Air, Dark",
@@ -88335,7 +88336,7 @@
         "attack": 0,
         "defense": 355,
         "hp": 0,
-        "evasion": 0.07,
+        "evasion": 7,
         "critChance": 0
       },
       "elementalAffinity": "",
@@ -88639,7 +88640,7 @@
         "attack": 0,
         "defense": 435,
         "hp": 0,
-        "evasion": 0.07,
+        "evasion": 7,
         "critChance": 0
       },
       "elementalAffinity": "Water",
@@ -88792,7 +88793,7 @@
         "defense": 465,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Dark",
       "spiritAffinity": "",
@@ -89475,7 +89476,7 @@
         "attack": 0,
         "defense": 650,
         "hp": 0,
-        "evasion": 0.07,
+        "evasion": 7,
         "critChance": 0
       },
       "elementalAffinity": "Earth, Water",
@@ -90691,7 +90692,7 @@
         "attack": 0,
         "defense": 160,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Earth",
@@ -90920,7 +90921,7 @@
         "defense": 190,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.07
+        "critChance": 7
       },
       "elementalAffinity": "",
       "spiritAffinity": "",
@@ -91299,7 +91300,7 @@
         "attack": 0,
         "defense": 215,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "",
@@ -93275,7 +93276,7 @@
         "attack": 0,
         "defense": 710,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Light",
@@ -95251,7 +95252,7 @@
         "attack": 0,
         "defense": 280,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Dark",
@@ -95555,7 +95556,7 @@
         "attack": 0,
         "defense": 415,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Earth, Water",
@@ -96011,7 +96012,7 @@
         "attack": 0,
         "defense": 665,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "",
@@ -101332,7 +101333,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Water",
       "spiritAffinity": "",
@@ -102548,7 +102549,7 @@
         "defense": 105,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "",
       "spiritAffinity": "",
@@ -103079,7 +103080,7 @@
         "attack": 0,
         "defense": 180,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Water",
@@ -104828,7 +104829,7 @@
         "defense": 525,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.05
+        "critChance": 5
       },
       "elementalAffinity": "Air",
       "spiritAffinity": "Griffin Freedom",
@@ -104979,7 +104980,7 @@
         "attack": 0,
         "defense": 540,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Gold",
@@ -105587,7 +105588,7 @@
         "attack": 0,
         "defense": 755,
         "hp": 0,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Air",
@@ -106348,7 +106349,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.07
+        "critChance": 7
       },
       "elementalAffinity": "All",
       "spiritAffinity": "Kirin Serenity",
@@ -106423,7 +106424,7 @@
         "attack": 0,
         "defense": 0,
         "hp": 38,
-        "evasion": 0.1,
+        "evasion": 10,
         "critChance": 0
       },
       "elementalAffinity": "",
@@ -106652,7 +106653,7 @@
         "defense": 0,
         "hp": 0,
         "evasion": 0,
-        "critChance": 0.1
+        "critChance": 10
       },
       "elementalAffinity": "Air",
       "spiritAffinity": "",
@@ -107183,7 +107184,7 @@
         "attack": 1590,
         "defense": 0,
         "hp": 0,
-        "evasion": 0.1,
+        "evasion": 10,
         "critChance": 0
       },
       "elementalAffinity": "",
@@ -107259,7 +107260,7 @@
         "attack": 0,
         "defense": 0,
         "hp": 163,
-        "evasion": 0.1,
+        "evasion": 10,
         "critChance": 0
       },
       "elementalAffinity": "",
@@ -110831,7 +110832,7 @@
         "attack": 0,
         "defense": 0,
         "hp": 42,
-        "evasion": 0.07,
+        "evasion": 7,
         "critChance": 0
       },
       "elementalAffinity": "Earth, Water",
@@ -112047,7 +112048,7 @@
         "attack": 0,
         "defense": 0,
         "hp": 210,
-        "evasion": 0.05,
+        "evasion": 5,
         "critChance": 0
       },
       "elementalAffinity": "Fire",
@@ -138270,143 +138271,3453 @@
       "id": "argon",
       "name": "Argon",
       "guest": false,
+      "role": "fighter",
+      "element": "Light",
+      "unlockCost": "FREE",
+      "prerequisite": "Merchant Lv. 1",
+      "baseStats": {
+        "hp": 30,
+        "attack": 50,
+        "defense": 30,
+        "evasion": 0,
+        "critChance": 5,
+        "critDamage": 2,
+        "threat": 90,
+        "power": 0
+      },
       "leaderSkillIds": [
         "aura-of-courage",
         "aura-of-resolve",
         "aura-of-heroism",
         "aura-of-the-paladin"
+      ],
+      "rankRewards": [
+        {
+          "rank": 1,
+          "rankLabel": "1",
+          "coinsNeeded": 5,
+          "coinsFormula": "",
+          "reward": "",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "aura-of-courage",
+          "repeatable": false
+        },
+        {
+          "rank": 2,
+          "rankLabel": "2",
+          "coinsNeeded": 15,
+          "coinsFormula": "",
+          "reward": "+7 Health, +31 Attack, +43 Defense",
+          "statGains": {
+            "attack": 31,
+            "defense": 43,
+            "hp": 7,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 3,
+          "rankLabel": "3",
+          "coinsNeeded": 25,
+          "coinsFormula": "",
+          "reward": "+22 Health, +93 Attack, +131 Defense",
+          "statGains": {
+            "attack": 93,
+            "defense": 131,
+            "hp": 22,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 4,
+          "rankLabel": "4",
+          "coinsNeeded": 50,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Aura of Resolve",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "aura-of-resolve",
+          "repeatable": false
+        },
+        {
+          "rank": 5,
+          "rankLabel": "5",
+          "coinsNeeded": 75,
+          "coinsFormula": "",
+          "reward": "+29 Health, +125 Attack, +174 Defense",
+          "statGains": {
+            "attack": 125,
+            "defense": 174,
+            "hp": 29,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 6,
+          "rankLabel": "6",
+          "coinsNeeded": 75,
+          "coinsFormula": "",
+          "reward": "+37 Health, +156 Attack, +218 Defense",
+          "statGains": {
+            "attack": 156,
+            "defense": 218,
+            "hp": 37,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 7,
+          "rankLabel": "7",
+          "coinsNeeded": 100,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Aura of Heroism",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "aura-of-heroism",
+          "repeatable": false
+        },
+        {
+          "rank": 8,
+          "rankLabel": "8",
+          "coinsNeeded": 100,
+          "coinsFormula": "",
+          "reward": "+44 Health, +187 Attack, +262 Defense",
+          "statGains": {
+            "attack": 187,
+            "defense": 262,
+            "hp": 44,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 9,
+          "rankLabel": "9",
+          "coinsNeeded": 150,
+          "coinsFormula": "",
+          "reward": "+66 Health, +281 Attack, +393 Defense",
+          "statGains": {
+            "attack": 281,
+            "defense": 393,
+            "hp": 66,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 10,
+          "rankLabel": "10",
+          "coinsNeeded": 200,
+          "coinsFormula": "",
+          "reward": "+89 Health, +375 Attack, +524 Defense",
+          "statGains": {
+            "attack": 375,
+            "defense": 524,
+            "hp": 89,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 11,
+          "rankLabel": "11",
+          "coinsNeeded": 0,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Aura of the Paladin",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "aura-of-the-paladin",
+          "repeatable": false
+        },
+        {
+          "rank": 11,
+          "rankLabel": "11 (+X)",
+          "coinsNeeded": 50,
+          "coinsFormula": "50 + (10 * X)",
+          "reward": "+14 Health, +62 Attack, +87 Defense",
+          "statGains": {
+            "attack": 62,
+            "defense": 87,
+            "hp": 14,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": true
+        }
+      ],
+      "elementBreakpoints": [
+        {
+          "rank": 1,
+          "elementValue": 0
+        },
+        {
+          "rank": 5,
+          "elementValue": 15
+        },
+        {
+          "rank": 6,
+          "elementValue": 30
+        },
+        {
+          "rank": 8,
+          "elementValue": 45
+        },
+        {
+          "rank": 9,
+          "elementValue": 60
+        },
+        {
+          "rank": 10,
+          "elementValue": 80
+        },
+        {
+          "rank": 12,
+          "elementValue": 90
+        },
+        {
+          "rank": 14,
+          "elementValue": 100
+        },
+        {
+          "rank": 16,
+          "elementValue": 110
+        },
+        {
+          "rank": 20,
+          "elementValue": 125
+        }
       ]
     },
     {
       "id": "ashley",
       "name": "Ashley",
       "guest": false,
+      "role": "fighter",
+      "element": "Earth",
+      "unlockCost": "140 Coins",
+      "prerequisite": "Merchant Lv. 33",
+      "baseStats": {
+        "hp": 35,
+        "attack": 100,
+        "defense": 30,
+        "evasion": 10,
+        "critChance": 5,
+        "critDamage": 3,
+        "threat": 90,
+        "power": 0
+      },
       "leaderSkillIds": [
         "iaijutsu-tactics",
         "ashley-s-gambit",
         "fell-the-greatest-foe",
         "bushido-force"
+      ],
+      "rankRewards": [
+        {
+          "rank": 1,
+          "rankLabel": "1",
+          "coinsNeeded": 30,
+          "coinsFormula": "",
+          "reward": "",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "iaijutsu-tactics",
+          "repeatable": false
+        },
+        {
+          "rank": 2,
+          "rankLabel": "2",
+          "coinsNeeded": 40,
+          "coinsFormula": "",
+          "reward": "+7 Health, +42 Attack, +27 Defense",
+          "statGains": {
+            "attack": 42,
+            "defense": 27,
+            "hp": 7,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 3,
+          "rankLabel": "3",
+          "coinsNeeded": 60,
+          "coinsFormula": "",
+          "reward": "+22 Health, +127 Attack, +82 Defense",
+          "statGains": {
+            "attack": 127,
+            "defense": 82,
+            "hp": 22,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 4,
+          "rankLabel": "4",
+          "coinsNeeded": 75,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Ashley's Gambit",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "ashley-s-gambit",
+          "repeatable": false
+        },
+        {
+          "rank": 5,
+          "rankLabel": "5",
+          "coinsNeeded": 110,
+          "coinsFormula": "",
+          "reward": "+30 Health, +170 Attack, +110 Defense",
+          "statGains": {
+            "attack": 170,
+            "defense": 110,
+            "hp": 30,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 6,
+          "rankLabel": "6",
+          "coinsNeeded": 110,
+          "coinsFormula": "",
+          "reward": "+37 Health, +212 Attack, +137 Defense",
+          "statGains": {
+            "attack": 212,
+            "defense": 137,
+            "hp": 37,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 7,
+          "rankLabel": "7",
+          "coinsNeeded": 160,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Fell The Greatest Foe",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "fell-the-greatest-foe",
+          "repeatable": false
+        },
+        {
+          "rank": 8,
+          "rankLabel": "8",
+          "coinsNeeded": 160,
+          "coinsFormula": "",
+          "reward": "+45 Health, +255 Attack, +165 Defense",
+          "statGains": {
+            "attack": 255,
+            "defense": 165,
+            "hp": 45,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 9,
+          "rankLabel": "9",
+          "coinsNeeded": 275,
+          "coinsFormula": "",
+          "reward": "+67 Health, +382 Attack, +247 Defense",
+          "statGains": {
+            "attack": 382,
+            "defense": 247,
+            "hp": 67,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 10,
+          "rankLabel": "10",
+          "coinsNeeded": 330,
+          "coinsFormula": "",
+          "reward": "+90 Health, +510 Attack, +330 Defense",
+          "statGains": {
+            "attack": 510,
+            "defense": 330,
+            "hp": 90,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 11,
+          "rankLabel": "11",
+          "coinsNeeded": 0,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Bushido Force",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "bushido-force",
+          "repeatable": false
+        },
+        {
+          "rank": 11,
+          "rankLabel": "11 (+X)",
+          "coinsNeeded": 50,
+          "coinsFormula": "50 + (10 * X)",
+          "reward": "+15 Health, +85 Attack, +55 Defense",
+          "statGains": {
+            "attack": 85,
+            "defense": 55,
+            "hp": 15,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": true
+        }
+      ],
+      "elementBreakpoints": [
+        {
+          "rank": 1,
+          "elementValue": 0
+        },
+        {
+          "rank": 5,
+          "elementValue": 15
+        },
+        {
+          "rank": 6,
+          "elementValue": 30
+        },
+        {
+          "rank": 8,
+          "elementValue": 45
+        },
+        {
+          "rank": 9,
+          "elementValue": 60
+        },
+        {
+          "rank": 10,
+          "elementValue": 80
+        },
+        {
+          "rank": 12,
+          "elementValue": 90
+        },
+        {
+          "rank": 14,
+          "elementValue": 100
+        },
+        {
+          "rank": 16,
+          "elementValue": 110
+        },
+        {
+          "rank": 20,
+          "elementValue": 125
+        }
       ]
     },
     {
       "id": "bjorn",
       "name": "Bjorn",
       "guest": false,
+      "role": "fighter",
+      "element": "Air",
+      "unlockCost": "150 Coins",
+      "prerequisite": "Merchant Lv. 35",
+      "baseStats": {
+        "hp": 30,
+        "attack": 125,
+        "defense": 30,
+        "evasion": 20,
+        "critChance": 5,
+        "critDamage": 2,
+        "threat": 60,
+        "power": 0
+      },
       "leaderSkillIds": [
         "double-trouble",
         "flash-strike-team",
         "born-to-be-wild",
         "the-tusked-two"
+      ],
+      "rankRewards": [
+        {
+          "rank": 1,
+          "rankLabel": "1",
+          "coinsNeeded": 30,
+          "coinsFormula": "",
+          "reward": "",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "double-trouble",
+          "repeatable": false
+        },
+        {
+          "rank": 2,
+          "rankLabel": "2",
+          "coinsNeeded": 40,
+          "coinsFormula": "",
+          "reward": "+8 Health, +43 Attack, +30 Defense",
+          "statGains": {
+            "attack": 43,
+            "defense": 30,
+            "hp": 8,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 3,
+          "rankLabel": "3",
+          "coinsNeeded": 60,
+          "coinsFormula": "",
+          "reward": "+24 Health, +129 Attack, +91 Defense",
+          "statGains": {
+            "attack": 129,
+            "defense": 91,
+            "hp": 24,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 4,
+          "rankLabel": "4",
+          "coinsNeeded": 75,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Flash Strike Team",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "flash-strike-team",
+          "repeatable": false
+        },
+        {
+          "rank": 5,
+          "rankLabel": "5",
+          "coinsNeeded": 110,
+          "coinsFormula": "",
+          "reward": "+33 Health, +172 Attack, +122 Defense",
+          "statGains": {
+            "attack": 172,
+            "defense": 122,
+            "hp": 33,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 6,
+          "rankLabel": "6",
+          "coinsNeeded": 110,
+          "coinsFormula": "",
+          "reward": "+41 Health, +215 Attack, +152 Defense",
+          "statGains": {
+            "attack": 215,
+            "defense": 152,
+            "hp": 41,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 7,
+          "rankLabel": "7",
+          "coinsNeeded": 160,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Born to be Wild",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "born-to-be-wild",
+          "repeatable": false
+        },
+        {
+          "rank": 8,
+          "rankLabel": "8",
+          "coinsNeeded": 160,
+          "coinsFormula": "",
+          "reward": "+49 Health, +258 Attack, +183 Defense",
+          "statGains": {
+            "attack": 258,
+            "defense": 183,
+            "hp": 49,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 9,
+          "rankLabel": "9",
+          "coinsNeeded": 275,
+          "coinsFormula": "",
+          "reward": "+74 Health, +388 Attack, +274 Defense",
+          "statGains": {
+            "attack": 388,
+            "defense": 274,
+            "hp": 74,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 10,
+          "rankLabel": "10",
+          "coinsNeeded": 330,
+          "coinsFormula": "",
+          "reward": "+99 Health, +517 Attack, +366 Defense",
+          "statGains": {
+            "attack": 517,
+            "defense": 366,
+            "hp": 99,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 11,
+          "rankLabel": "11",
+          "coinsNeeded": 0,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: The Tusked Two",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "the-tusked-two",
+          "repeatable": false
+        },
+        {
+          "rank": 11,
+          "rankLabel": "11 (+X)",
+          "coinsNeeded": 50,
+          "coinsFormula": "50 + (10 * X)",
+          "reward": "+16 Health, +86 Attack, +61 Defense",
+          "statGains": {
+            "attack": 86,
+            "defense": 61,
+            "hp": 16,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": true
+        }
+      ],
+      "elementBreakpoints": [
+        {
+          "rank": 1,
+          "elementValue": 0
+        },
+        {
+          "rank": 5,
+          "elementValue": 15
+        },
+        {
+          "rank": 6,
+          "elementValue": 30
+        },
+        {
+          "rank": 8,
+          "elementValue": 45
+        },
+        {
+          "rank": 9,
+          "elementValue": 60
+        },
+        {
+          "rank": 10,
+          "elementValue": 80
+        },
+        {
+          "rank": 12,
+          "elementValue": 90
+        },
+        {
+          "rank": 14,
+          "elementValue": 100
+        },
+        {
+          "rank": 16,
+          "elementValue": 110
+        },
+        {
+          "rank": 20,
+          "elementValue": 125
+        }
       ]
     },
     {
       "id": "donovan",
       "name": "Donovan",
       "guest": false,
+      "role": "spellcaster",
+      "element": "Fire",
+      "unlockCost": "100 Coins",
+      "prerequisite": "Merchant Lv. 28",
+      "baseStats": {
+        "hp": 25,
+        "attack": 150,
+        "defense": 20,
+        "evasion": 0,
+        "critChance": 5,
+        "critDamage": 2,
+        "threat": 10,
+        "power": 0
+      },
       "leaderSkillIds": [
         "alchemist-tonic",
         "essence-of-change",
         "master-of-transmutation",
         "philosopher-s-stone"
+      ],
+      "rankRewards": [
+        {
+          "rank": 1,
+          "rankLabel": "1",
+          "coinsNeeded": 30,
+          "coinsFormula": "",
+          "reward": "",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "alchemist-tonic",
+          "repeatable": false
+        },
+        {
+          "rank": 2,
+          "rankLabel": "2",
+          "coinsNeeded": 40,
+          "coinsFormula": "",
+          "reward": "+2 Health, +137 Attack, +20 Defense",
+          "statGains": {
+            "attack": 137,
+            "defense": 20,
+            "hp": 2,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 3,
+          "rankLabel": "3",
+          "coinsNeeded": 60,
+          "coinsFormula": "",
+          "reward": "+7 Health, +412 Attack, +60 Defense",
+          "statGains": {
+            "attack": 412,
+            "defense": 60,
+            "hp": 7,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 4,
+          "rankLabel": "4",
+          "coinsNeeded": 75,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Essence of Change",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "essence-of-change",
+          "repeatable": false
+        },
+        {
+          "rank": 5,
+          "rankLabel": "5",
+          "coinsNeeded": 110,
+          "coinsFormula": "",
+          "reward": "+10 Health, +550 Attack, +80 Defense",
+          "statGains": {
+            "attack": 550,
+            "defense": 80,
+            "hp": 10,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 6,
+          "rankLabel": "6",
+          "coinsNeeded": 110,
+          "coinsFormula": "",
+          "reward": "+12 Health, +687 Attack, +100 Defense",
+          "statGains": {
+            "attack": 687,
+            "defense": 100,
+            "hp": 12,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 7,
+          "rankLabel": "7",
+          "coinsNeeded": 160,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Master of Transmutation",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "master-of-transmutation",
+          "repeatable": false
+        },
+        {
+          "rank": 8,
+          "rankLabel": "8",
+          "coinsNeeded": 160,
+          "coinsFormula": "",
+          "reward": "+15 Health, +825 Attack, +120 Defense",
+          "statGains": {
+            "attack": 825,
+            "defense": 120,
+            "hp": 15,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 9,
+          "rankLabel": "9",
+          "coinsNeeded": 275,
+          "coinsFormula": "",
+          "reward": "+22 Health, +1237 Attack, +180 Defense",
+          "statGains": {
+            "attack": 1237,
+            "defense": 180,
+            "hp": 22,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 10,
+          "rankLabel": "10",
+          "coinsNeeded": 330,
+          "coinsFormula": "",
+          "reward": "+30 Health, +1650 Attack, +240 Defense",
+          "statGains": {
+            "attack": 1650,
+            "defense": 240,
+            "hp": 30,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 11,
+          "rankLabel": "11",
+          "coinsNeeded": 0,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Philosopher's Stone",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "philosopher-s-stone",
+          "repeatable": false
+        },
+        {
+          "rank": 11,
+          "rankLabel": "11 (+X)",
+          "coinsNeeded": 50,
+          "coinsFormula": "50 + (10 * X)",
+          "reward": "+5 Health, +275 Attack, +40 Defense",
+          "statGains": {
+            "attack": 275,
+            "defense": 40,
+            "hp": 5,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": true
+        }
+      ],
+      "elementBreakpoints": [
+        {
+          "rank": 1,
+          "elementValue": 0
+        },
+        {
+          "rank": 5,
+          "elementValue": 15
+        },
+        {
+          "rank": 6,
+          "elementValue": 30
+        },
+        {
+          "rank": 8,
+          "elementValue": 45
+        },
+        {
+          "rank": 9,
+          "elementValue": 60
+        },
+        {
+          "rank": 10,
+          "elementValue": 80
+        },
+        {
+          "rank": 12,
+          "elementValue": 90
+        },
+        {
+          "rank": 14,
+          "elementValue": 100
+        },
+        {
+          "rank": 16,
+          "elementValue": 110
+        },
+        {
+          "rank": 20,
+          "elementValue": 125
+        }
       ]
     },
     {
       "id": "hemma",
       "name": "Hemma",
       "guest": false,
+      "role": "spellcaster",
+      "element": "Dark",
+      "unlockCost": "120 Coins",
+      "prerequisite": "Merchant Lv. 31",
+      "baseStats": {
+        "hp": 25,
+        "attack": 150,
+        "defense": 20,
+        "evasion": 0,
+        "critChance": 5,
+        "critDamage": 2,
+        "threat": 10,
+        "power": 0
+      },
       "leaderSkillIds": [
         "empowering-drain",
         "ghastly-strike",
         "necromantic-spear",
         "consume-essence"
+      ],
+      "rankRewards": [
+        {
+          "rank": 1,
+          "rankLabel": "1",
+          "coinsNeeded": 30,
+          "coinsFormula": "",
+          "reward": "",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "empowering-drain",
+          "repeatable": false
+        },
+        {
+          "rank": 2,
+          "rankLabel": "2",
+          "coinsNeeded": 40,
+          "coinsFormula": "",
+          "reward": "+2 Health, +145 Attack, +19 Defense",
+          "statGains": {
+            "attack": 145,
+            "defense": 19,
+            "hp": 2,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 3,
+          "rankLabel": "3",
+          "coinsNeeded": 60,
+          "coinsFormula": "",
+          "reward": "+6 Health, +435 Attack, +58 Defense",
+          "statGains": {
+            "attack": 435,
+            "defense": 58,
+            "hp": 6,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 4,
+          "rankLabel": "4",
+          "coinsNeeded": 75,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Empowering Drain",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "empowering-drain",
+          "repeatable": false
+        },
+        {
+          "rank": 5,
+          "rankLabel": "5",
+          "coinsNeeded": 110,
+          "coinsFormula": "",
+          "reward": "+9 Health, +580 Attack, +78 Defense",
+          "statGains": {
+            "attack": 580,
+            "defense": 78,
+            "hp": 9,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 6,
+          "rankLabel": "6",
+          "coinsNeeded": 110,
+          "coinsFormula": "",
+          "reward": "+11 Health, +725 Attack, +97 Defense",
+          "statGains": {
+            "attack": 725,
+            "defense": 97,
+            "hp": 11,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 7,
+          "rankLabel": "7",
+          "coinsNeeded": 160,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Necromantic Spear",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "necromantic-spear",
+          "repeatable": false
+        },
+        {
+          "rank": 8,
+          "rankLabel": "8",
+          "coinsNeeded": 160,
+          "coinsFormula": "",
+          "reward": "+13 Health, +870 Attack, +117 Defense",
+          "statGains": {
+            "attack": 870,
+            "defense": 117,
+            "hp": 13,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 9,
+          "rankLabel": "9",
+          "coinsNeeded": 275,
+          "coinsFormula": "",
+          "reward": "+20 Health, +1305 Attack, +175 Defense",
+          "statGains": {
+            "attack": 1305,
+            "defense": 175,
+            "hp": 20,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 10,
+          "rankLabel": "10",
+          "coinsNeeded": 330,
+          "coinsFormula": "",
+          "reward": "+27 Health, +1740 Attack, +234 Defense",
+          "statGains": {
+            "attack": 1740,
+            "defense": 234,
+            "hp": 27,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 11,
+          "rankLabel": "11",
+          "coinsNeeded": 0,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Consume Essence",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "consume-essence",
+          "repeatable": false
+        },
+        {
+          "rank": 11,
+          "rankLabel": "11 (+X)",
+          "coinsNeeded": 50,
+          "coinsFormula": "50 + (10 * X)",
+          "reward": "+4 Health, +290 Attack, +39 Defense",
+          "statGains": {
+            "attack": 290,
+            "defense": 39,
+            "hp": 4,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": true
+        }
+      ],
+      "elementBreakpoints": [
+        {
+          "rank": 1,
+          "elementValue": 0
+        },
+        {
+          "rank": 5,
+          "elementValue": 15
+        },
+        {
+          "rank": 6,
+          "elementValue": 30
+        },
+        {
+          "rank": 8,
+          "elementValue": 45
+        },
+        {
+          "rank": 9,
+          "elementValue": 60
+        },
+        {
+          "rank": 10,
+          "elementValue": 80
+        },
+        {
+          "rank": 12,
+          "elementValue": 90
+        },
+        {
+          "rank": 14,
+          "elementValue": 100
+        },
+        {
+          "rank": 16,
+          "elementValue": 110
+        },
+        {
+          "rank": 20,
+          "elementValue": 125
+        }
       ]
     },
     {
       "id": "lilu",
       "name": "Lilu",
       "guest": false,
+      "role": "spellcaster",
+      "element": "Water",
+      "unlockCost": "25 Coins",
+      "prerequisite": "Merchant Lv. 7",
+      "baseStats": {
+        "hp": 20,
+        "attack": 150,
+        "defense": 20,
+        "evasion": 0,
+        "critChance": 5,
+        "critDamage": 2,
+        "threat": 10,
+        "power": 0
+      },
       "leaderSkillIds": [
         "cure-wounds",
         "divine-power",
         "revitalization",
         "sacred-circle"
+      ],
+      "rankRewards": [
+        {
+          "rank": 1,
+          "rankLabel": "1",
+          "coinsNeeded": 5,
+          "coinsFormula": "",
+          "reward": "",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "cure-wounds",
+          "repeatable": false
+        },
+        {
+          "rank": 2,
+          "rankLabel": "2",
+          "coinsNeeded": 15,
+          "coinsFormula": "",
+          "reward": "+2 Health, +135 Attack, +19 Defense",
+          "statGains": {
+            "attack": 135,
+            "defense": 19,
+            "hp": 2,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 3,
+          "rankLabel": "3",
+          "coinsNeeded": 25,
+          "coinsFormula": "",
+          "reward": "+6 Health, +407 Attack, +58 Defense",
+          "statGains": {
+            "attack": 407,
+            "defense": 58,
+            "hp": 6,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 4,
+          "rankLabel": "4",
+          "coinsNeeded": 50,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Divine Power",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "divine-power",
+          "repeatable": false
+        },
+        {
+          "rank": 5,
+          "rankLabel": "5",
+          "coinsNeeded": 75,
+          "coinsFormula": "",
+          "reward": "+8 Health, +543 Attack, +78 Defense",
+          "statGains": {
+            "attack": 543,
+            "defense": 78,
+            "hp": 8,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 6,
+          "rankLabel": "6",
+          "coinsNeeded": 75,
+          "coinsFormula": "",
+          "reward": "+10 Health, +679 Attack, +97 Defense",
+          "statGains": {
+            "attack": 679,
+            "defense": 97,
+            "hp": 10,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 7,
+          "rankLabel": "7",
+          "coinsNeeded": 100,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Revitalization",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "revitalization",
+          "repeatable": false
+        },
+        {
+          "rank": 8,
+          "rankLabel": "8",
+          "coinsNeeded": 100,
+          "coinsFormula": "",
+          "reward": "+12 Health, +814 Attack, +117 Defense",
+          "statGains": {
+            "attack": 814,
+            "defense": 117,
+            "hp": 12,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 9,
+          "rankLabel": "9",
+          "coinsNeeded": 150,
+          "coinsFormula": "",
+          "reward": "+18 Health, +1222 Attack, +176 Defense",
+          "statGains": {
+            "attack": 1222,
+            "defense": 176,
+            "hp": 18,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 10,
+          "rankLabel": "10",
+          "coinsNeeded": 200,
+          "coinsFormula": "",
+          "reward": "+24 Health, +1629 Attack, +234 Defense",
+          "statGains": {
+            "attack": 1629,
+            "defense": 234,
+            "hp": 24,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 11,
+          "rankLabel": "11",
+          "coinsNeeded": 0,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Sacred Circle",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "sacred-circle",
+          "repeatable": false
+        },
+        {
+          "rank": 11,
+          "rankLabel": "11 (+X)",
+          "coinsNeeded": 50,
+          "coinsFormula": "50 + (10 * X)",
+          "reward": "+4 Health, +271 Attack, +39 Defense",
+          "statGains": {
+            "attack": 271,
+            "defense": 39,
+            "hp": 4,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": true
+        }
+      ],
+      "elementBreakpoints": [
+        {
+          "rank": 1,
+          "elementValue": 0
+        },
+        {
+          "rank": 5,
+          "elementValue": 15
+        },
+        {
+          "rank": 6,
+          "elementValue": 30
+        },
+        {
+          "rank": 8,
+          "elementValue": 45
+        },
+        {
+          "rank": 9,
+          "elementValue": 60
+        },
+        {
+          "rank": 10,
+          "elementValue": 80
+        },
+        {
+          "rank": 12,
+          "elementValue": 90
+        },
+        {
+          "rank": 14,
+          "elementValue": 100
+        },
+        {
+          "rank": 16,
+          "elementValue": 110
+        },
+        {
+          "rank": 20,
+          "elementValue": 125
+        }
       ]
     },
     {
       "id": "malady",
       "name": "Malady",
       "guest": false,
+      "role": "spellcaster",
+      "element": "Light",
+      "unlockCost": "150 Coins",
+      "prerequisite": "Merchant Lv. 40",
+      "baseStats": {
+        "hp": 20,
+        "attack": 150,
+        "defense": 20,
+        "evasion": 10,
+        "critChance": 5,
+        "critDamage": 2,
+        "threat": 10,
+        "power": 0
+      },
       "leaderSkillIds": [
         "seer-s-sight",
         "sightless-eye",
         "fate-s-hand",
         "the-truth-beyond"
+      ],
+      "rankRewards": [
+        {
+          "rank": 1,
+          "rankLabel": "1",
+          "coinsNeeded": 30,
+          "coinsFormula": "",
+          "reward": "",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "seer-s-sight",
+          "repeatable": false
+        },
+        {
+          "rank": 2,
+          "rankLabel": "2",
+          "coinsNeeded": 40,
+          "coinsFormula": "",
+          "reward": "+8 Health, +43 Attack, +30 Defense",
+          "statGains": {
+            "attack": 43,
+            "defense": 30,
+            "hp": 8,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 3,
+          "rankLabel": "3",
+          "coinsNeeded": 60,
+          "coinsFormula": "",
+          "reward": "+24 Health, +129 Attack, +91 Defense",
+          "statGains": {
+            "attack": 129,
+            "defense": 91,
+            "hp": 24,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 4,
+          "rankLabel": "4",
+          "coinsNeeded": 75,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Sightless Eye",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "sightless-eye",
+          "repeatable": false
+        },
+        {
+          "rank": 5,
+          "rankLabel": "5",
+          "coinsNeeded": 110,
+          "coinsFormula": "",
+          "reward": "+33 Health, +172 Attack, +122 Defense",
+          "statGains": {
+            "attack": 172,
+            "defense": 122,
+            "hp": 33,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 6,
+          "rankLabel": "6",
+          "coinsNeeded": 110,
+          "coinsFormula": "",
+          "reward": "+41 Health, +215 Attack, +152 Defense",
+          "statGains": {
+            "attack": 215,
+            "defense": 152,
+            "hp": 41,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 7,
+          "rankLabel": "7",
+          "coinsNeeded": 160,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Fate's Hand",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "fate-s-hand",
+          "repeatable": false
+        },
+        {
+          "rank": 8,
+          "rankLabel": "8",
+          "coinsNeeded": 160,
+          "coinsFormula": "",
+          "reward": "+49 Health, +258 Attack, +183 Defense",
+          "statGains": {
+            "attack": 258,
+            "defense": 183,
+            "hp": 49,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 9,
+          "rankLabel": "9",
+          "coinsNeeded": 275,
+          "coinsFormula": "",
+          "reward": "+74 Health, +388 Attack, +274 Defense",
+          "statGains": {
+            "attack": 388,
+            "defense": 274,
+            "hp": 74,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 10,
+          "rankLabel": "10",
+          "coinsNeeded": 330,
+          "coinsFormula": "",
+          "reward": "+99 Health, +517 Attack, +366 Defense",
+          "statGains": {
+            "attack": 517,
+            "defense": 366,
+            "hp": 99,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 11,
+          "rankLabel": "11",
+          "coinsNeeded": 0,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: The Truth Beyond",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "the-truth-beyond",
+          "repeatable": false
+        },
+        {
+          "rank": 11,
+          "rankLabel": "11 (+X)",
+          "coinsNeeded": 50,
+          "coinsFormula": "50 + (10 * X)",
+          "reward": "+16 Health, +86 Attack, +61 Defense",
+          "statGains": {
+            "attack": 86,
+            "defense": 61,
+            "hp": 16,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": true
+        }
+      ],
+      "elementBreakpoints": [
+        {
+          "rank": 1,
+          "elementValue": 0
+        },
+        {
+          "rank": 5,
+          "elementValue": 15
+        },
+        {
+          "rank": 6,
+          "elementValue": 30
+        },
+        {
+          "rank": 8,
+          "elementValue": 45
+        },
+        {
+          "rank": 9,
+          "elementValue": 60
+        },
+        {
+          "rank": 10,
+          "elementValue": 80
+        },
+        {
+          "rank": 12,
+          "elementValue": 90
+        },
+        {
+          "rank": 14,
+          "elementValue": 100
+        },
+        {
+          "rank": 16,
+          "elementValue": 110
+        },
+        {
+          "rank": 20,
+          "elementValue": 125
+        }
       ]
     },
     {
       "id": "polonia",
       "name": "Polonia",
       "guest": false,
+      "role": "rogue",
+      "element": "Water",
+      "unlockCost": "90 Coins",
+      "prerequisite": "Merchant Lv. 26",
+      "baseStats": {
+        "hp": 25,
+        "attack": 125,
+        "defense": 40,
+        "evasion": 30,
+        "critChance": 30,
+        "critDamage": 2,
+        "threat": 60,
+        "power": 0
+      },
       "leaderSkillIds": [
         "pirate-s-due",
         "davy-jones-muggin",
         "high-sea-robbery",
         "captain-s-share"
+      ],
+      "rankRewards": [
+        {
+          "rank": 1,
+          "rankLabel": "1",
+          "coinsNeeded": 25,
+          "coinsFormula": "",
+          "reward": "",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "pirate-s-due",
+          "repeatable": false
+        },
+        {
+          "rank": 2,
+          "rankLabel": "2",
+          "coinsNeeded": 35,
+          "coinsFormula": "",
+          "reward": "+4 Health, +43 Attack, +27 Defense",
+          "statGains": {
+            "attack": 43,
+            "defense": 27,
+            "hp": 4,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 3,
+          "rankLabel": "3",
+          "coinsNeeded": 55,
+          "coinsFormula": "",
+          "reward": "+13 Health, +129 Attack, +81 Defense",
+          "statGains": {
+            "attack": 129,
+            "defense": 81,
+            "hp": 13,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 4,
+          "rankLabel": "4",
+          "coinsNeeded": 75,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Davy Jone's Muggin'",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "davy-jones-muggin",
+          "repeatable": false
+        },
+        {
+          "rank": 5,
+          "rankLabel": "5",
+          "coinsNeeded": 110,
+          "coinsFormula": "",
+          "reward": "+17 Health, +172 Attack, +109 Defense",
+          "statGains": {
+            "attack": 172,
+            "defense": 109,
+            "hp": 17,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 6,
+          "rankLabel": "6",
+          "coinsNeeded": 110,
+          "coinsFormula": "",
+          "reward": "+21 Health, +215 Attack, +136 Defense",
+          "statGains": {
+            "attack": 215,
+            "defense": 136,
+            "hp": 21,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 7,
+          "rankLabel": "7",
+          "coinsNeeded": 160,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: High Sea Robbery",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "high-sea-robbery",
+          "repeatable": false
+        },
+        {
+          "rank": 8,
+          "rankLabel": "8",
+          "coinsNeeded": 160,
+          "coinsFormula": "",
+          "reward": "+26 Health, +258 Attack, +163 Defense",
+          "statGains": {
+            "attack": 258,
+            "defense": 163,
+            "hp": 26,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 9,
+          "rankLabel": "9",
+          "coinsNeeded": 275,
+          "coinsFormula": "",
+          "reward": "+39 Health, +388 Attack, +245 Defense",
+          "statGains": {
+            "attack": 388,
+            "defense": 245,
+            "hp": 39,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 10,
+          "rankLabel": "10",
+          "coinsNeeded": 330,
+          "coinsFormula": "",
+          "reward": "+52 Health, +517 Attack, +327 Defense",
+          "statGains": {
+            "attack": 517,
+            "defense": 327,
+            "hp": 52,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 11,
+          "rankLabel": "11",
+          "coinsNeeded": 0,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Captain's Share",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "captain-s-share",
+          "repeatable": false
+        },
+        {
+          "rank": 11,
+          "rankLabel": "11 (+X)",
+          "coinsNeeded": 50,
+          "coinsFormula": "50 + (10 * X)",
+          "reward": "+8 Health, +86 Attack, +54 Defense",
+          "statGains": {
+            "attack": 86,
+            "defense": 54,
+            "hp": 8,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": true
+        }
+      ],
+      "elementBreakpoints": [
+        {
+          "rank": 1,
+          "elementValue": 0
+        },
+        {
+          "rank": 5,
+          "elementValue": 15
+        },
+        {
+          "rank": 6,
+          "elementValue": 30
+        },
+        {
+          "rank": 8,
+          "elementValue": 45
+        },
+        {
+          "rank": 9,
+          "elementValue": 60
+        },
+        {
+          "rank": 10,
+          "elementValue": 80
+        },
+        {
+          "rank": 12,
+          "elementValue": 90
+        },
+        {
+          "rank": 14,
+          "elementValue": 100
+        },
+        {
+          "rank": 16,
+          "elementValue": 110
+        },
+        {
+          "rank": 20,
+          "elementValue": 125
+        }
       ]
     },
     {
       "id": "reinhold",
       "name": "Reinhold",
       "guest": true,
+      "role": "fighter",
+      "element": "Gold",
+      "unlockCost": "10 Coins",
+      "prerequisite": "Merchant Lv. 10",
+      "baseStats": {
+        "hp": 25,
+        "attack": 150,
+        "defense": 30,
+        "evasion": 0,
+        "critChance": 5,
+        "critDamage": 5,
+        "threat": 10,
+        "power": 0
+      },
       "leaderSkillIds": [
         "reinhold-s-randonee",
         "kingly-sortie",
         "wealth-begets-wealth",
         "wealth-of-the-world"
+      ],
+      "rankRewards": [
+        {
+          "rank": 1,
+          "rankLabel": "1",
+          "coinsNeeded": 30,
+          "coinsFormula": "",
+          "reward": "",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "reinhold-s-randonee",
+          "repeatable": false
+        },
+        {
+          "rank": 2,
+          "rankLabel": "2",
+          "coinsNeeded": 50,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Kingly Sortie",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "kingly-sortie",
+          "repeatable": false
+        },
+        {
+          "rank": 3,
+          "rankLabel": "3",
+          "coinsNeeded": 100,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Wealth Begets Wealth",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "wealth-begets-wealth",
+          "repeatable": false
+        },
+        {
+          "rank": 4,
+          "rankLabel": "4",
+          "coinsNeeded": 0,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Wealth of the World",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "wealth-of-the-world",
+          "repeatable": false
+        },
+        {
+          "rank": 4,
+          "rankLabel": "4 (+X)",
+          "coinsNeeded": 50,
+          "coinsFormula": "50 + (10 * X)",
+          "reward": "+5 Health, +80 Attack, +60 Defense",
+          "statGains": {
+            "attack": 80,
+            "defense": 60,
+            "hp": 5,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": true
+        }
+      ],
+      "elementBreakpoints": [
+        {
+          "rank": 1,
+          "elementValue": 0
+        },
+        {
+          "rank": 5,
+          "elementValue": 15
+        },
+        {
+          "rank": 6,
+          "elementValue": 30
+        },
+        {
+          "rank": 8,
+          "elementValue": 45
+        },
+        {
+          "rank": 9,
+          "elementValue": 60
+        },
+        {
+          "rank": 10,
+          "elementValue": 80
+        },
+        {
+          "rank": 12,
+          "elementValue": 90
+        },
+        {
+          "rank": 14,
+          "elementValue": 100
+        },
+        {
+          "rank": 16,
+          "elementValue": 110
+        },
+        {
+          "rank": 20,
+          "elementValue": 125
+        }
       ]
     },
     {
       "id": "rudo",
       "name": "Rudo",
       "guest": false,
+      "role": "fighter",
+      "element": "Fire",
+      "unlockCost": "70 Coins",
+      "prerequisite": "Merchant Lv. 22",
+      "baseStats": {
+        "hp": 40,
+        "attack": 80,
+        "defense": 25,
+        "evasion": 0,
+        "critChance": 5,
+        "critDamage": 2,
+        "threat": 90,
+        "power": 0
+      },
       "leaderSkillIds": [
         "rudo-blitz",
         "headstrong-assault",
         "berserker-rampage",
         "total-mayhem"
+      ],
+      "rankRewards": [
+        {
+          "rank": 1,
+          "rankLabel": "1",
+          "coinsNeeded": 20,
+          "coinsFormula": "",
+          "reward": "",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "rudo-blitz",
+          "repeatable": false
+        },
+        {
+          "rank": 2,
+          "rankLabel": "2",
+          "coinsNeeded": 30,
+          "coinsFormula": "",
+          "reward": "+10 Health, +38 Attack, +33 Defense",
+          "statGains": {
+            "attack": 38,
+            "defense": 33,
+            "hp": 10,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 3,
+          "rankLabel": "3",
+          "coinsNeeded": 50,
+          "coinsFormula": "",
+          "reward": "+32 Health, +114 Attack, +101 Defense",
+          "statGains": {
+            "attack": 114,
+            "defense": 101,
+            "hp": 32,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 4,
+          "rankLabel": "4",
+          "coinsNeeded": 70,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Headstrong Assault",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "headstrong-assault",
+          "repeatable": false
+        },
+        {
+          "rank": 5,
+          "rankLabel": "5",
+          "coinsNeeded": 100,
+          "coinsFormula": "",
+          "reward": "+43 Health, +152 Attack, +135 Defense",
+          "statGains": {
+            "attack": 152,
+            "defense": 135,
+            "hp": 43,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 6,
+          "rankLabel": "6",
+          "coinsNeeded": 100,
+          "coinsFormula": "",
+          "reward": "+54 Health, +190 Attack, +169 Defense",
+          "statGains": {
+            "attack": 190,
+            "defense": 169,
+            "hp": 54,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 7,
+          "rankLabel": "7",
+          "coinsNeeded": 150,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Berserker Rampage",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "berserker-rampage",
+          "repeatable": false
+        },
+        {
+          "rank": 8,
+          "rankLabel": "8",
+          "coinsNeeded": 150,
+          "coinsFormula": "",
+          "reward": "+65 Health, +228 Attack, +203 Defense",
+          "statGains": {
+            "attack": 228,
+            "defense": 203,
+            "hp": 65,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 9,
+          "rankLabel": "9",
+          "coinsNeeded": 250,
+          "coinsFormula": "",
+          "reward": "+98 Health, +342 Attack, +304 Defense",
+          "statGains": {
+            "attack": 342,
+            "defense": 304,
+            "hp": 98,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 10,
+          "rankLabel": "10",
+          "coinsNeeded": 300,
+          "coinsFormula": "",
+          "reward": "+131 Health, +457 Attack, +406 Defense",
+          "statGains": {
+            "attack": 457,
+            "defense": 406,
+            "hp": 131,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 11,
+          "rankLabel": "11",
+          "coinsNeeded": 0,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Total Mayhem",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "total-mayhem",
+          "repeatable": false
+        },
+        {
+          "rank": 11,
+          "rankLabel": "11 (+X)",
+          "coinsNeeded": 50,
+          "coinsFormula": "50 + (10 * X)",
+          "reward": "+21 Health, +76 Attack, +67 Defense",
+          "statGains": {
+            "attack": 76,
+            "defense": 67,
+            "hp": 21,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": true
+        }
+      ],
+      "elementBreakpoints": [
+        {
+          "rank": 1,
+          "elementValue": 0
+        },
+        {
+          "rank": 5,
+          "elementValue": 15
+        },
+        {
+          "rank": 6,
+          "elementValue": 30
+        },
+        {
+          "rank": 8,
+          "elementValue": 45
+        },
+        {
+          "rank": 9,
+          "elementValue": 60
+        },
+        {
+          "rank": 10,
+          "elementValue": 80
+        },
+        {
+          "rank": 12,
+          "elementValue": 90
+        },
+        {
+          "rank": 14,
+          "elementValue": 100
+        },
+        {
+          "rank": 16,
+          "elementValue": 110
+        },
+        {
+          "rank": 20,
+          "elementValue": 125
+        }
       ]
     },
     {
       "id": "sia",
       "name": "Sia",
       "guest": false,
+      "role": "rogue",
+      "element": "Air",
+      "unlockCost": "50 Coins",
+      "prerequisite": "Merchant Lv. 12",
+      "baseStats": {
+        "hp": 25,
+        "attack": 100,
+        "defense": 30,
+        "evasion": 40,
+        "critChance": 20,
+        "critDamage": 2,
+        "threat": 40,
+        "power": 0
+      },
       "leaderSkillIds": [
         "eye-for-loot",
         "trained-eye",
         "eye-for-style",
         "eye-of-the-beholder"
+      ],
+      "rankRewards": [
+        {
+          "rank": 1,
+          "rankLabel": "1",
+          "coinsNeeded": 10,
+          "coinsFormula": "",
+          "reward": "",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "eye-for-loot",
+          "repeatable": false
+        },
+        {
+          "rank": 2,
+          "rankLabel": "2",
+          "coinsNeeded": 20,
+          "coinsFormula": "",
+          "reward": "+2 Health, +51 Attack, +35 Defense",
+          "statGains": {
+            "attack": 51,
+            "defense": 35,
+            "hp": 2,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 3,
+          "rankLabel": "3",
+          "coinsNeeded": 30,
+          "coinsFormula": "",
+          "reward": "+6 Health, +154 Attack, +106 Defense",
+          "statGains": {
+            "attack": 154,
+            "defense": 106,
+            "hp": 6,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 4,
+          "rankLabel": "4",
+          "coinsNeeded": 60,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Trained Eye",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "trained-eye",
+          "repeatable": false
+        },
+        {
+          "rank": 5,
+          "rankLabel": "5",
+          "coinsNeeded": 90,
+          "coinsFormula": "",
+          "reward": "+8 Health, +205 Attack, +141 Defense",
+          "statGains": {
+            "attack": 205,
+            "defense": 141,
+            "hp": 8,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 6,
+          "rankLabel": "6",
+          "coinsNeeded": 90,
+          "coinsFormula": "",
+          "reward": "+11 Health, +257 Attack, +176 Defense",
+          "statGains": {
+            "attack": 257,
+            "defense": 176,
+            "hp": 11,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 7,
+          "rankLabel": "7",
+          "coinsNeeded": 125,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Eye for Style",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "eye-for-style",
+          "repeatable": false
+        },
+        {
+          "rank": 8,
+          "rankLabel": "8",
+          "coinsNeeded": 125,
+          "coinsFormula": "",
+          "reward": "+13 Health, +308 Attack, +212 Defense",
+          "statGains": {
+            "attack": 308,
+            "defense": 212,
+            "hp": 13,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 9,
+          "rankLabel": "9",
+          "coinsNeeded": 200,
+          "coinsFormula": "",
+          "reward": "+19 Health, +463 Attack, +318 Defense",
+          "statGains": {
+            "attack": 463,
+            "defense": 318,
+            "hp": 19,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 10,
+          "rankLabel": "10",
+          "coinsNeeded": 250,
+          "coinsFormula": "",
+          "reward": "+26 Health, +617 Attack, +424 Defense",
+          "statGains": {
+            "attack": 617,
+            "defense": 424,
+            "hp": 26,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 11,
+          "rankLabel": "11",
+          "coinsNeeded": 0,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Eye of the Beholder",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "eye-of-the-beholder",
+          "repeatable": false
+        },
+        {
+          "rank": 11,
+          "rankLabel": "11 (+X)",
+          "coinsNeeded": 50,
+          "coinsFormula": "50 + (10 * X)",
+          "reward": "+4 Health, +102 Attack, +70 Defense",
+          "statGains": {
+            "attack": 102,
+            "defense": 70,
+            "hp": 4,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": true
+        }
+      ],
+      "elementBreakpoints": [
+        {
+          "rank": 1,
+          "elementValue": 0
+        },
+        {
+          "rank": 5,
+          "elementValue": 15
+        },
+        {
+          "rank": 6,
+          "elementValue": 30
+        },
+        {
+          "rank": 8,
+          "elementValue": 45
+        },
+        {
+          "rank": 9,
+          "elementValue": 60
+        },
+        {
+          "rank": 10,
+          "elementValue": 80
+        },
+        {
+          "rank": 12,
+          "elementValue": 90
+        },
+        {
+          "rank": 14,
+          "elementValue": 100
+        },
+        {
+          "rank": 16,
+          "elementValue": 110
+        },
+        {
+          "rank": 20,
+          "elementValue": 125
+        }
       ]
     },
     {
       "id": "tamas",
       "name": "Tamas",
       "guest": true,
+      "role": "rogue",
+      "element": "Earth",
+      "unlockCost": "10 Coins",
+      "prerequisite": "Merchant Lv. 10",
+      "baseStats": {
+        "hp": 25,
+        "attack": 50,
+        "defense": 30,
+        "evasion": 20,
+        "critChance": 20,
+        "critDamage": 3,
+        "threat": 10,
+        "power": 0
+      },
       "leaderSkillIds": [
         "awakening-of-leather",
         "power-of-leather",
         "league-of-leather",
         "ultimate-leatherworker"
+      ],
+      "rankRewards": [
+        {
+          "rank": 1,
+          "rankLabel": "1",
+          "coinsNeeded": 20,
+          "coinsFormula": "",
+          "reward": "",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "awakening-of-leather",
+          "repeatable": false
+        },
+        {
+          "rank": 2,
+          "rankLabel": "2",
+          "coinsNeeded": 25,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Power of Leather",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "power-of-leather",
+          "repeatable": false
+        },
+        {
+          "rank": 3,
+          "rankLabel": "3",
+          "coinsNeeded": 50,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: League of Leather",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "league-of-leather",
+          "repeatable": false
+        },
+        {
+          "rank": 4,
+          "rankLabel": "4",
+          "coinsNeeded": 0,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Ultimate Leatherworker",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "ultimate-leatherworker",
+          "repeatable": false
+        },
+        {
+          "rank": 4,
+          "rankLabel": "4 (+X)",
+          "coinsNeeded": 50,
+          "coinsFormula": "50 + (10 * X)",
+          "reward": "+10 Health, +86 Attack, +54 Defense",
+          "statGains": {
+            "attack": 86,
+            "defense": 54,
+            "hp": 10,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": true
+        }
+      ],
+      "elementBreakpoints": [
+        {
+          "rank": 1,
+          "elementValue": 0
+        },
+        {
+          "rank": 5,
+          "elementValue": 15
+        },
+        {
+          "rank": 6,
+          "elementValue": 30
+        },
+        {
+          "rank": 8,
+          "elementValue": 45
+        },
+        {
+          "rank": 9,
+          "elementValue": 60
+        },
+        {
+          "rank": 10,
+          "elementValue": 80
+        },
+        {
+          "rank": 12,
+          "elementValue": 90
+        },
+        {
+          "rank": 14,
+          "elementValue": 100
+        },
+        {
+          "rank": 16,
+          "elementValue": 110
+        },
+        {
+          "rank": 20,
+          "elementValue": 125
+        }
       ]
     },
     {
       "id": "yami",
       "name": "Yami",
       "guest": false,
+      "role": "rogue",
+      "element": "Dark",
+      "unlockCost": "50 Coins",
+      "prerequisite": "Merchant Lv. 17",
+      "baseStats": {
+        "hp": 25,
+        "attack": 100,
+        "defense": 30,
+        "evasion": 30,
+        "critChance": 20,
+        "critDamage": 3,
+        "threat": 30,
+        "power": 0
+      },
       "leaderSkillIds": [
         "ambush",
         "coordinated-ambush",
         "ethereal-ambush",
         "perfect-ambush"
+      ],
+      "rankRewards": [
+        {
+          "rank": 1,
+          "rankLabel": "1",
+          "coinsNeeded": 10,
+          "coinsFormula": "",
+          "reward": "",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "ambush",
+          "repeatable": false
+        },
+        {
+          "rank": 2,
+          "rankLabel": "2",
+          "coinsNeeded": 20,
+          "coinsFormula": "",
+          "reward": "+2 Health, +55 Attack, +27 Defense",
+          "statGains": {
+            "attack": 55,
+            "defense": 27,
+            "hp": 2,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 3,
+          "rankLabel": "3",
+          "coinsNeeded": 30,
+          "coinsFormula": "",
+          "reward": "+6 Health, +165 Attack, +83 Defense",
+          "statGains": {
+            "attack": 165,
+            "defense": 83,
+            "hp": 6,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 4,
+          "rankLabel": "4",
+          "coinsNeeded": 60,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Coordinated Ambush",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "coordinated-ambush",
+          "repeatable": false
+        },
+        {
+          "rank": 5,
+          "rankLabel": "5",
+          "coinsNeeded": 90,
+          "coinsFormula": "",
+          "reward": "+9 Health, +221 Attack, +111 Defense",
+          "statGains": {
+            "attack": 221,
+            "defense": 111,
+            "hp": 9,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 6,
+          "rankLabel": "6",
+          "coinsNeeded": 90,
+          "coinsFormula": "",
+          "reward": "+11 Health, +276 Attack, +138 Defense",
+          "statGains": {
+            "attack": 276,
+            "defense": 138,
+            "hp": 11,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 7,
+          "rankLabel": "7",
+          "coinsNeeded": 125,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Ethereal Ambush",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "ethereal-ambush",
+          "repeatable": false
+        },
+        {
+          "rank": 8,
+          "rankLabel": "8",
+          "coinsNeeded": 125,
+          "coinsFormula": "",
+          "reward": "+13 Health, +331 Attack, +166 Defense",
+          "statGains": {
+            "attack": 331,
+            "defense": 166,
+            "hp": 13,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 9,
+          "rankLabel": "9",
+          "coinsNeeded": 200,
+          "coinsFormula": "",
+          "reward": "+20 Health, +497 Attack, +249 Defense",
+          "statGains": {
+            "attack": 497,
+            "defense": 249,
+            "hp": 20,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 10,
+          "rankLabel": "10",
+          "coinsNeeded": 250,
+          "coinsFormula": "",
+          "reward": "+27 Health, +663 Attack, +333 Defense",
+          "statGains": {
+            "attack": 663,
+            "defense": 333,
+            "hp": 27,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": false
+        },
+        {
+          "rank": 11,
+          "rankLabel": "11",
+          "coinsNeeded": 0,
+          "coinsFormula": "",
+          "reward": "Leader Skill Upgraded: Perfect Ambush",
+          "statGains": {
+            "attack": 0,
+            "defense": 0,
+            "hp": 0,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "perfect-ambush",
+          "repeatable": false
+        },
+        {
+          "rank": 11,
+          "rankLabel": "11 (+X)",
+          "coinsNeeded": 50,
+          "coinsFormula": "50 + (10 * X)",
+          "reward": "+4 Health, +110 Attack, +55 Defense",
+          "statGains": {
+            "attack": 110,
+            "defense": 55,
+            "hp": 4,
+            "evasion": 0,
+            "critChance": 0,
+            "critDamage": 0,
+            "threat": 0
+          },
+          "leaderSkillId": "",
+          "repeatable": true
+        }
+      ],
+      "elementBreakpoints": [
+        {
+          "rank": 1,
+          "elementValue": 0
+        },
+        {
+          "rank": 5,
+          "elementValue": 15
+        },
+        {
+          "rank": 6,
+          "elementValue": 30
+        },
+        {
+          "rank": 8,
+          "elementValue": 45
+        },
+        {
+          "rank": 9,
+          "elementValue": 60
+        },
+        {
+          "rank": 10,
+          "elementValue": 80
+        },
+        {
+          "rank": 12,
+          "elementValue": 90
+        },
+        {
+          "rank": 14,
+          "elementValue": 100
+        },
+        {
+          "rank": 16,
+          "elementValue": 110
+        },
+        {
+          "rank": 20,
+          "elementValue": 125
+        }
       ]
     }
   ],

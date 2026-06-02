@@ -27,8 +27,14 @@ export function parseBuildJsonDetailed(json: string, data: GameData): ParseResul
     return { ok: false, errors };
   }
 
-  const build = parsed as BuildConfig;
+  const build = stripRosterOnlyFields(parsed as BuildConfig & { championSkillId?: string });
   const warnings = validateBuildConfig(build, data);
+  if ((parsed as { championSkillId?: unknown }).championSkillId) {
+    warnings.push({
+      field: 'championSkillId',
+      message: 'Champion aura is roster-only and was ignored for this build.'
+    });
+  }
   const hero = getHero(data, build.heroClassId);
 
   return {
@@ -44,10 +50,6 @@ export function validateBuildConfig(build: BuildConfig, data: GameData): Validat
 
   if (!hero) {
     warnings.push({ field: 'heroClassId', message: `Unknown hero class "${build.heroClassId}".` });
-  }
-
-  if (build.championSkillId && !data.skills.some((skill) => skill.id === build.championSkillId && skill.type === 'Leader')) {
-    warnings.push({ field: 'championSkillId', message: `Unknown champion skill "${build.championSkillId}".` });
   }
 
   for (const [index, skillId] of build.skills.entries()) {
@@ -69,6 +71,11 @@ export function validateBuildConfig(build: BuildConfig, data: GameData): Validat
   }
 
   return warnings;
+}
+
+function stripRosterOnlyFields(build: BuildConfig & { championSkillId?: string }): BuildConfig {
+  const { championSkillId: _championSkillId, ...buildOnly } = build;
+  return buildOnly;
 }
 
 export function migrateOrDefaultBuild(value: string | null, data: GameData): BuildConfig {
