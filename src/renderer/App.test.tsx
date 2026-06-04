@@ -81,4 +81,18 @@ describe('App', () => {
     expect(screen.getByText('1 / 5')).toBeInTheDocument();
     expect(screen.getAllByText('Roster Champion A').length).toBeGreaterThan(0);
   });
+
+  it('opens the quest simulator with the active roster controls', () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Quest Simulator' }));
+
+    expect(screen.getByRole('heading', { name: 'Quest Simulator' })).toBeInTheDocument();
+    expect(screen.getByLabelText('Roster')).toBeInTheDocument();
+    expect(screen.getByLabelText('Quest')).toBeInTheDocument();
+    expect(screen.getByLabelText('Defense cap')).toBeInTheDocument();
+    expect(screen.getByText('Quick Result')).toBeInTheDocument();
+    expect(screen.getByText('No roster loaded')).toBeInTheDocument();
+    expect(screen.getByText('Enemy hits')).toBeInTheDocument();
+  });
 });

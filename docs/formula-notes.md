@@ -1,6 +1,6 @@
 # Formula Notes
 
-This MVP implements the stat engine as pure TypeScript and keeps all imported game data in JSON. It intentionally leaves the Quest Simulator disabled until Ress' workbook formulas are fully audited.
+This MVP implements the stat engine as pure TypeScript and keeps all imported game data in JSON. The Quest Simulator is enabled as a narrow Ress simple-analysis slice while full Monte Carlo remains locked until the remaining workbook formulas are audited.
 
 ## Implemented
 
@@ -21,6 +21,9 @@ This MVP implements the stat engine as pure TypeScript and keeps all imported ga
 - Skill effects are parsed into broad percent modifiers for ATK, DEF, HP, EVA, CRIT, and critical damage.
 - Roster presets are stored locally as separate team configurations. Champion leader skills are applied through the active roster, not through the individual Hero Builder stat panel.
 - Build export/import uses schema version `1`.
+- The first Quest Simulator tab is wired to roster teams and uses the audited Ress simple-analysis formulas for enemy damage per hit, threat targeting, total enemy hits, and deterministic solo summary checks.
+- The Quest Simulator displays a Quick Result of `All survive`, `Some survive`, `None survive`, or `No roster loaded` from the current simple-analysis rows.
+- `src/shared/combat-engine.ts` is UI-free and is checked against `data/fixtures/combat-simulator-cases.json` for deterministic Ress parity.
 
 ## Ress Parity Audit
 
@@ -39,11 +42,13 @@ This MVP implements the stat engine as pure TypeScript and keeps all imported ga
 - Conditional innate skills are currently approximated as their imported stat modifiers; gear-type-specific and battle-state-specific clauses still need Ress parity work.
 - Champion Card Level, Champion rank scaling, and Champion gear enchant caps still need exact Ress fixture tests.
 - Power is a display score only and is not used for combat simulation.
-- Quest combat and Monte Carlo simulation are intentionally deferred until formula parity tests are in place.
+- Quest Simulator Quick Result does not yet include healing, artifacts, fatal-blow survival, conditional spirits, Polonia, LCoG, rest time, or the full Monte Carlo roll chain.
+- Full Monte Carlo simulation is intentionally deferred until the random simulation chain in Ress is mapped.
 
 ## Next Formula Work
 
-1. Inspect `data/raw/ress-hero-quest-simulator.xlsx`.
-2. Extract the hero stat, enchantment, spirit, barrier, damage, rest, and survival formulas into documented TypeScript functions.
-3. Add fixture builds with expected outputs copied from the workbook.
-4. Enable seeded Monte Carlo quest simulation only after the deterministic stat fixtures pass.
+1. Use `pnpm.cmd dump:ress-formulas` to regenerate `data/raw/ress-formula-dump.json` and `docs/ress-formula-index.md` from `data/raw/ress-hero-quest-simulator.xlsx`.
+2. Keep the named simulator formulas in `docs/combat-simulator-calc-spec.md`.
+3. Treat `data/fixtures/combat-simulator-cases.json` as the first truth table for deterministic and stored Ress outputs.
+4. Extract the remaining hero stat, enchantment, spirit, barrier, rest, and random simulation formulas into documented TypeScript functions.
+5. Enable seeded Monte Carlo quest simulation only after the deterministic stat fixtures pass.

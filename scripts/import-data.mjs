@@ -26,6 +26,8 @@ async function main() {
   process.stdout.write('Fetching official workbook for Champions...\n');
   const officialWorkbook = await fetchXlsx(OFFICIAL_SHEET_ID);
   const championRows = readXlsxRows(officialWorkbook, 'Champions');
+  process.stdout.write('Fetching Ress workbook for formulas and quest metadata...\n');
+  const ressWorkbook = await fetchXlsx(RESS_SHEET_ID);
 
   const ressVersion = await readRessVersion();
   const metadata = readMetadata(sheets.get('Home') ?? [], ressVersion);
@@ -39,14 +41,14 @@ async function main() {
     skills,
     champions: parseChampions(skills, championRows),
     enchantments: parseEnchantments(sheets.get('Enchantments') ?? []),
-    quests: parseQuests(sheets.get('Quests') ?? [])
+    quests: enrichQuestsWithRessMetadata(parseQuests(sheets.get('Quests') ?? []), ressWorkbook)
   };
 
   await mkdir(dirname(OUTPUT_PATH), { recursive: true });
   await writeFile(OUTPUT_PATH, `${JSON.stringify(data, null, 2)}\n`, 'utf8');
   process.stdout.write(`Wrote ${OUTPUT_PATH}\n`);
 
-  await downloadRessWorkbook();
+  await writeRessWorkbook(ressWorkbook);
 }
 
 async function fetchCsv(sheetId, tab) {
@@ -102,6 +104,13 @@ async function downloadRessWorkbook() {
     throw new Error(`Failed to download Ress workbook: ${response.status} ${response.statusText}`);
   }
   const bytes = Buffer.from(await response.arrayBuffer());
+  await mkdir(dirname(RAW_RESS_PATH), { recursive: true });
+  await writeFile(RAW_RESS_PATH, bytes);
+  process.stdout.write(`Wrote ${RAW_RESS_PATH}\n`);
+}
+
+async function writeRessWorkbook(workbook) {
+  const bytes = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
   await mkdir(dirname(RAW_RESS_PATH), { recursive: true });
   await writeFile(RAW_RESS_PATH, bytes);
   process.stdout.write(`Wrote ${RAW_RESS_PATH}\n`);
@@ -573,12 +582,176 @@ function parseQuests(rows) {
       powerRequirement: numberValue(row[3]) || numberValue(row[4]),
       enemyHealth: numberValue(row[12]),
       enemyDamage: numberValue(row[13]),
+      defenseCap: 0,
+      aoeDamage: 0,
+      aoeChance: 0,
+      lcog: false,
+      isBoss: type === 'Boss',
+      isExtreme: difficulty === 'Extreme',
       barrierType: clean(row[15]),
+      barrierOptions: clean(row[15])
+        .split(',')
+        .map((entry) => entry.trim())
+        .filter(Boolean),
       barrierHealth: numberValue(row[16])
     });
   }
 
   return quests;
+}
+
+function enrichQuestsWithRessMetadata(quests, workbook) {
+  const ressRows = parseRessQuestRows(workbook);
+  if (ressRows.length === 0) {
+    return quests;
+  }
+
+  const byKey = new Map(ressRows.map((row) => [questMatchKey(row.zone, row.type, row.difficulty), row]));
+  const enriched = quests.map((quest) => {
+    const ress = byKey.get(questMatchKey(quest.zone, quest.type, quest.difficulty));
+    return ress ? mergeQuestWithRess(quest, ress) : quest;
+  });
+  const existingKeys = new Set(enriched.map((quest) => questMatchKey(quest.zone, quest.type, quest.difficulty)));
+  const existingIds = new Set(enriched.map((quest) => quest.id));
+
+  for (const ress of ressRows) {
+    const key = questMatchKey(ress.zone, ress.type, ress.difficulty);
+    if (existingKeys.has(key)) {
+      continue;
+    }
+    const id = uniqueQuestId(`${ress.zone}-${ress.type}-${ress.difficulty}`, existingIds);
+    existingIds.add(id);
+    existingKeys.add(key);
+    enriched.push({
+      id,
+      zone: ress.zone,
+      difficulty: ress.difficulty,
+      type: ress.type,
+      partySize: ress.lcog ? 5 : 4,
+      powerRequirement: 0,
+      enemyHealth: ress.enemyHealth,
+      enemyDamage: ress.enemyDamage,
+      defenseCap: ress.defenseCap,
+      aoeDamage: ress.aoeDamage,
+      aoeChance: ress.aoeChance,
+      lcog: ress.lcog,
+      isBoss: ress.isBoss,
+      isExtreme: ress.isExtreme,
+      barrierType: ress.barrierOptions.filter((entry) => entry !== 'None').join(', '),
+      barrierOptions: ress.barrierOptions,
+      barrierHealth: ress.barrierHealth
+    });
+  }
+
+  return enriched;
+}
+
+function parseRessQuestRows(workbook) {
+  const sheet = workbook.Sheets['Quest Data'];
+  if (!sheet) {
+    return [];
+  }
+  const rows = XLSX.utils.sheet_to_json(sheet, {
+    header: 1,
+    defval: '',
+    raw: false
+  });
+  const difficulties = ['Easy', 'Medium', 'Hard', 'Extreme'];
+  const parsed = [];
+
+  for (const row of rows.slice(2)) {
+    if (!truthy(row[0])) {
+      continue;
+    }
+    const zone = titleCase(clean(row[1]).replace(/\s+/g, ' '));
+    if (!zone) {
+      continue;
+    }
+    const lcog = /^yes$/i.test(clean(row[2]));
+    const isBoss = /^yes$/i.test(clean(row[3]));
+    const aoeChance = percentOrNumber(row[4]);
+    const barrierOptions = [row[25], row[26], row[27]]
+      .map((entry) => clean(entry))
+      .filter(Boolean);
+
+    for (let index = 0; index < difficulties.length; index += 1) {
+      const difficulty = difficulties[index];
+      parsed.push({
+        zone,
+        difficulty,
+        type: isBoss ? 'Boss' : 'Normal',
+        enemyHealth: numberValue(row[5 + index]),
+        defenseCap: numberValue(row[9 + index]),
+        enemyDamage: numberValue(row[13 + index]),
+        aoeDamage: numberValue(row[17 + index]),
+        aoeChance,
+        lcog,
+        isBoss,
+        isExtreme: difficulty === 'Extreme',
+        barrierHealth: numberValue(row[21 + index]),
+        barrierOptions
+      });
+    }
+  }
+
+  return parsed.filter((entry) => entry.enemyHealth > 0 || entry.enemyDamage > 0);
+}
+
+function mergeQuestWithRess(quest, ress) {
+  return {
+    ...quest,
+    defenseCap: ress.defenseCap,
+    aoeDamage: ress.aoeDamage,
+    aoeChance: ress.aoeChance,
+    lcog: ress.lcog,
+    isBoss: ress.isBoss,
+    isExtreme: ress.isExtreme,
+    barrierOptions: ress.barrierOptions.length > 0 ? ress.barrierOptions : quest.barrierOptions,
+    barrierHealth: quest.barrierHealth || ress.barrierHealth,
+    barrierType: quest.barrierType || ress.barrierOptions.filter((entry) => entry !== 'None').join(', ')
+  };
+}
+
+function questMatchKey(zone, type, difficulty) {
+  return `${normalizeQuestZoneKey(zone)}|${normalizeQuestType(type)}|${normalizeQuestDifficulty(difficulty)}`;
+}
+
+function normalizeQuestZoneKey(value) {
+  const normalized = clean(value)
+    .toLowerCase()
+    .replace(/'s\b/g, '')
+    .replace(/\bboss\b/g, '')
+    .replace(/\bnormal\b/g, '')
+    .replace(/[^a-z0-9]+/g, '');
+  const aliases = {
+    sungod: 'sungodtomb',
+    chronos: 'chronosruins',
+    cinderlake: 'cinderlakevolcano'
+  };
+  return aliases[normalized] ?? normalized;
+}
+
+function normalizeQuestType(value) {
+  return /boss/i.test(clean(value)) ? 'boss' : 'normal';
+}
+
+function normalizeQuestDifficulty(value) {
+  return clean(value).toLowerCase();
+}
+
+function uniqueQuestId(value, existingIds) {
+  const base = slugify(value);
+  let candidate = base;
+  let index = 2;
+  while (existingIds.has(candidate)) {
+    candidate = `${base}-${index}`;
+    index += 1;
+  }
+  return candidate;
+}
+
+function truthy(value) {
+  return /^(true|yes|1)$/i.test(clean(value));
 }
 
 function parseSkillModifiers(effect) {

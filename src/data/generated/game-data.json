@@ -142238,7 +142238,14 @@
       "enemyHealth": 250,
       "enemyDamage": 8,
       "barrierType": "",
-      "barrierHealth": 0
+      "barrierHealth": 0,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": []
     },
     {
       "id": "howling-woods-normal-medium",
@@ -142250,7 +142257,14 @@
       "enemyHealth": 1000,
       "enemyDamage": 10,
       "barrierType": "",
-      "barrierHealth": 0
+      "barrierHealth": 0,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": []
     },
     {
       "id": "howling-woods-normal-hard",
@@ -142262,7 +142276,14 @@
       "enemyHealth": 3500,
       "enemyDamage": 14,
       "barrierType": "",
-      "barrierHealth": 0
+      "barrierHealth": 0,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": []
     },
     {
       "id": "howling-woods-normal-extreme",
@@ -142274,7 +142295,18 @@
       "enemyHealth": 30000,
       "enemyDamage": 40,
       "barrierType": "Air, Earth, Light",
-      "barrierHealth": 15
+      "barrierHealth": 15,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Air",
+        "Earth",
+        "Light"
+      ]
     },
     {
       "id": "howling-woods-boss-easy",
@@ -142286,7 +142318,14 @@
       "enemyHealth": 2000,
       "enemyDamage": 12,
       "barrierType": "",
-      "barrierHealth": 0
+      "barrierHealth": 0,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": []
     },
     {
       "id": "howling-woods-boss-medium",
@@ -142298,7 +142337,14 @@
       "enemyHealth": 4000,
       "enemyDamage": 15,
       "barrierType": "",
-      "barrierHealth": 0
+      "barrierHealth": 0,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": []
     },
     {
       "id": "howling-woods-boss-hard",
@@ -142310,7 +142356,14 @@
       "enemyHealth": 10000,
       "enemyDamage": 20,
       "barrierType": "",
-      "barrierHealth": 0
+      "barrierHealth": 0,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": []
     },
     {
       "id": "howling-woods-boss-extreme",
@@ -142322,7 +142375,16 @@
       "enemyHealth": 80000,
       "enemyDamage": 60,
       "barrierType": "Air",
-      "barrierHealth": 30
+      "barrierHealth": 30,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Air"
+      ]
     },
     {
       "id": "aurora-caves-normal-easy",
@@ -142334,7 +142396,14 @@
       "enemyHealth": 900,
       "enemyDamage": 9,
       "barrierType": "",
-      "barrierHealth": 0
+      "barrierHealth": 0,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": []
     },
     {
       "id": "aurora-caves-normal-medium",
@@ -142346,7 +142415,14 @@
       "enemyHealth": 4000,
       "enemyDamage": 12,
       "barrierType": "",
-      "barrierHealth": 0
+      "barrierHealth": 0,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": []
     },
     {
       "id": "aurora-caves-normal-hard",
@@ -142358,7 +142434,14 @@
       "enemyHealth": 8000,
       "enemyDamage": 14,
       "barrierType": "",
-      "barrierHealth": 0
+      "barrierHealth": 0,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": []
     },
     {
       "id": "aurora-caves-normal-extreme",
@@ -142370,7 +142453,18 @@
       "enemyHealth": 60000,
       "enemyDamage": 55,
       "barrierType": "Water, Fire, Dark",
-      "barrierHealth": 25
+      "barrierHealth": 25,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Water",
+        "Fire",
+        "Dark"
+      ]
     },
     {
       "id": "aurora-caves-boss-easy",
@@ -142382,7 +142476,14 @@
       "enemyHealth": 7000,
       "enemyDamage": 12,
       "barrierType": "",
-      "barrierHealth": 0
+      "barrierHealth": 0,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": []
     },
     {
       "id": "aurora-caves-boss-medium",
@@ -142394,7 +142495,14 @@
       "enemyHealth": 10000,
       "enemyDamage": 17,
       "barrierType": "",
-      "barrierHealth": 0
+      "barrierHealth": 0,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": []
     },
     {
       "id": "aurora-caves-boss-hard",
@@ -142406,7 +142514,14 @@
       "enemyHealth": 22000,
       "enemyDamage": 27,
       "barrierType": "",
-      "barrierHealth": 0
+      "barrierHealth": 0,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": []
     },
     {
       "id": "aurora-caves-boss-extreme",
@@ -142418,7 +142533,16 @@
       "enemyHealth": 170000,
       "enemyDamage": 80,
       "barrierType": "Fire",
-      "barrierHealth": 40
+      "barrierHealth": 40,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Fire"
+      ]
     },
     {
       "id": "whispering-bog-normal-easy",
@@ -142430,7 +142554,14 @@
       "enemyHealth": 4000,
       "enemyDamage": 15,
       "barrierType": "",
-      "barrierHealth": 0
+      "barrierHealth": 0,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": []
     },
     {
       "id": "whispering-bog-normal-medium",
@@ -142442,7 +142573,14 @@
       "enemyHealth": 6000,
       "enemyDamage": 18,
       "barrierType": "",
-      "barrierHealth": 0
+      "barrierHealth": 0,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": []
     },
     {
       "id": "whispering-bog-normal-hard",
@@ -142454,7 +142592,14 @@
       "enemyHealth": 13000,
       "enemyDamage": 25,
       "barrierType": "",
-      "barrierHealth": 0
+      "barrierHealth": 0,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": []
     },
     {
       "id": "whispering-bog-normal-extreme",
@@ -142466,7 +142611,18 @@
       "enemyHealth": 140000,
       "enemyDamage": 70,
       "barrierType": "Earth, Fire, Light",
-      "barrierHealth": 35
+      "barrierHealth": 35,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Earth",
+        "Fire",
+        "Light"
+      ]
     },
     {
       "id": "whispering-bog-boss-easy",
@@ -142478,7 +142634,14 @@
       "enemyHealth": 9000,
       "enemyDamage": 20,
       "barrierType": "",
-      "barrierHealth": 0
+      "barrierHealth": 0,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": []
     },
     {
       "id": "whispering-bog-boss-medium",
@@ -142490,7 +142653,14 @@
       "enemyHealth": 16000,
       "enemyDamage": 25,
       "barrierType": "",
-      "barrierHealth": 0
+      "barrierHealth": 0,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": []
     },
     {
       "id": "whispering-bog-boss-hard",
@@ -142502,7 +142672,14 @@
       "enemyHealth": 30000,
       "enemyDamage": 35,
       "barrierType": "",
-      "barrierHealth": 0
+      "barrierHealth": 0,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": []
     },
     {
       "id": "whispering-bog-boss-extreme",
@@ -142514,7 +142691,16 @@
       "enemyHealth": 330000,
       "enemyDamage": 100,
       "barrierType": "Earth",
-      "barrierHealth": 55
+      "barrierHealth": 55,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Earth"
+      ]
     },
     {
       "id": "barren-wastes-normal-easy",
@@ -142526,7 +142712,14 @@
       "enemyHealth": 9000,
       "enemyDamage": 18,
       "barrierType": "",
-      "barrierHealth": 0
+      "barrierHealth": 0,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": []
     },
     {
       "id": "barren-wastes-normal-medium",
@@ -142538,7 +142731,14 @@
       "enemyHealth": 13000,
       "enemyDamage": 23,
       "barrierType": "",
-      "barrierHealth": 0
+      "barrierHealth": 0,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": []
     },
     {
       "id": "barren-wastes-normal-hard",
@@ -142550,7 +142750,14 @@
       "enemyHealth": 26000,
       "enemyDamage": 30,
       "barrierType": "",
-      "barrierHealth": 0
+      "barrierHealth": 0,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": []
     },
     {
       "id": "barren-wastes-normal-extreme",
@@ -142562,7 +142769,18 @@
       "enemyHealth": 280000,
       "enemyDamage": 100,
       "barrierType": "Air, Fire, Dark",
-      "barrierHealth": 50
+      "barrierHealth": 50,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Air",
+        "Fire",
+        "Dark"
+      ]
     },
     {
       "id": "barren-wastes-boss-easy",
@@ -142574,7 +142792,14 @@
       "enemyHealth": 20000,
       "enemyDamage": 25,
       "barrierType": "",
-      "barrierHealth": 0
+      "barrierHealth": 0,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": []
     },
     {
       "id": "barren-wastes-boss-medium",
@@ -142586,7 +142811,14 @@
       "enemyHealth": 45000,
       "enemyDamage": 35,
       "barrierType": "",
-      "barrierHealth": 0
+      "barrierHealth": 0,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": []
     },
     {
       "id": "barren-wastes-boss-hard",
@@ -142598,7 +142830,14 @@
       "enemyHealth": 80000,
       "enemyDamage": 50,
       "barrierType": "",
-      "barrierHealth": 0
+      "barrierHealth": 0,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": []
     },
     {
       "id": "barren-wastes-boss-extreme",
@@ -142610,7 +142849,16 @@
       "enemyHealth": 500000,
       "enemyDamage": 125,
       "barrierType": "Water",
-      "barrierHealth": 75
+      "barrierHealth": 75,
+      "defenseCap": 0,
+      "aoeDamage": 0,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Water"
+      ]
     },
     {
       "id": "sun-god-s-tomb-normal-easy",
@@ -142621,8 +142869,19 @@
       "powerRequirement": 1200,
       "enemyHealth": 25000,
       "enemyDamage": 40,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Air, Dark, Water",
+      "barrierHealth": 0,
+      "defenseCap": 12000,
+      "aoeDamage": 20,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Air",
+        "Dark",
+        "Water"
+      ]
     },
     {
       "id": "sun-god-s-tomb-normal-medium",
@@ -142633,8 +142892,19 @@
       "powerRequirement": 1500,
       "enemyHealth": 40000,
       "enemyDamage": 50,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Air, Dark, Water",
+      "barrierHealth": 0,
+      "defenseCap": 14400,
+      "aoeDamage": 25,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Air",
+        "Dark",
+        "Water"
+      ]
     },
     {
       "id": "sun-god-s-tomb-normal-hard",
@@ -142645,8 +142915,19 @@
       "powerRequirement": 2500,
       "enemyHealth": 80000,
       "enemyDamage": 60,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Air, Dark, Water",
+      "barrierHealth": 0,
+      "defenseCap": 16200,
+      "aoeDamage": 30,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Air",
+        "Dark",
+        "Water"
+      ]
     },
     {
       "id": "sun-god-s-tomb-normal-extreme",
@@ -142658,7 +142939,18 @@
       "enemyHealth": 430000,
       "enemyDamage": 130,
       "barrierType": "Dark, Water, Air",
-      "barrierHealth": 70
+      "barrierHealth": 70,
+      "defenseCap": 42000,
+      "aoeDamage": 65,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Air",
+        "Dark",
+        "Water"
+      ]
     },
     {
       "id": "sun-god-s-tomb-boss-easy",
@@ -142669,8 +142961,17 @@
       "powerRequirement": 1800,
       "enemyHealth": 60000,
       "enemyDamage": 60,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Light",
+      "barrierHealth": 0,
+      "defenseCap": 16800,
+      "aoeDamage": 30,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Light"
+      ]
     },
     {
       "id": "sun-god-s-tomb-boss-medium",
@@ -142681,8 +142982,17 @@
       "powerRequirement": 2500,
       "enemyHealth": 90000,
       "enemyDamage": 70,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Light",
+      "barrierHealth": 0,
+      "defenseCap": 20400,
+      "aoeDamage": 35,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Light"
+      ]
     },
     {
       "id": "sun-god-s-tomb-boss-hard",
@@ -142693,8 +143003,17 @@
       "powerRequirement": 4000,
       "enemyHealth": 130000,
       "enemyDamage": 80,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Light",
+      "barrierHealth": 0,
+      "defenseCap": 22800,
+      "aoeDamage": 40,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Light"
+      ]
     },
     {
       "id": "sun-god-s-tomb-boss-extreme",
@@ -142706,7 +143025,16 @@
       "enemyHealth": 750000,
       "enemyDamage": 175,
       "barrierType": "Light",
-      "barrierHealth": 95
+      "barrierHealth": 95,
+      "defenseCap": 47000,
+      "aoeDamage": 80,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Light"
+      ]
     },
     {
       "id": "chronos-ruins-normal-easy",
@@ -142717,8 +143045,19 @@
       "powerRequirement": 2500,
       "enemyHealth": 60000,
       "enemyDamage": 60,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Air, Dark, Fire",
+      "barrierHealth": 0,
+      "defenseCap": 21000,
+      "aoeDamage": 30,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Air",
+        "Dark",
+        "Fire"
+      ]
     },
     {
       "id": "chronos-ruins-normal-medium",
@@ -142729,8 +143068,19 @@
       "powerRequirement": 3500,
       "enemyHealth": 90000,
       "enemyDamage": 70,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Air, Dark, Fire",
+      "barrierHealth": 0,
+      "defenseCap": 24000,
+      "aoeDamage": 35,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Air",
+        "Dark",
+        "Fire"
+      ]
     },
     {
       "id": "chronos-ruins-normal-hard",
@@ -142741,8 +143091,19 @@
       "powerRequirement": 4000,
       "enemyHealth": 120000,
       "enemyDamage": 80,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Air, Dark, Fire",
+      "barrierHealth": 0,
+      "defenseCap": 27510,
+      "aoeDamage": 40,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Air",
+        "Dark",
+        "Fire"
+      ]
     },
     {
       "id": "chronos-ruins-normal-extreme",
@@ -142754,7 +143115,18 @@
       "enemyHealth": 600000,
       "enemyDamage": 150,
       "barrierType": "Air, Fire, Dark",
-      "barrierHealth": 90
+      "barrierHealth": 90,
+      "defenseCap": 47000,
+      "aoeDamage": 75,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Air",
+        "Dark",
+        "Fire"
+      ]
     },
     {
       "id": "chronos-ruins-boss-easy",
@@ -142765,8 +143137,17 @@
       "powerRequirement": 4000,
       "enemyHealth": 130000,
       "enemyDamage": 80,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Air",
+      "barrierHealth": 0,
+      "defenseCap": 27000,
+      "aoeDamage": 40,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Air"
+      ]
     },
     {
       "id": "chronos-ruins-boss-medium",
@@ -142777,8 +143158,17 @@
       "powerRequirement": 5000,
       "enemyHealth": 170000,
       "enemyDamage": 100,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Air",
+      "barrierHealth": 0,
+      "defenseCap": 30000,
+      "aoeDamage": 60,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Air"
+      ]
     },
     {
       "id": "chronos-ruins-boss-hard",
@@ -142789,8 +143179,17 @@
       "powerRequirement": 6500,
       "enemyHealth": 300000,
       "enemyDamage": 125,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Air",
+      "barrierHealth": 0,
+      "defenseCap": 25470,
+      "aoeDamage": 70,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Air"
+      ]
     },
     {
       "id": "chronos-ruins-boss-extreme",
@@ -142802,7 +143201,16 @@
       "enemyHealth": 1100000,
       "enemyDamage": 200,
       "barrierType": "Air",
-      "barrierHealth": 110
+      "barrierHealth": 110,
+      "defenseCap": 48500,
+      "aoeDamage": 100,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Air"
+      ]
     },
     {
       "id": "haunted-castle-normal-easy",
@@ -142813,8 +143221,19 @@
       "powerRequirement": 3750,
       "enemyHealth": 100000,
       "enemyDamage": 80,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Earth, Light, Water",
+      "barrierHealth": 0,
+      "defenseCap": 27510,
+      "aoeDamage": 40,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Earth",
+        "Light",
+        "Water"
+      ]
     },
     {
       "id": "haunted-castle-normal-medium",
@@ -142825,8 +143244,19 @@
       "powerRequirement": 5000,
       "enemyHealth": 150000,
       "enemyDamage": 90,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Earth, Light, Water",
+      "barrierHealth": 0,
+      "defenseCap": 32016,
+      "aoeDamage": 45,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Earth",
+        "Light",
+        "Water"
+      ]
     },
     {
       "id": "haunted-castle-normal-hard",
@@ -142837,8 +143267,19 @@
       "powerRequirement": 6250,
       "enemyHealth": 250000,
       "enemyDamage": 100,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Earth, Light, Water",
+      "barrierHealth": 0,
+      "defenseCap": 34560,
+      "aoeDamage": 50,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Earth",
+        "Light",
+        "Water"
+      ]
     },
     {
       "id": "haunted-castle-normal-extreme",
@@ -142850,7 +143291,18 @@
       "enemyHealth": 1000000,
       "enemyDamage": 170,
       "barrierType": "Light, Earth, Water",
-      "barrierHealth": 100
+      "barrierHealth": 100,
+      "defenseCap": 48500,
+      "aoeDamage": 85,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Earth",
+        "Light",
+        "Water"
+      ]
     },
     {
       "id": "haunted-castle-boss-easy",
@@ -142861,8 +143313,17 @@
       "powerRequirement": 6250,
       "enemyHealth": 200000,
       "enemyDamage": 100,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Light",
+      "barrierHealth": 0,
+      "defenseCap": 30000,
+      "aoeDamage": 50,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Light"
+      ]
     },
     {
       "id": "haunted-castle-boss-medium",
@@ -142873,8 +143334,17 @@
       "powerRequirement": 8000,
       "enemyHealth": 300000,
       "enemyDamage": 125,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Light",
+      "barrierHealth": 0,
+      "defenseCap": 33000,
+      "aoeDamage": 60,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Light"
+      ]
     },
     {
       "id": "haunted-castle-boss-hard",
@@ -142885,8 +143355,17 @@
       "powerRequirement": 10000,
       "enemyHealth": 500000,
       "enemyDamage": 140,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Light",
+      "barrierHealth": 0,
+      "defenseCap": 37740,
+      "aoeDamage": 70,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Light"
+      ]
     },
     {
       "id": "haunted-castle-boss-extreme",
@@ -142898,7 +143377,16 @@
       "enemyHealth": 1800000,
       "enemyDamage": 200,
       "barrierType": "Light",
-      "barrierHealth": 130
+      "barrierHealth": 130,
+      "defenseCap": 55000,
+      "aoeDamage": 100,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Light"
+      ]
     },
     {
       "id": "sunken-temple-normal-easy",
@@ -142909,8 +143397,19 @@
       "powerRequirement": 6250,
       "enemyHealth": 250000,
       "enemyDamage": 100,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Dark, Earth, Fire",
+      "barrierHealth": 0,
+      "defenseCap": 35400,
+      "aoeDamage": 50,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Dark",
+        "Earth",
+        "Fire"
+      ]
     },
     {
       "id": "sunken-temple-normal-medium",
@@ -142921,8 +143420,19 @@
       "powerRequirement": 7500,
       "enemyHealth": 350000,
       "enemyDamage": 120,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Dark, Earth, Fire",
+      "barrierHealth": 0,
+      "defenseCap": 37800,
+      "aoeDamage": 55,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Dark",
+        "Earth",
+        "Fire"
+      ]
     },
     {
       "id": "sunken-temple-normal-hard",
@@ -142933,8 +143443,19 @@
       "powerRequirement": 9000,
       "enemyHealth": 450000,
       "enemyDamage": 145,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Dark, Earth, Fire",
+      "barrierHealth": 0,
+      "defenseCap": 39600,
+      "aoeDamage": 60,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Dark",
+        "Earth",
+        "Fire"
+      ]
     },
     {
       "id": "sunken-temple-normal-extreme",
@@ -142946,7 +143467,18 @@
       "enemyHealth": 1500000,
       "enemyDamage": 210,
       "barrierType": "Fire, Dark, Earth",
-      "barrierHealth": 120
+      "barrierHealth": 120,
+      "defenseCap": 54500,
+      "aoeDamage": 105,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Dark",
+        "Earth",
+        "Fire"
+      ]
     },
     {
       "id": "sunken-temple-boss-easy",
@@ -142957,8 +143489,17 @@
       "powerRequirement": 9000,
       "enemyHealth": 300000,
       "enemyDamage": 145,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Fire",
+      "barrierHealth": 0,
+      "defenseCap": 37950,
+      "aoeDamage": 60,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Fire"
+      ]
     },
     {
       "id": "sunken-temple-boss-medium",
@@ -142969,8 +143510,17 @@
       "powerRequirement": 10000,
       "enemyHealth": 450000,
       "enemyDamage": 160,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Fire",
+      "barrierHealth": 0,
+      "defenseCap": 41850,
+      "aoeDamage": 70,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Fire"
+      ]
     },
     {
       "id": "sunken-temple-boss-hard",
@@ -142981,8 +143531,17 @@
       "powerRequirement": 11750,
       "enemyHealth": 900000,
       "enemyDamage": 175,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Fire",
+      "barrierHealth": 0,
+      "defenseCap": 43200,
+      "aoeDamage": 80,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Fire"
+      ]
     },
     {
       "id": "sunken-temple-boss-extreme",
@@ -142994,7 +143553,16 @@
       "enemyHealth": 2000000,
       "enemyDamage": 230,
       "barrierType": "Fire",
-      "barrierHealth": 155
+      "barrierHealth": 155,
+      "defenseCap": 63000,
+      "aoeDamage": 110,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Fire"
+      ]
     },
     {
       "id": "bleakspire-peak-normal-easy",
@@ -143005,8 +143573,19 @@
       "powerRequirement": 6500,
       "enemyHealth": 400000,
       "enemyDamage": 130,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Air, Fire, Light",
+      "barrierHealth": 0,
+      "defenseCap": 43800,
+      "aoeDamage": 60,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Air",
+        "Fire",
+        "Light"
+      ]
     },
     {
       "id": "bleakspire-peak-normal-medium",
@@ -143017,8 +143596,19 @@
       "powerRequirement": 9000,
       "enemyHealth": 500000,
       "enemyDamage": 150,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Air, Fire, Light",
+      "barrierHealth": 0,
+      "defenseCap": 46800,
+      "aoeDamage": 65,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Air",
+        "Fire",
+        "Light"
+      ]
     },
     {
       "id": "bleakspire-peak-normal-hard",
@@ -143029,8 +143619,19 @@
       "powerRequirement": 10000,
       "enemyHealth": 650000,
       "enemyDamage": 170,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Air, Fire, Light",
+      "barrierHealth": 0,
+      "defenseCap": 49200,
+      "aoeDamage": 70,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Air",
+        "Fire",
+        "Light"
+      ]
     },
     {
       "id": "bleakspire-peak-normal-extreme",
@@ -143042,7 +143643,18 @@
       "enemyHealth": 1800000,
       "enemyDamage": 220,
       "barrierType": "Fire, Air, Light",
-      "barrierHealth": 140
+      "barrierHealth": 140,
+      "defenseCap": 62000,
+      "aoeDamage": 110,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Air",
+        "Fire",
+        "Light"
+      ]
     },
     {
       "id": "bleakspire-peak-boss-easy",
@@ -143053,8 +143665,17 @@
       "powerRequirement": 10000,
       "enemyHealth": 600000,
       "enemyDamage": 170,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Earth",
+      "barrierHealth": 0,
+      "defenseCap": 48000,
+      "aoeDamage": 70,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Earth"
+      ]
     },
     {
       "id": "bleakspire-peak-boss-medium",
@@ -143065,8 +143686,17 @@
       "powerRequirement": 12000,
       "enemyHealth": 900000,
       "enemyDamage": 190,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Earth",
+      "barrierHealth": 0,
+      "defenseCap": 54000,
+      "aoeDamage": 80,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Earth"
+      ]
     },
     {
       "id": "bleakspire-peak-boss-hard",
@@ -143077,8 +143707,17 @@
       "powerRequirement": 13000,
       "enemyHealth": 1200000,
       "enemyDamage": 215,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Earth",
+      "barrierHealth": 0,
+      "defenseCap": 63000,
+      "aoeDamage": 100,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Earth"
+      ]
     },
     {
       "id": "bleakspire-peak-boss-extreme",
@@ -143090,7 +143729,16 @@
       "enemyHealth": 3000000,
       "enemyDamage": 250,
       "barrierType": "Earth",
-      "barrierHealth": 165
+      "barrierHealth": 165,
+      "defenseCap": 75000,
+      "aoeDamage": 125,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Earth"
+      ]
     },
     {
       "id": "cinderlake-volcano-normal-easy",
@@ -143101,8 +143749,19 @@
       "powerRequirement": 8000,
       "enemyHealth": 500000,
       "enemyDamage": 160,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Earth, Light, Water",
+      "barrierHealth": 0,
+      "defenseCap": 46800,
+      "aoeDamage": 80,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Earth",
+        "Light",
+        "Water"
+      ]
     },
     {
       "id": "cinderlake-volcano-normal-medium",
@@ -143113,8 +143772,19 @@
       "powerRequirement": 10500,
       "enemyHealth": 650000,
       "enemyDamage": 180,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Earth, Light, Water",
+      "barrierHealth": 0,
+      "defenseCap": 51000,
+      "aoeDamage": 90,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Earth",
+        "Light",
+        "Water"
+      ]
     },
     {
       "id": "cinderlake-volcano-normal-hard",
@@ -143125,8 +143795,19 @@
       "powerRequirement": 12000,
       "enemyHealth": 900000,
       "enemyDamage": 200,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Earth, Light, Water",
+      "barrierHealth": 0,
+      "defenseCap": 54000,
+      "aoeDamage": 100,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Earth",
+        "Light",
+        "Water"
+      ]
     },
     {
       "id": "cinderlake-volcano-normal-extreme",
@@ -143138,7 +143819,18 @@
       "enemyHealth": 2400000,
       "enemyDamage": 240,
       "barrierType": "Water, Earth, Light",
-      "barrierHealth": 160
+      "barrierHealth": 160,
+      "defenseCap": 64500,
+      "aoeDamage": 120,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Earth",
+        "Light",
+        "Water"
+      ]
     },
     {
       "id": "cinderlake-volcano-boss-easy",
@@ -143150,7 +143842,16 @@
       "enemyHealth": 800000,
       "enemyDamage": 180,
       "barrierType": "Water",
-      "barrierHealth": 165
+      "barrierHealth": 165,
+      "defenseCap": 48320,
+      "aoeDamage": 90,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Water"
+      ]
     },
     {
       "id": "cinderlake-volcano-boss-medium",
@@ -143162,7 +143863,16 @@
       "enemyHealth": 1250000,
       "enemyDamage": 205,
       "barrierType": "Water",
-      "barrierHealth": 170
+      "barrierHealth": 170,
+      "defenseCap": 54540,
+      "aoeDamage": 100,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Water"
+      ]
     },
     {
       "id": "cinderlake-volcano-boss-hard",
@@ -143174,7 +143884,16 @@
       "enemyHealth": 1800000,
       "enemyDamage": 225,
       "barrierType": "Water",
-      "barrierHealth": 175
+      "barrierHealth": 175,
+      "defenseCap": 64885,
+      "aoeDamage": 110,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Water"
+      ]
     },
     {
       "id": "cinderlake-volcano-boss-extreme",
@@ -143186,7 +143905,16 @@
       "enemyHealth": 4000000,
       "enemyDamage": 280,
       "barrierType": "Water",
-      "barrierHealth": 180
+      "barrierHealth": 180,
+      "defenseCap": 78000,
+      "aoeDamage": 140,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Water"
+      ]
     },
     {
       "id": "void-dimension-normal-easy",
@@ -143197,8 +143925,19 @@
       "powerRequirement": 9500,
       "enemyHealth": 620000,
       "enemyDamage": 190,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Air, Fire, Light",
+      "barrierHealth": 0,
+      "defenseCap": 48600,
+      "aoeDamage": 95,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Air",
+        "Fire",
+        "Light"
+      ]
     },
     {
       "id": "void-dimension-normal-medium",
@@ -143209,8 +143948,19 @@
       "powerRequirement": 12000,
       "enemyHealth": 800000,
       "enemyDamage": 210,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Air, Fire, Light",
+      "barrierHealth": 0,
+      "defenseCap": 54140,
+      "aoeDamage": 105,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Air",
+        "Fire",
+        "Light"
+      ]
     },
     {
       "id": "void-dimension-normal-hard",
@@ -143221,8 +143971,19 @@
       "powerRequirement": 14250,
       "enemyHealth": 1100000,
       "enemyDamage": 245,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Air, Fire, Light",
+      "barrierHealth": 0,
+      "defenseCap": 61480,
+      "aoeDamage": 120,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Air",
+        "Fire",
+        "Light"
+      ]
     },
     {
       "id": "void-dimension-normal-extreme",
@@ -143234,7 +143995,18 @@
       "enemyHealth": 2740000,
       "enemyDamage": 270,
       "barrierType": "Light, Air, Fire",
-      "barrierHealth": 170
+      "barrierHealth": 170,
+      "defenseCap": 72270,
+      "aoeDamage": 135,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Air",
+        "Fire",
+        "Light"
+      ]
     },
     {
       "id": "void-dimension-boss-easy",
@@ -143246,7 +144018,16 @@
       "enemyHealth": 1050000,
       "enemyDamage": 215,
       "barrierType": "Light",
-      "barrierHealth": 185
+      "barrierHealth": 185,
+      "defenseCap": 53200,
+      "aoeDamage": 110,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Light"
+      ]
     },
     {
       "id": "void-dimension-boss-medium",
@@ -143258,7 +144039,16 @@
       "enemyHealth": 1550000,
       "enemyDamage": 240,
       "barrierType": "Light",
-      "barrierHealth": 190
+      "barrierHealth": 190,
+      "defenseCap": 55735,
+      "aoeDamage": 120,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Light"
+      ]
     },
     {
       "id": "void-dimension-boss-hard",
@@ -143270,7 +144060,16 @@
       "enemyHealth": 2150000,
       "enemyDamage": 260,
       "barrierType": "Light",
-      "barrierHealth": 195
+      "barrierHealth": 195,
+      "defenseCap": 72970,
+      "aoeDamage": 130,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Light"
+      ]
     },
     {
       "id": "void-dimension-boss-extreme",
@@ -143282,7 +144081,16 @@
       "enemyHealth": 5000000,
       "enemyDamage": 320,
       "barrierType": "Light",
-      "barrierHealth": 200
+      "barrierHealth": 200,
+      "defenseCap": 90670,
+      "aoeDamage": 160,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Light"
+      ]
     },
     {
       "id": "elysium-normal-easy",
@@ -143293,8 +144101,19 @@
       "powerRequirement": 13000,
       "enemyHealth": 900000,
       "enemyDamage": 220,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Dark, Earth, Water",
+      "barrierHealth": 0,
+      "defenseCap": 62950,
+      "aoeDamage": 125,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Dark",
+        "Earth",
+        "Water"
+      ]
     },
     {
       "id": "elysium-normal-medium",
@@ -143305,8 +144124,19 @@
       "powerRequirement": 15000,
       "enemyHealth": 1200000,
       "enemyDamage": 230,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Dark, Earth, Water",
+      "barrierHealth": 0,
+      "defenseCap": 72460,
+      "aoeDamage": 130,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Dark",
+        "Earth",
+        "Water"
+      ]
     },
     {
       "id": "elysium-normal-hard",
@@ -143317,8 +144147,19 @@
       "powerRequirement": 17000,
       "enemyHealth": 1500000,
       "enemyDamage": 290,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Dark, Earth, Water",
+      "barrierHealth": 0,
+      "defenseCap": 78504,
+      "aoeDamage": 150,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Dark",
+        "Earth",
+        "Water"
+      ]
     },
     {
       "id": "elysium-normal-extreme",
@@ -143330,7 +144171,18 @@
       "enemyHealth": 4000000,
       "enemyDamage": 320,
       "barrierType": "Water, Dark, Earth",
-      "barrierHealth": 180
+      "barrierHealth": 180,
+      "defenseCap": 90840,
+      "aoeDamage": 180,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Dark",
+        "Earth",
+        "Water"
+      ]
     },
     {
       "id": "elysium-boss-easy",
@@ -143342,7 +144194,16 @@
       "enemyHealth": 1800000,
       "enemyDamage": 245,
       "barrierType": "Dark",
-      "barrierHealth": 190
+      "barrierHealth": 190,
+      "defenseCap": 75300,
+      "aoeDamage": 140,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Dark"
+      ]
     },
     {
       "id": "elysium-boss-medium",
@@ -143354,7 +144215,16 @@
       "enemyHealth": 2200000,
       "enemyDamage": 270,
       "barrierType": "Dark",
-      "barrierHealth": 200
+      "barrierHealth": 200,
+      "defenseCap": 78220,
+      "aoeDamage": 150,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Dark"
+      ]
     },
     {
       "id": "elysium-boss-hard",
@@ -143366,7 +144236,16 @@
       "enemyHealth": 2800000,
       "enemyDamage": 300,
       "barrierType": "Dark",
-      "barrierHealth": 210
+      "barrierHealth": 210,
+      "defenseCap": 116700,
+      "aoeDamage": 170,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Dark"
+      ]
     },
     {
       "id": "elysium-boss-extreme",
@@ -143378,7 +144257,16 @@
       "enemyHealth": 8000000,
       "enemyDamage": 360,
       "barrierType": "Dark",
-      "barrierHealth": 220
+      "barrierHealth": 220,
+      "defenseCap": 146772,
+      "aoeDamage": 210,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Dark"
+      ]
     },
     {
       "id": "ancient-jungle-normal-easy",
@@ -143389,8 +144277,19 @@
       "powerRequirement": 16000,
       "enemyHealth": 1400000,
       "enemyDamage": 285,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Air, Fire, Light",
+      "barrierHealth": 0,
+      "defenseCap": 84600,
+      "aoeDamage": 150,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Air",
+        "Fire",
+        "Light"
+      ]
     },
     {
       "id": "ancient-jungle-normal-medium",
@@ -143401,8 +144300,19 @@
       "powerRequirement": 18000,
       "enemyHealth": 1800000,
       "enemyDamage": 310,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Air, Fire, Light",
+      "barrierHealth": 0,
+      "defenseCap": 92400,
+      "aoeDamage": 160,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Air",
+        "Fire",
+        "Light"
+      ]
     },
     {
       "id": "ancient-jungle-normal-hard",
@@ -143413,8 +144323,19 @@
       "powerRequirement": 20000,
       "enemyHealth": 2500000,
       "enemyDamage": 330,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Air, Fire, Light",
+      "barrierHealth": 0,
+      "defenseCap": 105600,
+      "aoeDamage": 170,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Air",
+        "Fire",
+        "Light"
+      ]
     },
     {
       "id": "ancient-jungle-normal-extreme",
@@ -143426,7 +144347,18 @@
       "enemyHealth": 7000000,
       "enemyDamage": 360,
       "barrierType": "Air, Fire, Light",
-      "barrierHealth": 280
+      "barrierHealth": 280,
+      "defenseCap": 132000,
+      "aoeDamage": 235,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Air",
+        "Fire",
+        "Light"
+      ]
     },
     {
       "id": "ancient-jungle-boss-easy",
@@ -143438,7 +144370,16 @@
       "enemyHealth": 2800000,
       "enemyDamage": 300,
       "barrierType": "Fire",
-      "barrierHealth": 210
+      "barrierHealth": 210,
+      "defenseCap": 112200,
+      "aoeDamage": 175,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Fire"
+      ]
     },
     {
       "id": "ancient-jungle-boss-medium",
@@ -143450,7 +144391,16 @@
       "enemyHealth": 3500000,
       "enemyDamage": 330,
       "barrierType": "Fire",
-      "barrierHealth": 240
+      "barrierHealth": 240,
+      "defenseCap": 132000,
+      "aoeDamage": 190,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Fire"
+      ]
     },
     {
       "id": "ancient-jungle-boss-hard",
@@ -143462,7 +144412,16 @@
       "enemyHealth": 5000000,
       "enemyDamage": 370,
       "barrierType": "Fire",
-      "barrierHealth": 280
+      "barrierHealth": 280,
+      "defenseCap": 145200,
+      "aoeDamage": 215,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Fire"
+      ]
     },
     {
       "id": "ancient-jungle-boss-extreme",
@@ -143474,7 +144433,16 @@
       "enemyHealth": 15000000,
       "enemyDamage": 410,
       "barrierType": "Fire",
-      "barrierHealth": 360
+      "barrierHealth": 360,
+      "defenseCap": 168000,
+      "aoeDamage": 250,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Fire"
+      ]
     },
     {
       "id": "meteor-zone-normal-easy",
@@ -143485,8 +144453,19 @@
       "powerRequirement": 19000,
       "enemyHealth": 1900000,
       "enemyDamage": 355,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Dark, Light, Earth",
+      "barrierHealth": 0,
+      "defenseCap": 112800,
+      "aoeDamage": 185,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Dark",
+        "Light",
+        "Earth"
+      ]
     },
     {
       "id": "meteor-zone-normal-medium",
@@ -143497,8 +144476,19 @@
       "powerRequirement": 21000,
       "enemyHealth": 2400000,
       "enemyDamage": 370,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Dark, Light, Earth",
+      "barrierHealth": 0,
+      "defenseCap": 120000,
+      "aoeDamage": 195,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Dark",
+        "Light",
+        "Earth"
+      ]
     },
     {
       "id": "meteor-zone-normal-hard",
@@ -143509,8 +144499,19 @@
       "powerRequirement": 23000,
       "enemyHealth": 3400000,
       "enemyDamage": 390,
-      "barrierType": "",
-      "barrierHealth": 0
+      "barrierType": "Dark, Light, Earth",
+      "barrierHealth": 0,
+      "defenseCap": 134400,
+      "aoeDamage": 205,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Dark",
+        "Light",
+        "Earth"
+      ]
     },
     {
       "id": "meteor-zone-normal-extreme",
@@ -143522,7 +144523,18 @@
       "enemyHealth": 10000000,
       "enemyDamage": 410,
       "barrierType": "Dark, Light, Earth",
-      "barrierHealth": 320
+      "barrierHealth": 320,
+      "defenseCap": 159600,
+      "aoeDamage": 280,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": false,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Dark",
+        "Light",
+        "Earth"
+      ]
     },
     {
       "id": "meteor-zone-boss-easy",
@@ -143534,7 +144546,16 @@
       "enemyHealth": 3800000,
       "enemyDamage": 365,
       "barrierType": "Dark",
-      "barrierHealth": 230
+      "barrierHealth": 230,
+      "defenseCap": 144000,
+      "aoeDamage": 210,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Dark"
+      ]
     },
     {
       "id": "meteor-zone-boss-medium",
@@ -143546,7 +144567,16 @@
       "enemyHealth": 4800000,
       "enemyDamage": 395,
       "barrierType": "Dark",
-      "barrierHealth": 260
+      "barrierHealth": 260,
+      "defenseCap": 163200,
+      "aoeDamage": 230,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Dark"
+      ]
     },
     {
       "id": "meteor-zone-boss-hard",
@@ -143558,7 +144588,16 @@
       "enemyHealth": 7000000,
       "enemyDamage": 425,
       "barrierType": "Dark",
-      "barrierHealth": 300
+      "barrierHealth": 300,
+      "defenseCap": 177600,
+      "aoeDamage": 255,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierOptions": [
+        "Dark"
+      ]
     },
     {
       "id": "meteor-zone-boss-extreme",
@@ -143570,7 +144609,2628 @@
       "enemyHealth": 22000000,
       "enemyDamage": 470,
       "barrierType": "Dark",
-      "barrierHealth": 400
+      "barrierHealth": 400,
+      "defenseCap": 201600,
+      "aoeDamage": 290,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierOptions": [
+        "Dark"
+      ]
+    },
+    {
+      "id": "lost-city-of-gold-diff-7-normal-easy",
+      "zone": "Lost City Of Gold Diff 7",
+      "difficulty": "Easy",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 350000,
+      "enemyDamage": 140,
+      "defenseCap": 18000,
+      "aoeDamage": 70,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-7-normal-medium",
+      "zone": "Lost City Of Gold Diff 7",
+      "difficulty": "Medium",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 350000,
+      "enemyDamage": 140,
+      "defenseCap": 18000,
+      "aoeDamage": 70,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-7-normal-hard",
+      "zone": "Lost City Of Gold Diff 7",
+      "difficulty": "Hard",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 350000,
+      "enemyDamage": 140,
+      "defenseCap": 18000,
+      "aoeDamage": 70,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-7-normal-extreme",
+      "zone": "Lost City Of Gold Diff 7",
+      "difficulty": "Extreme",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 350000,
+      "enemyDamage": 140,
+      "defenseCap": 18000,
+      "aoeDamage": 70,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": true,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-8-normal-easy",
+      "zone": "Lost City Of Gold Diff 8",
+      "difficulty": "Easy",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 1000000,
+      "enemyDamage": 170,
+      "defenseCap": 31200,
+      "aoeDamage": 90,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-8-normal-medium",
+      "zone": "Lost City Of Gold Diff 8",
+      "difficulty": "Medium",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 1000000,
+      "enemyDamage": 170,
+      "defenseCap": 31200,
+      "aoeDamage": 90,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-8-normal-hard",
+      "zone": "Lost City Of Gold Diff 8",
+      "difficulty": "Hard",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 1000000,
+      "enemyDamage": 170,
+      "defenseCap": 31200,
+      "aoeDamage": 90,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-8-normal-extreme",
+      "zone": "Lost City Of Gold Diff 8",
+      "difficulty": "Extreme",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 1000000,
+      "enemyDamage": 170,
+      "defenseCap": 31200,
+      "aoeDamage": 90,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": true,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-9-normal-easy",
+      "zone": "Lost City Of Gold Diff 9",
+      "difficulty": "Easy",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 1500000,
+      "enemyDamage": 180,
+      "defenseCap": 36000,
+      "aoeDamage": 100,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-9-normal-medium",
+      "zone": "Lost City Of Gold Diff 9",
+      "difficulty": "Medium",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 1500000,
+      "enemyDamage": 180,
+      "defenseCap": 36000,
+      "aoeDamage": 100,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-9-normal-hard",
+      "zone": "Lost City Of Gold Diff 9",
+      "difficulty": "Hard",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 1500000,
+      "enemyDamage": 180,
+      "defenseCap": 36000,
+      "aoeDamage": 100,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-9-normal-extreme",
+      "zone": "Lost City Of Gold Diff 9",
+      "difficulty": "Extreme",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 1500000,
+      "enemyDamage": 180,
+      "defenseCap": 36000,
+      "aoeDamage": 100,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": true,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-10-normal-easy",
+      "zone": "Lost City Of Gold Diff 10",
+      "difficulty": "Easy",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 3500000,
+      "enemyDamage": 260,
+      "defenseCap": 42000,
+      "aoeDamage": 130,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-10-normal-medium",
+      "zone": "Lost City Of Gold Diff 10",
+      "difficulty": "Medium",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 3500000,
+      "enemyDamage": 260,
+      "defenseCap": 42000,
+      "aoeDamage": 130,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-10-normal-hard",
+      "zone": "Lost City Of Gold Diff 10",
+      "difficulty": "Hard",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 3500000,
+      "enemyDamage": 260,
+      "defenseCap": 42000,
+      "aoeDamage": 130,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-10-normal-extreme",
+      "zone": "Lost City Of Gold Diff 10",
+      "difficulty": "Extreme",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 3500000,
+      "enemyDamage": 260,
+      "defenseCap": 42000,
+      "aoeDamage": 130,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": true,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-11-normal-easy",
+      "zone": "Lost City Of Gold Diff 11",
+      "difficulty": "Easy",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 4700000,
+      "enemyDamage": 290,
+      "defenseCap": 69000,
+      "aoeDamage": 150,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-11-normal-medium",
+      "zone": "Lost City Of Gold Diff 11",
+      "difficulty": "Medium",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 4700000,
+      "enemyDamage": 290,
+      "defenseCap": 69000,
+      "aoeDamage": 150,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-11-normal-hard",
+      "zone": "Lost City Of Gold Diff 11",
+      "difficulty": "Hard",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 4700000,
+      "enemyDamage": 290,
+      "defenseCap": 69000,
+      "aoeDamage": 150,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-11-normal-extreme",
+      "zone": "Lost City Of Gold Diff 11",
+      "difficulty": "Extreme",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 4700000,
+      "enemyDamage": 290,
+      "defenseCap": 69000,
+      "aoeDamage": 150,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": true,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-12-normal-easy",
+      "zone": "Lost City Of Gold Diff 12",
+      "difficulty": "Easy",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 6200000,
+      "enemyDamage": 350,
+      "defenseCap": 132000,
+      "aoeDamage": 185,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-12-normal-medium",
+      "zone": "Lost City Of Gold Diff 12",
+      "difficulty": "Medium",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 6200000,
+      "enemyDamage": 350,
+      "defenseCap": 132000,
+      "aoeDamage": 185,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-12-normal-hard",
+      "zone": "Lost City Of Gold Diff 12",
+      "difficulty": "Hard",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 6200000,
+      "enemyDamage": 350,
+      "defenseCap": 132000,
+      "aoeDamage": 185,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-12-normal-extreme",
+      "zone": "Lost City Of Gold Diff 12",
+      "difficulty": "Extreme",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 6200000,
+      "enemyDamage": 350,
+      "defenseCap": 132000,
+      "aoeDamage": 185,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": true,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-13-normal-easy",
+      "zone": "Lost City Of Gold Diff 13",
+      "difficulty": "Easy",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 9500000,
+      "enemyDamage": 400,
+      "defenseCap": 144000,
+      "aoeDamage": 200,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-13-normal-medium",
+      "zone": "Lost City Of Gold Diff 13",
+      "difficulty": "Medium",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 9500000,
+      "enemyDamage": 400,
+      "defenseCap": 144000,
+      "aoeDamage": 200,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-13-normal-hard",
+      "zone": "Lost City Of Gold Diff 13",
+      "difficulty": "Hard",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 9500000,
+      "enemyDamage": 400,
+      "defenseCap": 144000,
+      "aoeDamage": 200,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-diff-13-normal-extreme",
+      "zone": "Lost City Of Gold Diff 13",
+      "difficulty": "Extreme",
+      "type": "Normal",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 9500000,
+      "enemyDamage": 400,
+      "defenseCap": 144000,
+      "aoeDamage": 200,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": false,
+      "isExtreme": true,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-7-boss-easy",
+      "zone": "Lost City Of Gold Boss 7",
+      "difficulty": "Easy",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 500000,
+      "enemyDamage": 150,
+      "defenseCap": 19200,
+      "aoeDamage": 70,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-7-boss-medium",
+      "zone": "Lost City Of Gold Boss 7",
+      "difficulty": "Medium",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 500000,
+      "enemyDamage": 150,
+      "defenseCap": 19200,
+      "aoeDamage": 70,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-7-boss-hard",
+      "zone": "Lost City Of Gold Boss 7",
+      "difficulty": "Hard",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 500000,
+      "enemyDamage": 150,
+      "defenseCap": 19200,
+      "aoeDamage": 70,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-7-boss-extreme",
+      "zone": "Lost City Of Gold Boss 7",
+      "difficulty": "Extreme",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 500000,
+      "enemyDamage": 150,
+      "defenseCap": 19200,
+      "aoeDamage": 70,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-8-boss-easy",
+      "zone": "Lost City Of Gold Boss 8",
+      "difficulty": "Easy",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 1500000,
+      "enemyDamage": 190,
+      "defenseCap": 32800,
+      "aoeDamage": 110,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-8-boss-medium",
+      "zone": "Lost City Of Gold Boss 8",
+      "difficulty": "Medium",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 1500000,
+      "enemyDamage": 190,
+      "defenseCap": 32800,
+      "aoeDamage": 110,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-8-boss-hard",
+      "zone": "Lost City Of Gold Boss 8",
+      "difficulty": "Hard",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 1500000,
+      "enemyDamage": 190,
+      "defenseCap": 32800,
+      "aoeDamage": 110,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-8-boss-extreme",
+      "zone": "Lost City Of Gold Boss 8",
+      "difficulty": "Extreme",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 1500000,
+      "enemyDamage": 190,
+      "defenseCap": 32800,
+      "aoeDamage": 110,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-9-boss-easy",
+      "zone": "Lost City Of Gold Boss 9",
+      "difficulty": "Easy",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 2000000,
+      "enemyDamage": 200,
+      "defenseCap": 43500,
+      "aoeDamage": 120,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-9-boss-medium",
+      "zone": "Lost City Of Gold Boss 9",
+      "difficulty": "Medium",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 2000000,
+      "enemyDamage": 200,
+      "defenseCap": 43500,
+      "aoeDamage": 120,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-9-boss-hard",
+      "zone": "Lost City Of Gold Boss 9",
+      "difficulty": "Hard",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 2000000,
+      "enemyDamage": 200,
+      "defenseCap": 43500,
+      "aoeDamage": 120,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-9-boss-extreme",
+      "zone": "Lost City Of Gold Boss 9",
+      "difficulty": "Extreme",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 2000000,
+      "enemyDamage": 200,
+      "defenseCap": 43500,
+      "aoeDamage": 120,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-10-boss-easy",
+      "zone": "Lost City Of Gold Boss 10",
+      "difficulty": "Easy",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 5500000,
+      "enemyDamage": 300,
+      "defenseCap": 78485,
+      "aoeDamage": 120,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-10-boss-medium",
+      "zone": "Lost City Of Gold Boss 10",
+      "difficulty": "Medium",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 5500000,
+      "enemyDamage": 300,
+      "defenseCap": 78485,
+      "aoeDamage": 120,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-10-boss-hard",
+      "zone": "Lost City Of Gold Boss 10",
+      "difficulty": "Hard",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 5500000,
+      "enemyDamage": 300,
+      "defenseCap": 78485,
+      "aoeDamage": 120,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-10-boss-extreme",
+      "zone": "Lost City Of Gold Boss 10",
+      "difficulty": "Extreme",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 5500000,
+      "enemyDamage": 300,
+      "defenseCap": 78485,
+      "aoeDamage": 120,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-11-boss-easy",
+      "zone": "Lost City Of Gold Boss 11",
+      "difficulty": "Easy",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 7000000,
+      "enemyDamage": 340,
+      "defenseCap": 88800,
+      "aoeDamage": 150,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-11-boss-medium",
+      "zone": "Lost City Of Gold Boss 11",
+      "difficulty": "Medium",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 7000000,
+      "enemyDamage": 340,
+      "defenseCap": 88800,
+      "aoeDamage": 150,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-11-boss-hard",
+      "zone": "Lost City Of Gold Boss 11",
+      "difficulty": "Hard",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 7000000,
+      "enemyDamage": 340,
+      "defenseCap": 88800,
+      "aoeDamage": 150,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-11-boss-extreme",
+      "zone": "Lost City Of Gold Boss 11",
+      "difficulty": "Extreme",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 7000000,
+      "enemyDamage": 340,
+      "defenseCap": 88800,
+      "aoeDamage": 150,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-12-boss-easy",
+      "zone": "Lost City Of Gold Boss 12",
+      "difficulty": "Easy",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 10000000,
+      "enemyDamage": 400,
+      "defenseCap": 144000,
+      "aoeDamage": 200,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-12-boss-medium",
+      "zone": "Lost City Of Gold Boss 12",
+      "difficulty": "Medium",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 10000000,
+      "enemyDamage": 400,
+      "defenseCap": 144000,
+      "aoeDamage": 200,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-12-boss-hard",
+      "zone": "Lost City Of Gold Boss 12",
+      "difficulty": "Hard",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 10000000,
+      "enemyDamage": 400,
+      "defenseCap": 144000,
+      "aoeDamage": 200,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-12-boss-extreme",
+      "zone": "Lost City Of Gold Boss 12",
+      "difficulty": "Extreme",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 10000000,
+      "enemyDamage": 400,
+      "defenseCap": 144000,
+      "aoeDamage": 200,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-13-boss-easy",
+      "zone": "Lost City Of Gold Boss 13",
+      "difficulty": "Easy",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 12000000,
+      "enemyDamage": 500,
+      "defenseCap": 162000,
+      "aoeDamage": 250,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-13-boss-medium",
+      "zone": "Lost City Of Gold Boss 13",
+      "difficulty": "Medium",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 12000000,
+      "enemyDamage": 500,
+      "defenseCap": 162000,
+      "aoeDamage": 250,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-13-boss-hard",
+      "zone": "Lost City Of Gold Boss 13",
+      "difficulty": "Hard",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 12000000,
+      "enemyDamage": 500,
+      "defenseCap": 162000,
+      "aoeDamage": 250,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "lost-city-of-gold-boss-13-boss-extreme",
+      "zone": "Lost City Of Gold Boss 13",
+      "difficulty": "Extreme",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 12000000,
+      "enemyDamage": 500,
+      "defenseCap": 162000,
+      "aoeDamage": 250,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "delta-tower-floor-30-titan-boss-easy",
+      "zone": "Delta Tower - Floor 30 (titan)",
+      "difficulty": "Easy",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 1300000,
+      "enemyDamage": 175,
+      "defenseCap": 45000,
+      "aoeDamage": 100,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "delta-tower-floor-30-titan-boss-medium",
+      "zone": "Delta Tower - Floor 30 (titan)",
+      "difficulty": "Medium",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 1300000,
+      "enemyDamage": 175,
+      "defenseCap": 45000,
+      "aoeDamage": 100,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "delta-tower-floor-30-titan-boss-hard",
+      "zone": "Delta Tower - Floor 30 (titan)",
+      "difficulty": "Hard",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 1300000,
+      "enemyDamage": 175,
+      "defenseCap": 45000,
+      "aoeDamage": 100,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "delta-tower-floor-30-titan-boss-extreme",
+      "zone": "Delta Tower - Floor 30 (titan)",
+      "difficulty": "Extreme",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 1300000,
+      "enemyDamage": 175,
+      "defenseCap": 45000,
+      "aoeDamage": 100,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "epsilon-tower-floor-30-titan-boss-easy",
+      "zone": "Epsilon Tower - Floor 30 (titan)",
+      "difficulty": "Easy",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 2500000,
+      "enemyDamage": 240,
+      "defenseCap": 60600,
+      "aoeDamage": 120,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "epsilon-tower-floor-30-titan-boss-medium",
+      "zone": "Epsilon Tower - Floor 30 (titan)",
+      "difficulty": "Medium",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 2500000,
+      "enemyDamage": 240,
+      "defenseCap": 60600,
+      "aoeDamage": 120,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "epsilon-tower-floor-30-titan-boss-hard",
+      "zone": "Epsilon Tower - Floor 30 (titan)",
+      "difficulty": "Hard",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 2500000,
+      "enemyDamage": 240,
+      "defenseCap": 60600,
+      "aoeDamage": 120,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "epsilon-tower-floor-30-titan-boss-extreme",
+      "zone": "Epsilon Tower - Floor 30 (titan)",
+      "difficulty": "Extreme",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 2500000,
+      "enemyDamage": 240,
+      "defenseCap": 60600,
+      "aoeDamage": 120,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierType": "",
+      "barrierOptions": [
+        "None"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "terror-tower-floor-30-titan-boss-easy",
+      "zone": "Terror Tower - Floor 30 (titan)",
+      "difficulty": "Easy",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 8000000,
+      "enemyDamage": 300,
+      "defenseCap": 174780,
+      "aoeDamage": 150,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Air, Dark, Earth",
+      "barrierOptions": [
+        "Air",
+        "Dark",
+        "Earth"
+      ],
+      "barrierHealth": 350
+    },
+    {
+      "id": "terror-tower-floor-30-titan-boss-medium",
+      "zone": "Terror Tower - Floor 30 (titan)",
+      "difficulty": "Medium",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 8000000,
+      "enemyDamage": 300,
+      "defenseCap": 174780,
+      "aoeDamage": 150,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Air, Dark, Earth",
+      "barrierOptions": [
+        "Air",
+        "Dark",
+        "Earth"
+      ],
+      "barrierHealth": 350
+    },
+    {
+      "id": "terror-tower-floor-30-titan-boss-hard",
+      "zone": "Terror Tower - Floor 30 (titan)",
+      "difficulty": "Hard",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 8000000,
+      "enemyDamage": 300,
+      "defenseCap": 174780,
+      "aoeDamage": 150,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Air, Dark, Earth",
+      "barrierOptions": [
+        "Air",
+        "Dark",
+        "Earth"
+      ],
+      "barrierHealth": 350
+    },
+    {
+      "id": "terror-tower-floor-30-titan-boss-extreme",
+      "zone": "Terror Tower - Floor 30 (titan)",
+      "difficulty": "Extreme",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 8000000,
+      "enemyDamage": 300,
+      "defenseCap": 174780,
+      "aoeDamage": 150,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierType": "Air, Dark, Earth",
+      "barrierOptions": [
+        "Air",
+        "Dark",
+        "Earth"
+      ],
+      "barrierHealth": 350
+    },
+    {
+      "id": "ancient-crustacean-boss-easy",
+      "zone": "Ancient Crustacean",
+      "difficulty": "Easy",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 625000,
+      "enemyDamage": 175,
+      "defenseCap": 47400,
+      "aoeDamage": 70,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Water",
+      "barrierOptions": [
+        "Water"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "ancient-crustacean-boss-medium",
+      "zone": "Ancient Crustacean",
+      "difficulty": "Medium",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 1000000,
+      "enemyDamage": 210,
+      "defenseCap": 54560,
+      "aoeDamage": 110,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Water",
+      "barrierOptions": [
+        "Water"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "ancient-crustacean-boss-hard",
+      "zone": "Ancient Crustacean",
+      "difficulty": "Hard",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 4400000,
+      "enemyDamage": 290,
+      "defenseCap": 88325,
+      "aoeDamage": 140,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Water",
+      "barrierOptions": [
+        "Water"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "ancient-crustacean-boss-extreme",
+      "zone": "Ancient Crustacean",
+      "difficulty": "Extreme",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 7000000,
+      "enemyDamage": 320,
+      "defenseCap": 94175,
+      "aoeDamage": 170,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierType": "Water",
+      "barrierOptions": [
+        "Water"
+      ],
+      "barrierHealth": 160
+    },
+    {
+      "id": "anubis-champion-boss-easy",
+      "zone": "Anubis Champion",
+      "difficulty": "Easy",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 110000,
+      "enemyDamage": 83,
+      "defenseCap": 27930,
+      "aoeDamage": 42,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Light",
+      "barrierOptions": [
+        "Light"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "anubis-champion-boss-medium",
+      "zone": "Anubis Champion",
+      "difficulty": "Medium",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 360000,
+      "enemyDamage": 125,
+      "defenseCap": 38030,
+      "aoeDamage": 58,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Light",
+      "barrierOptions": [
+        "Light"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "anubis-champion-boss-hard",
+      "zone": "Anubis Champion",
+      "difficulty": "Hard",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 700000,
+      "enemyDamage": 180,
+      "defenseCap": 53990,
+      "aoeDamage": 80,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Light",
+      "barrierOptions": [
+        "Light"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "anubis-champion-boss-extreme",
+      "zone": "Anubis Champion",
+      "difficulty": "Extreme",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 2500000,
+      "enemyDamage": 250,
+      "defenseCap": 64730,
+      "aoeDamage": 120,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierType": "Light",
+      "barrierOptions": [
+        "Light"
+      ],
+      "barrierHealth": 85
+    },
+    {
+      "id": "cyclops-general-boss-easy",
+      "zone": "Cyclops General",
+      "difficulty": "Easy",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 370000,
+      "enemyDamage": 125,
+      "defenseCap": 38030,
+      "aoeDamage": 60,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Air",
+      "barrierOptions": [
+        "Air"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "cyclops-general-boss-medium",
+      "zone": "Cyclops General",
+      "difficulty": "Medium",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 660000,
+      "enemyDamage": 172,
+      "defenseCap": 48375,
+      "aoeDamage": 69,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Air",
+      "barrierOptions": [
+        "Air"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "cyclops-general-boss-hard",
+      "zone": "Cyclops General",
+      "difficulty": "Hard",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 1000000,
+      "enemyDamage": 215,
+      "defenseCap": 54255,
+      "aoeDamage": 105,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Air",
+      "barrierOptions": [
+        "Air"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "cyclops-general-boss-extreme",
+      "zone": "Cyclops General",
+      "difficulty": "Extreme",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 1900000,
+      "enemyDamage": 235,
+      "defenseCap": 64240,
+      "aoeDamage": 110,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierType": "Air",
+      "barrierOptions": [
+        "Air"
+      ],
+      "barrierHealth": 50
+    },
+    {
+      "id": "cyclops-merchant-boss-easy",
+      "zone": "Cyclops Merchant",
+      "difficulty": "Easy",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 15000,
+      "enemyDamage": 26,
+      "defenseCap": 7295,
+      "aoeDamage": 18,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Dark",
+      "barrierOptions": [
+        "Dark"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "cyclops-merchant-boss-medium",
+      "zone": "Cyclops Merchant",
+      "difficulty": "Medium",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 30000,
+      "enemyDamage": 34,
+      "defenseCap": 10480,
+      "aoeDamage": 21,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Dark",
+      "barrierOptions": [
+        "Dark"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "cyclops-merchant-boss-hard",
+      "zone": "Cyclops Merchant",
+      "difficulty": "Hard",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 300000,
+      "enemyDamage": 110,
+      "defenseCap": 32110,
+      "aoeDamage": 55,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Dark",
+      "barrierOptions": [
+        "Dark"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "cyclops-merchant-boss-extreme",
+      "zone": "Cyclops Merchant",
+      "difficulty": "Extreme",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 1250000,
+      "enemyDamage": 210,
+      "defenseCap": 54000,
+      "aoeDamage": 100,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierType": "Dark",
+      "barrierOptions": [
+        "Dark"
+      ],
+      "barrierHealth": 95
+    },
+    {
+      "id": "gold-golem-boss-easy",
+      "zone": "Gold Golem",
+      "difficulty": "Easy",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 220000,
+      "enemyDamage": 100,
+      "defenseCap": 17010,
+      "aoeDamage": 50,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Fire",
+      "barrierOptions": [
+        "Fire"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "gold-golem-boss-medium",
+      "zone": "Gold Golem",
+      "difficulty": "Medium",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 600000,
+      "enemyDamage": 160,
+      "defenseCap": 21960,
+      "aoeDamage": 80,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Fire",
+      "barrierOptions": [
+        "Fire"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "gold-golem-boss-hard",
+      "zone": "Gold Golem",
+      "difficulty": "Hard",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 3500000,
+      "enemyDamage": 260,
+      "defenseCap": 43245,
+      "aoeDamage": 130,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Fire",
+      "barrierOptions": [
+        "Fire"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "gold-golem-boss-extreme",
+      "zone": "Gold Golem",
+      "difficulty": "Extreme",
+      "type": "Boss",
+      "partySize": 5,
+      "powerRequirement": 0,
+      "enemyHealth": 5500000,
+      "enemyDamage": 300,
+      "defenseCap": 77620,
+      "aoeDamage": 120,
+      "aoeChance": 25,
+      "lcog": true,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierType": "Fire",
+      "barrierOptions": [
+        "Fire"
+      ],
+      "barrierHealth": 50
+    },
+    {
+      "id": "moonstone-golem-boss-easy",
+      "zone": "Moonstone Golem",
+      "difficulty": "Easy",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 40000,
+      "enemyDamage": 70,
+      "defenseCap": 13695,
+      "aoeDamage": 1,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Light",
+      "barrierOptions": [
+        "Light"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "moonstone-golem-boss-medium",
+      "zone": "Moonstone Golem",
+      "difficulty": "Medium",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 130000,
+      "enemyDamage": 100,
+      "defenseCap": 27390,
+      "aoeDamage": 1,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Light",
+      "barrierOptions": [
+        "Light"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "moonstone-golem-boss-hard",
+      "zone": "Moonstone Golem",
+      "difficulty": "Hard",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 460000,
+      "enemyDamage": 180,
+      "defenseCap": 38875,
+      "aoeDamage": 1,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Light",
+      "barrierOptions": [
+        "Light"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "moonstone-golem-boss-extreme",
+      "zone": "Moonstone Golem",
+      "difficulty": "Extreme",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 1700000,
+      "enemyDamage": 250,
+      "defenseCap": 54330,
+      "aoeDamage": 1,
+      "aoeChance": 0,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierType": "Light",
+      "barrierOptions": [
+        "Light"
+      ],
+      "barrierHealth": 55
+    },
+    {
+      "id": "mushgoon-graverobber-boss-easy",
+      "zone": "Mushgoon Graverobber",
+      "difficulty": "Easy",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 13500,
+      "enemyDamage": 22,
+      "defenseCap": 9355,
+      "aoeDamage": 17,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Earth",
+      "barrierOptions": [
+        "Earth"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "mushgoon-graverobber-boss-medium",
+      "zone": "Mushgoon Graverobber",
+      "difficulty": "Medium",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 135000,
+      "enemyDamage": 85,
+      "defenseCap": 27460,
+      "aoeDamage": 40,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Earth",
+      "barrierOptions": [
+        "Earth"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "mushgoon-graverobber-boss-hard",
+      "zone": "Mushgoon Graverobber",
+      "difficulty": "Hard",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 320000,
+      "enemyDamage": 150,
+      "defenseCap": 38565,
+      "aoeDamage": 65,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Earth",
+      "barrierOptions": [
+        "Earth"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "mushgoon-graverobber-boss-extreme",
+      "zone": "Mushgoon Graverobber",
+      "difficulty": "Extreme",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 670000,
+      "enemyDamage": 185,
+      "defenseCap": 54200,
+      "aoeDamage": 100,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierType": "Earth",
+      "barrierOptions": [
+        "Earth"
+      ],
+      "barrierHealth": 65
+    },
+    {
+      "id": "runestone-golem-boss-easy",
+      "zone": "Runestone Golem",
+      "difficulty": "Easy",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 40000,
+      "enemyDamage": 45,
+      "defenseCap": 13030,
+      "aoeDamage": 20,
+      "aoeChance": 50,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Water",
+      "barrierOptions": [
+        "Water"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "runestone-golem-boss-medium",
+      "zone": "Runestone Golem",
+      "difficulty": "Medium",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 130000,
+      "enemyDamage": 83,
+      "defenseCap": 27930,
+      "aoeDamage": 35,
+      "aoeChance": 50,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Water",
+      "barrierOptions": [
+        "Water"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "runestone-golem-boss-hard",
+      "zone": "Runestone Golem",
+      "difficulty": "Hard",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 460000,
+      "enemyDamage": 140,
+      "defenseCap": 38830,
+      "aoeDamage": 50,
+      "aoeChance": 50,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Water",
+      "barrierOptions": [
+        "Water"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "runestone-golem-boss-extreme",
+      "zone": "Runestone Golem",
+      "difficulty": "Extreme",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 1700000,
+      "enemyDamage": 200,
+      "defenseCap": 53988,
+      "aoeDamage": 90,
+      "aoeChance": 50,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierType": "Water",
+      "barrierOptions": [
+        "Water"
+      ],
+      "barrierHealth": 35
+    },
+    {
+      "id": "scholarly-harpy-boss-easy",
+      "zone": "Scholarly Harpy",
+      "difficulty": "Easy",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 7000,
+      "enemyDamage": 20,
+      "defenseCap": 5210,
+      "aoeDamage": 13,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Earth",
+      "barrierOptions": [
+        "Earth"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "scholarly-harpy-boss-medium",
+      "zone": "Scholarly Harpy",
+      "difficulty": "Medium",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 15000,
+      "enemyDamage": 25,
+      "defenseCap": 7620,
+      "aoeDamage": 18,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Earth",
+      "barrierOptions": [
+        "Earth"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "scholarly-harpy-boss-hard",
+      "zone": "Scholarly Harpy",
+      "difficulty": "Hard",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 110000,
+      "enemyDamage": 80,
+      "defenseCap": 27875,
+      "aoeDamage": 40,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Earth",
+      "barrierOptions": [
+        "Earth"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "scholarly-harpy-boss-extreme",
+      "zone": "Scholarly Harpy",
+      "difficulty": "Extreme",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 1300000,
+      "enemyDamage": 210,
+      "defenseCap": 54420,
+      "aoeDamage": 105,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierType": "Earth",
+      "barrierOptions": [
+        "Earth"
+      ],
+      "barrierHealth": 90
+    },
+    {
+      "id": "sigil-ninja-boss-easy",
+      "zone": "Sigil Ninja",
+      "difficulty": "Easy",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 475000,
+      "enemyDamage": 150,
+      "defenseCap": 41535,
+      "aoeDamage": 60,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Fire",
+      "barrierOptions": [
+        "Fire"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "sigil-ninja-boss-medium",
+      "zone": "Sigil Ninja",
+      "difficulty": "Medium",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 700000,
+      "enemyDamage": 175,
+      "defenseCap": 49090,
+      "aoeDamage": 75,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Fire",
+      "barrierOptions": [
+        "Fire"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "sigil-ninja-boss-hard",
+      "zone": "Sigil Ninja",
+      "difficulty": "Hard",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 1300000,
+      "enemyDamage": 220,
+      "defenseCap": 54595,
+      "aoeDamage": 110,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Fire",
+      "barrierOptions": [
+        "Fire"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "sigil-ninja-boss-extreme",
+      "zone": "Sigil Ninja",
+      "difficulty": "Extreme",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 4250000,
+      "enemyDamage": 290,
+      "defenseCap": 88610,
+      "aoeDamage": 150,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierType": "Fire",
+      "barrierOptions": [
+        "Fire"
+      ],
+      "barrierHealth": 35
+    },
+    {
+      "id": "toad-sage-boss-easy",
+      "zone": "Toad Sage",
+      "difficulty": "Easy",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 65000,
+      "enemyDamage": 65,
+      "defenseCap": 21855,
+      "aoeDamage": 30,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Earth",
+      "barrierOptions": [
+        "Earth"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "toad-sage-boss-medium",
+      "zone": "Toad Sage",
+      "difficulty": "Medium",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 250000,
+      "enemyDamage": 105,
+      "defenseCap": 32870,
+      "aoeDamage": 50,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Earth",
+      "barrierOptions": [
+        "Earth"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "toad-sage-boss-hard",
+      "zone": "Toad Sage",
+      "difficulty": "Hard",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 650000,
+      "enemyDamage": 160,
+      "defenseCap": 53975,
+      "aoeDamage": 80,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Earth",
+      "barrierOptions": [
+        "Earth"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "toad-sage-boss-extreme",
+      "zone": "Toad Sage",
+      "difficulty": "Extreme",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 1800000,
+      "enemyDamage": 220,
+      "defenseCap": 62530,
+      "aoeDamage": 110,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierType": "Earth",
+      "barrierOptions": [
+        "Earth"
+      ],
+      "barrierHealth": 65
+    },
+    {
+      "id": "training-instructor-boss-easy",
+      "zone": "Training Instructor",
+      "difficulty": "Easy",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 9000,
+      "enemyDamage": 23,
+      "defenseCap": 5810,
+      "aoeDamage": 14,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Light",
+      "barrierOptions": [
+        "Light"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "training-instructor-boss-medium",
+      "zone": "Training Instructor",
+      "difficulty": "Medium",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 18000,
+      "enemyDamage": 30,
+      "defenseCap": 8350,
+      "aoeDamage": 48,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Light",
+      "barrierOptions": [
+        "Light"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "training-instructor-boss-hard",
+      "zone": "Training Instructor",
+      "difficulty": "Hard",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 50000,
+      "enemyDamage": 45,
+      "defenseCap": 12005,
+      "aoeDamage": 30,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Light",
+      "barrierOptions": [
+        "Light"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "training-instructor-boss-extreme",
+      "zone": "Training Instructor",
+      "difficulty": "Extreme",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 390000,
+      "enemyDamage": 110,
+      "defenseCap": 31950,
+      "aoeDamage": 60,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierType": "Light",
+      "barrierOptions": [
+        "Light"
+      ],
+      "barrierHealth": 110
+    },
+    {
+      "id": "troublin-blacksmith-boss-easy",
+      "zone": "Troublin Blacksmith",
+      "difficulty": "Easy",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 160000,
+      "enemyDamage": 93,
+      "defenseCap": 32295,
+      "aoeDamage": 45,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Water",
+      "barrierOptions": [
+        "Water"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "troublin-blacksmith-boss-medium",
+      "zone": "Troublin Blacksmith",
+      "difficulty": "Medium",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 470000,
+      "enemyDamage": 150,
+      "defenseCap": 41535,
+      "aoeDamage": 65,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Water",
+      "barrierOptions": [
+        "Water"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "troublin-blacksmith-boss-hard",
+      "zone": "Troublin Blacksmith",
+      "difficulty": "Hard",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 710000,
+      "enemyDamage": 170,
+      "defenseCap": 52455,
+      "aoeDamage": 80,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Water",
+      "barrierOptions": [
+        "Water"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "troublin-blacksmith-boss-extreme",
+      "zone": "Troublin Blacksmith",
+      "difficulty": "Extreme",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 930000,
+      "enemyDamage": 205,
+      "defenseCap": 53345,
+      "aoeDamage": 105,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierType": "Water",
+      "barrierOptions": [
+        "Water"
+      ],
+      "barrierHealth": 15
+    },
+    {
+      "id": "troublin-pirate-boss-easy",
+      "zone": "Troublin Pirate",
+      "difficulty": "Easy",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 21000,
+      "enemyDamage": 32,
+      "defenseCap": 11345,
+      "aoeDamage": 20,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Dark",
+      "barrierOptions": [
+        "Dark"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "troublin-pirate-boss-medium",
+      "zone": "Troublin Pirate",
+      "difficulty": "Medium",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 84000,
+      "enemyDamage": 55,
+      "defenseCap": 13310,
+      "aoeDamage": 35,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Dark",
+      "barrierOptions": [
+        "Dark"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "troublin-pirate-boss-hard",
+      "zone": "Troublin Pirate",
+      "difficulty": "Hard",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 480000,
+      "enemyDamage": 150,
+      "defenseCap": 42160,
+      "aoeDamage": 65,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": false,
+      "barrierType": "Dark",
+      "barrierOptions": [
+        "Dark"
+      ],
+      "barrierHealth": 0
+    },
+    {
+      "id": "troublin-pirate-boss-extreme",
+      "zone": "Troublin Pirate",
+      "difficulty": "Extreme",
+      "type": "Boss",
+      "partySize": 4,
+      "powerRequirement": 0,
+      "enemyHealth": 1900000,
+      "enemyDamage": 210,
+      "defenseCap": 55650,
+      "aoeDamage": 100,
+      "aoeChance": 25,
+      "lcog": false,
+      "isBoss": true,
+      "isExtreme": true,
+      "barrierType": "Dark",
+      "barrierOptions": [
+        "Dark"
+      ],
+      "barrierHealth": 10
     }
   ]
 }

@@ -176,7 +176,8 @@ h3 {
 }
 
 .library-view,
-.roster-management-view {
+.roster-management-view,
+.simulator-view {
   width: min(1260px, 100%);
   margin: 0 auto;
 }
@@ -1043,6 +1044,232 @@ h3 {
   border-top: 1px solid #e0e7e3;
 }
 
+.simulator-panel {
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+}
+
+.simulator-panel .panel-title {
+  margin-bottom: 0;
+}
+
+.simulator-toolbar {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.8fr) minmax(360px, 1.4fr) minmax(150px, 0.45fr);
+  gap: 12px;
+  align-items: end;
+}
+
+.simulator-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(132px, 1fr));
+  gap: 10px;
+}
+
+.simulator-overview div {
+  min-width: 0;
+  padding: 11px;
+  border: 1px solid #d7dfda;
+  border-radius: 8px;
+  background: #f8faf9;
+}
+
+.simulator-overview span {
+  display: block;
+  color: #68786f;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.simulator-overview strong {
+  display: block;
+  overflow: hidden;
+  margin-top: 4px;
+  color: #21332b;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.quick-result-card {
+  display: grid;
+  gap: 4px;
+  padding: 16px;
+  border: 1px solid #d7dfda;
+  border-radius: 8px;
+  background: #f8faf9;
+}
+
+.quick-result-card span {
+  color: #68786f;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.quick-result-card strong {
+  color: #21332b;
+  font-size: 24px;
+  line-height: 1.1;
+}
+
+.quick-result-card small {
+  color: #4f6058;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.quick-result-card.success {
+  border-color: #9bc8b2;
+  background: #e8f5ee;
+}
+
+.quick-result-card.warning {
+  border-color: #dfc6a0;
+  background: #fff8eb;
+}
+
+.quick-result-card.danger {
+  border-color: #dcaaa0;
+  background: #fff1ef;
+}
+
+.quick-result-card.empty {
+  border-color: #c8d3cd;
+  background: #f4f6f5;
+}
+
+.simulator-result {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 11px 12px;
+  border: 1px solid #d7dfda;
+  border-radius: 8px;
+  background: #f8faf9;
+}
+
+.simulator-result.success {
+  border-color: #b8d4c7;
+  color: #1d493d;
+  background: #eef7f2;
+}
+
+.simulator-result.warning {
+  border-color: #dfc6a0;
+  color: #664613;
+  background: #fff8eb;
+}
+
+.simulator-result.danger {
+  border-color: #dcaaa0;
+  color: #7a271d;
+  background: #fff1ef;
+}
+
+.simulator-result.empty {
+  border-color: #c8d3cd;
+  color: #53635b;
+  background: #f4f6f5;
+}
+
+.simulator-result strong,
+.simulator-result span {
+  display: block;
+}
+
+.simulator-table-wrap {
+  overflow: auto;
+  border: 1px solid #d7dfda;
+  border-radius: 8px;
+}
+
+.simulator-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1120px;
+  background: #ffffff;
+}
+
+.simulator-table th,
+.simulator-table td {
+  padding: 10px;
+  border-bottom: 1px solid #edf1ef;
+  text-align: right;
+  font-size: 12px;
+}
+
+.simulator-table th:first-child,
+.simulator-table td:first-child {
+  text-align: left;
+}
+
+.simulator-table th {
+  color: #65756d;
+  background: #f8faf9;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.simulator-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.simulator-unit {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 8px;
+  align-items: center;
+  min-width: 0;
+}
+
+.simulator-unit strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.result-pill {
+  display: inline-flex;
+  min-width: 72px;
+  justify-content: center;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.result-pill.success {
+  color: #1d493d;
+  background: #dfeee7;
+}
+
+.result-pill.warning {
+  color: #6a4413;
+  background: #f9e1bc;
+}
+
+.simulator-bottom-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.7fr) minmax(420px, 1fr);
+  gap: 12px;
+}
+
+.compact-team-panel {
+  padding: 12px;
+  border: 1px solid #d7dfda;
+  border-radius: 8px;
+  background: #fbfcfb;
+}
+
+.simulator-notes {
+  margin: 0;
+}
+
 .library-panel {
   display: grid;
   gap: 16px;
@@ -1524,6 +1751,9 @@ h3 {
   .browser-toolbar,
   .item-row,
   .roster-overview,
+  .simulator-toolbar,
+  .simulator-overview,
+  .simulator-bottom-grid,
   .saved-roster-grid,
   .rank-reward-list div {
     grid-template-columns: 1fr;

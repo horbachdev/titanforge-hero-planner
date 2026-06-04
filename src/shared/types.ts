@@ -168,7 +168,14 @@ export interface QuestData {
   powerRequirement: number;
   enemyDamage: number;
   enemyHealth: number;
+  defenseCap: number;
+  aoeDamage: number;
+  aoeChance: number;
+  lcog: boolean;
+  isBoss: boolean;
+  isExtreme: boolean;
   barrierType: string;
+  barrierOptions: string[];
   barrierHealth: number;
 }
 

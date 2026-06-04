@@ -10,7 +10,8 @@
     "build": "tsc --noEmit && electron-vite build",
     "start": "electron-vite preview",
     "test": "vitest run --config vitest.config.mjs",
-    "import:data": "node scripts/import-data.mjs"
+    "import:data": "node scripts/import-data.mjs",
+    "dump:ress-formulas": "node scripts/dump-ress-formulas.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^4.3.4",

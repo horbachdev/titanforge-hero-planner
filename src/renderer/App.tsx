@@ -8,6 +8,7 @@ import {
   Save,
   Search,
   Sparkles,
+  Swords,
   Trash2,
   UserRound,
   UsersRound
@@ -15,6 +16,7 @@ import {
 import { useEffect, useMemo, useState } from 'react';
 import rawGameData from '../data/generated/game-data.json';
 import { parseBuildJsonDetailed, serializeBuild, validateBuildConfig } from '../shared/build-io';
+import { calculateSimpleQuestAnalysis, estimateQuestDefenseCap, getHeroSlotLimitForQuest, questToCombatInput } from '../shared/combat-engine';
 import {
   ITEM_QUALITIES,
   QUALITY_LABELS,
@@ -54,6 +56,7 @@ import type {
   SkillData,
   StatBlock
 } from '../shared/types';
+import type { CombatantInput, SimpleQuestAnalysis } from '../shared/combat-engine';
 import { ChampionToken, EnchantmentToken, HeroToken, ItemToken, SkillToken, VisualToken } from './VisualToken';
 
 const data = rawGameData as GameData;
@@ -67,7 +70,7 @@ const ACTIVE_ROSTER_KEY = 'shopTitansHeroBuilder.activeRoster';
 const ROSTER_SLOT_COUNT = 5;
 const rosterSlots = [0, 1, 2, 3, 4] as const;
 
-type AppTab = 'hero' | 'champion' | 'library' | 'roster';
+type AppTab = 'hero' | 'champion' | 'library' | 'roster' | 'simulator';
 
 const statLabels: Array<[keyof StatBlock, string]> = [
   ['attack', 'ATK'],
@@ -88,6 +91,8 @@ export function App(): JSX.Element {
   const [savedChampionBuilds, setSavedChampionBuilds] = useState<ChampionBuildConfig[]>(() => loadSavedChampionBuilds());
   const [rosters, setRosters] = useState<RosterConfig[]>(() => loadRosters());
   const [activeRosterId, setActiveRosterId] = useState(() => window.localStorage.getItem(ACTIVE_ROSTER_KEY) ?? '');
+  const [simulatorQuestId, setSimulatorQuestId] = useState(() => data.quests[0]?.id ?? '');
+  const [simulatorDefenseCaps, setSimulatorDefenseCaps] = useState<Record<string, number>>({});
   const [importText, setImportText] = useState('');
   const [ioMessage, setIoMessage] = useState('');
 
@@ -232,6 +237,13 @@ export function App(): JSX.Element {
     setRosters((current) => current.map((roster) => (roster.id === activeRoster.id ? { ...roster, ...patch } : roster)));
   }
 
+  function updateSimulatorDefenseCap(questId: string, defenseCap: number): void {
+    setSimulatorDefenseCaps((current) => ({
+      ...current,
+      [questId]: Math.max(0, Math.round(defenseCap || 0))
+    }));
+  }
+
   function updateChampionBuild(patch: Partial<ChampionBuildConfig>): void {
     setChampionBuild((current) => normalizeChampionBuild({ ...current, ...patch }) ?? defaultChampionBuild(data));
   }
@@ -358,6 +370,9 @@ export function App(): JSX.Element {
           </TabButton>
           <TabButton active={activeTab === 'roster'} onClick={() => setActiveTab('roster')} icon={<UsersRound size={18} />}>
             Roster Management
+          </TabButton>
+          <TabButton active={activeTab === 'simulator'} onClick={() => setActiveTab('simulator')} icon={<Swords size={18} />}>
+            Quest Simulator
           </TabButton>
         </nav>
       </header>
@@ -594,6 +609,20 @@ export function App(): JSX.Element {
             onEditChampion={loadChampionBuildForEdit}
           />
         </main>
+      )}
+
+      {activeTab === 'simulator' && (
+        <QuestSimulatorPanel
+          activeRoster={activeRoster}
+          rosters={rosters}
+          savedBuilds={savedBuilds}
+          savedChampionBuilds={savedChampionBuilds}
+          questId={simulatorQuestId}
+          defenseCapOverrides={simulatorDefenseCaps}
+          onActiveRosterChange={setActiveRosterId}
+          onQuestChange={setSimulatorQuestId}
+          onDefenseCapChange={updateSimulatorDefenseCap}
+        />
       )}
     </div>
   );
@@ -967,6 +996,273 @@ function RosterPanel({
         <ElementPointsPanel scores={totalElementScores} />
       </div>
     </section>
+  );
+}
+
+function QuestSimulatorPanel({
+  activeRoster,
+  rosters,
+  savedBuilds,
+  savedChampionBuilds,
+  questId,
+  defenseCapOverrides,
+  onActiveRosterChange,
+  onQuestChange,
+  onDefenseCapChange
+}: {
+  activeRoster: RosterConfig;
+  rosters: RosterConfig[];
+  savedBuilds: BuildConfig[];
+  savedChampionBuilds: ChampionBuildConfig[];
+  questId: string;
+  defenseCapOverrides: Record<string, number>;
+  onActiveRosterChange: (id: string) => void;
+  onQuestChange: (id: string) => void;
+  onDefenseCapChange: (questId: string, defenseCap: number) => void;
+}): JSX.Element {
+  const selectedQuest = data.quests.find((quest) => quest.id === questId) ?? data.quests[0];
+  const questDefenseCap = selectedQuest
+    ? defenseCapOverrides[selectedQuest.id] ?? (selectedQuest.defenseCap || estimateQuestDefenseCap(selectedQuest))
+    : 0;
+  const questInput = selectedQuest ? questToCombatInput(selectedQuest, questDefenseCap) : null;
+  const heroBuildIds = normalizeRosterHeroIds(activeRoster.heroBuildIds);
+  const heroSlotLimit = selectedQuest ? getHeroSlotLimitForQuest(selectedQuest) : 4;
+  const activeHeroBuildIds = heroBuildIds.slice(0, heroSlotLimit);
+  const ignoredHeroSlotCount = heroBuildIds.slice(heroSlotLimit).filter(Boolean).length;
+  const championBuild = savedChampionBuilds.find((entry) => entry.id === activeRoster.championBuildId) ?? null;
+  const resolvedChampion = championBuild ? calculateChampionBuildStats(championBuild, data) : null;
+  const resolvedHeroes = activeHeroBuildIds
+    .map((buildId) => savedBuilds.find((entry) => entry.id === buildId) ?? null)
+    .filter((build): build is BuildConfig => Boolean(build))
+    .map((build) => calculateHeroStats(build, data, { championSkillId: resolvedChampion?.leaderSkill?.id }));
+  const combatants: CombatantInput[] = [
+    ...(resolvedChampion
+      ? [
+          {
+            id: `champion-${resolvedChampion.build.id}`,
+            name: championBuild?.name ?? resolvedChampion.champion?.name ?? 'Champion',
+            kind: 'champion' as const,
+            stats: resolvedChampion.stats,
+            elementScores: resolvedChampion.elementScores
+          }
+        ]
+      : []),
+    ...resolvedHeroes.map((resolved) => ({
+      id: `hero-${resolved.build.id}`,
+      name: resolved.build.name,
+      kind: 'hero' as const,
+      stats: resolved.stats,
+      elementScores: resolved.elementScores
+    }))
+  ];
+  const analysis = questInput ? calculateSimpleQuestAnalysis(questInput, combatants) : null;
+  const teamPower =
+    resolvedHeroes.reduce((total, entry) => total + entry.stats.power, 0) + (resolvedChampion?.stats.power ?? 0);
+  const totalElementScores = [
+    ...resolvedHeroes.map((entry) => entry.elementScores),
+    ...(resolvedChampion ? [resolvedChampion.elementScores] : [])
+  ].reduce((acc, scores) => mergeElementScores(acc, scores), {} as ElementScores);
+  const capIsEstimated = Boolean(selectedQuest && selectedQuest.defenseCap <= 0 && defenseCapOverrides[selectedQuest.id] === undefined);
+  const quickResult = analysis ? quickResultForAnalysis(analysis) : null;
+
+  return (
+    <main className="simulator-view">
+      <section className="panel simulator-panel">
+        <div className="panel-title">
+          <Swords size={19} />
+          <h2>Quest Simulator</h2>
+        </div>
+
+        <div className="simulator-toolbar">
+          <label>
+            Roster
+            <select value={activeRoster.id} onChange={(event) => onActiveRosterChange(event.target.value)}>
+              {rosters.map((roster) => (
+                <option key={roster.id} value={roster.id}>
+                  {roster.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Quest
+            <select value={selectedQuest?.id ?? ''} onChange={(event) => onQuestChange(event.target.value)}>
+              {data.quests.map((quest) => (
+                <option key={quest.id} value={quest.id}>
+                  {formatQuestName(quest)}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Defense cap
+            <input
+              type="number"
+              min={0}
+              value={questDefenseCap}
+              onChange={(event) => selectedQuest && onDefenseCapChange(selectedQuest.id, event.target.valueAsNumber)}
+            />
+          </label>
+        </div>
+
+        {selectedQuest && analysis && (
+          <>
+            {quickResult && (
+              <div className={`quick-result-card ${quickResult.tone}`}>
+                <span>Quick Result</span>
+                <strong>{quickResult.label}</strong>
+                <small>{quickResult.detail}</small>
+              </div>
+            )}
+
+            <div className="simulator-overview">
+              <div>
+                <span>Quest HP</span>
+                <strong>{selectedQuest.enemyHealth.toLocaleString()}</strong>
+              </div>
+              <div>
+                <span>Enemy ATK</span>
+                <strong>{selectedQuest.enemyDamage.toLocaleString()}</strong>
+              </div>
+              <div>
+                <span>Defense Cap</span>
+                <strong>{questDefenseCap.toLocaleString()}</strong>
+              </div>
+              <div>
+                <span>AoE</span>
+                <strong>
+                  {selectedQuest.aoeDamage > 0
+                    ? `${selectedQuest.aoeDamage.toLocaleString()} @ ${formatPercent(selectedQuest.aoeChance)}`
+                    : 'None'}
+                </strong>
+              </div>
+              <div>
+                <span>Team ATK</span>
+                <strong>{analysis.teamAttackNoCrit.toLocaleString()}</strong>
+              </div>
+              <div>
+                <span>Enemy hits</span>
+                <strong>{analysis.totalEnemyHits.toLocaleString()}</strong>
+              </div>
+              <div>
+                <span>Survival</span>
+                <strong>
+                  {analysis.survivingCombatants} / {analysis.occupiedCombatants}
+                </strong>
+              </div>
+              <div>
+                <span>Team Power</span>
+                <strong>{teamPower.toLocaleString()}</strong>
+              </div>
+              <div>
+                <span>Hero Slots</span>
+                <strong>
+                  {resolvedHeroes.length} / {heroSlotLimit}
+                </strong>
+              </div>
+              <div>
+                <span>Quest Flags</span>
+                <strong>
+                  {[selectedQuest.lcog ? 'LCoG' : '', selectedQuest.isBoss ? 'Boss' : '', selectedQuest.isExtreme ? 'Extreme' : '']
+                    .filter(Boolean)
+                    .join(', ') || 'Normal'}
+                </strong>
+              </div>
+              <div>
+                <span>Enemy Crit</span>
+                <strong>Pending</strong>
+              </div>
+            </div>
+
+            <div className={`simulator-result ${quickResult?.tone ?? 'warning'}`}>
+              <strong>{quickResult?.label ?? 'No result'}</strong>
+              <span>
+                Barrier {analysis.barrier.met ? 'met' : 'short'}: {analysis.barrier.available} / {analysis.barrier.required}
+              </span>
+            </div>
+
+            <div className="simulator-table-wrap">
+              <table className="simulator-table">
+                <thead>
+                  <tr>
+                    <th>Unit</th>
+                    <th>HP</th>
+                    <th>ATK</th>
+                    <th>DEF</th>
+                    <th>Threat</th>
+                    <th>Target %</th>
+                    <th>Dmg / hit</th>
+                    <th>Hits</th>
+                    <th>Target dmg</th>
+                    <th>AoE est.</th>
+                    <th>Total dmg</th>
+                    <th>Result</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {analysis.rows.map((row) => (
+                    <tr key={row.combatant.id}>
+                      <td>
+                        <span className="simulator-unit">
+                          {row.combatant.kind === 'champion' ? (
+                            <ChampionToken champion={resolvedChampion?.champion ?? undefined} />
+                          ) : (
+                            <HeroToken hero={resolvedHeroes.find((entry) => `hero-${entry.build.id}` === row.combatant.id)?.hero} />
+                          )}
+                          <strong>{row.combatant.name}</strong>
+                        </span>
+                      </td>
+                      <td>{row.combatant.stats.hp.toLocaleString()}</td>
+                      <td>{row.combatant.stats.attack.toLocaleString()}</td>
+                      <td>{row.combatant.stats.defense.toLocaleString()}</td>
+                      <td>{row.combatant.stats.threat.toLocaleString()}</td>
+                      <td>{formatPercent(row.targetPercent)}</td>
+                      <td>{row.damagePerHit.toLocaleString()}</td>
+                      <td>{row.targetedHits.toLocaleString()}</td>
+                      <td>{row.targetedDamage.toLocaleString()}</td>
+                      <td>{row.expectedAoeDamage.toLocaleString()}</td>
+                      <td>{row.totalExpectedDamage.toLocaleString()}</td>
+                      <td>
+                        <span className={row.survives ? 'result-pill success' : 'result-pill warning'}>
+                          {row.survives ? 'Survives' : 'Falls'}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                  {analysis.rows.length === 0 && (
+                    <tr>
+                      <td colSpan={12}>No saved roster units loaded.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="simulator-bottom-grid">
+              <div className="team-total-panel compact-team-panel">
+                <h3>Team Elements</h3>
+                <ElementPointsPanel scores={totalElementScores} />
+              </div>
+              <div className="warning-box simulator-notes">
+                {capIsEstimated && <p>Defense cap is estimated because no Ress defense-cap value was imported for this quest.</p>}
+                {ignoredHeroSlotCount > 0 && (
+                  <p>
+                    {ignoredHeroSlotCount} saved hero slot{ignoredHeroSlotCount === 1 ? '' : 's'} ignored for this quest. LCoG quests use up to
+                    5 hero slots; normal quests use the imported party limit capped at 4.
+                  </p>
+                )}
+                <p>Quick Result covers HP, ATK, DEF, threat targeting, enemy hits, barrier points, LCoG slot limits, and expected AoE damage.</p>
+                <p>Enemy critical hits, evasion rolls, healing, special artifacts, fatal-blow effects, conditional spirits, Polonia, and rest time are not included yet.</p>
+                <p>Monte Carlo output remains locked until the random simulation chain is mapped from Ress.</p>
+                {analysis.warnings.map((warning) => (
+                  <p key={warning}>{warning}</p>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
+      </section>
+    </main>
   );
 }
 
@@ -1827,6 +2123,16 @@ function formatElementLabel(key: string): string {
   return labels[key] ?? key;
 }
 
+function formatQuestName(quest: GameData['quests'][number]): string {
+  return `${titleCase(quest.zone)} | ${quest.type} | ${quest.difficulty}`;
+}
+
+function titleCase(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/\b[a-z]/g, (match) => match.toUpperCase());
+}
+
 function mergeElementScores(left: ElementScores, right: ElementScores): ElementScores {
   const merged = { ...left };
   for (const [key, value] of Object.entries(right)) {
@@ -2004,6 +2310,52 @@ function formatStat(key: keyof StatBlock, value: number): string {
     return `${value.toLocaleString()}x`;
   }
   return value.toLocaleString();
+}
+
+function formatPercent(value: number): string {
+  return `${Math.round(value * 100) / 100}%`;
+}
+
+function quickResultForAnalysis(analysis: SimpleQuestAnalysis): {
+  label: string;
+  detail: string;
+  tone: 'success' | 'warning' | 'danger' | 'empty';
+} {
+  const total = analysis.occupiedCombatants;
+  const survivors = analysis.survivingCombatants;
+  const barrierDetail = analysis.barrier.required > 0
+    ? ` Barrier ${analysis.barrier.met ? 'met' : 'short'}: ${analysis.barrier.available} / ${analysis.barrier.required}.`
+    : '';
+
+  if (total === 0) {
+    return {
+      label: 'No roster loaded',
+      detail: 'Load saved heroes and a champion into the active roster.',
+      tone: 'empty'
+    };
+  }
+
+  if (survivors === total) {
+    return {
+      label: 'All survive',
+      detail: `${survivors} / ${total} units survive simple analysis plus expected AoE.${barrierDetail}`,
+      tone: analysis.barrier.met ? 'success' : 'warning'
+    };
+  }
+
+  if (survivors > 0) {
+    return {
+      label: 'Some survive',
+      detail: `${survivors} / ${total} units survive simple analysis plus expected AoE.${barrierDetail}`,
+      tone: 'warning'
+    };
+  }
+
+  return {
+    label: 'None survive',
+    detail: `0 / ${total} units survive simple analysis plus expected AoE.${barrierDetail}`,
+    tone: 'danger'
+  };
 }
 
 function clampNumber(value: number, min: number, max: number): number {

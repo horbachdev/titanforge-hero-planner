@@ -1,0 +1,205 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "workbook": "data/raw/ress-hero-quest-simulator.xlsx",
+    "workbookLabel": "Ress Hero & Quest Simulator V9.4",
+    "formulaDump": "data/raw/ress-formula-dump.json",
+    "formulaIndex": "docs/ress-formula-index.md"
+  },
+  "cases": [
+    {
+      "id": "quest-sim-simple-damage-champion-1",
+      "kind": "deterministic-formula",
+      "description": "Quest Sim row 16 enemy damage per targeted hit for Champion 1.",
+      "sourceCells": ["Quest Sim!D16", "Quest Sim!E11", "Quest Sim!F11", "Quest Sim!G16"],
+      "inputs": {
+        "heroDefense": 1691,
+        "questAttack": 40,
+        "questDefenseCap": 12000
+      },
+      "expected": {
+        "damagePerHit": 26
+      }
+    },
+    {
+      "id": "quest-sim-simple-damage-hero-1",
+      "kind": "deterministic-formula",
+      "description": "Quest Sim row 17 enemy damage per targeted hit for Hero 1.",
+      "sourceCells": ["Quest Sim!D17", "Quest Sim!E11", "Quest Sim!F11", "Quest Sim!G17"],
+      "inputs": {
+        "heroDefense": 5958,
+        "questAttack": 40,
+        "questDefenseCap": 12000
+      },
+      "expected": {
+        "damagePerHit": 12
+      }
+    },
+    {
+      "id": "quest-sim-simple-damage-empty-slot",
+      "kind": "deterministic-formula",
+      "description": "Quest Sim row 20 damage behavior for an empty party slot with zero defense.",
+      "sourceCells": ["Quest Sim!D20", "Quest Sim!E11", "Quest Sim!F11", "Quest Sim!G20"],
+      "inputs": {
+        "heroDefense": 0,
+        "questAttack": 40,
+        "questDefenseCap": 12000
+      },
+      "expected": {
+        "damagePerHit": 60
+      }
+    },
+    {
+      "id": "quest-sim-total-enemy-hits",
+      "kind": "deterministic-formula",
+      "description": "Quest Sim total enemy hits from quest HP divided by total team no-crit attack.",
+      "sourceCells": ["Quest Sim!D11", "Quest Sim!C21", "Quest Sim!H21"],
+      "inputs": {
+        "questHp": 25000,
+        "teamAttackNoCrit": 384730
+      },
+      "expected": {
+        "totalEnemyHits": 1
+      }
+    },
+    {
+      "id": "quest-sim-targeted-hits-champion-1",
+      "kind": "deterministic-formula",
+      "description": "Quest Sim row 16 targeted hits after threat weighting.",
+      "sourceCells": ["Quest Sim!F16", "Quest Sim!H21", "Quest Sim!H16"],
+      "inputs": {
+        "targetPercent": 50,
+        "totalEnemyHits": 1
+      },
+      "expected": {
+        "targetedHits": 1
+      }
+    },
+    {
+      "id": "quest-sim-targeted-hits-hero-1",
+      "kind": "deterministic-formula",
+      "description": "Quest Sim row 17 targeted hits after threat weighting.",
+      "sourceCells": ["Quest Sim!F17", "Quest Sim!H21", "Quest Sim!H17"],
+      "inputs": {
+        "targetPercent": 16.66666667,
+        "totalEnemyHits": 1
+      },
+      "expected": {
+        "targetedHits": 1
+      }
+    },
+    {
+      "id": "hero-1-visible-final-stats",
+      "kind": "workbook-visible-output",
+      "description": "Hero 1 default workbook final stat panel.",
+      "sourceCells": ["Hero 1!B2", "Hero 1!B3", "Hero 1!E18", "Hero 1!E19", "Hero 1!E20", "Hero 1!E21", "Hero 1!E22", "Hero 1!E23", "Hero 1!E24", "Hero 1!E30", "Hero 1!E31", "Hero 1!E32", "Hero 1!E33"],
+      "inputs": {
+        "promoted": true,
+        "classType": "Blue Type",
+        "resolvedClass": "Archmage",
+        "level": 44,
+        "seeds": {
+          "hp": 40,
+          "attack": 40,
+          "defense": 40
+        }
+      },
+      "expected": {
+        "hp": 1919,
+        "attack": 127375,
+        "defense": 5958,
+        "evasion": 0,
+        "critChance": 55,
+        "critMultiplier": 6.5,
+        "innateSkillLevel": 4,
+        "attackMod": 340,
+        "defenseMod": 0,
+        "threat": 10,
+        "power": 427849
+      }
+    },
+    {
+      "id": "hero-1-visible-solo-quest-summary",
+      "kind": "mixed-deterministic-and-stored-output",
+      "description": "Hero 1 solo quest summary against Sunken Temple Boss Hard from the default workbook.",
+      "sourceCells": ["Hero 1!B31", "Hero 1!B32", "Hero 1!B33", "Hero 1!B34", "Hero 1!B35", "Hero 1!B36", "Hero 1!B37", "Hero 1!B38", "Hero 1!B39", "Hero 1!B42", "Hero 1!B43", "Hero 1!B44"],
+      "inputs": {
+        "heroHp": 1919,
+        "heroAttack": 127375,
+        "heroDefense": 5958,
+        "mobHp": 900000,
+        "mobBaseDamage": 175,
+        "mobDefenseCap": 43200,
+        "lizardRegen": 0
+      },
+      "expected": {
+        "damageDealt": 127375,
+        "damageTaken": 118,
+        "hitsToKillNoCrits": 8,
+        "roundsSurvivedNoCrits": 16,
+        "critsSurvivedAndStillWin": 6,
+        "successRate": 100,
+        "averageRoundsWinsOnly": 2.3719,
+        "minimumRoundsWinsOnly": 2,
+        "maximumRoundsWinsOnly": 8
+      }
+    },
+    {
+      "id": "champion-1-visible-final-stats",
+      "kind": "workbook-visible-output",
+      "description": "Champion 1 default workbook final stat panel for Yami.",
+      "sourceCells": ["Champion 1!B2", "Champion 1!B3", "Champion 1!B4", "Champion 1!B10", "Champion 1!B11", "Champion 1!B12", "Champion 1!B13", "Champion 1!E5", "Champion 1!E6", "Champion 1!E7", "Champion 1!E8", "Champion 1!E9", "Champion 1!E10", "Champion 1!E11", "Champion 1!E12", "Champion 1!E13", "Champion 1!E15"],
+      "inputs": {
+        "champion": "Yami",
+        "rank": 1,
+        "level": 31,
+        "championSoul": true,
+        "seeds": {
+          "hp": 80,
+          "attack": 80,
+          "defense": 80
+        }
+      },
+      "expected": {
+        "hp": 231,
+        "attack": 2605,
+        "defense": 1691,
+        "evasion": 30,
+        "critChance": 20,
+        "critMultiplier": 3,
+        "innateSkillLevel": 1,
+        "armadilloChance": 0,
+        "dinosaurBonus": 0,
+        "sharkBonus": 0,
+        "threat": 30
+      }
+    },
+    {
+      "id": "quest-sim-visible-party-summary",
+      "kind": "workbook-stored-monte-carlo-output",
+      "description": "Quest Sim stored result panel for the default party. Use after mapping the random simulation chain.",
+      "sourceCells": ["Quest Sim!A25", "Quest Sim!B25", "Quest Sim!C25", "Quest Sim!D25", "Quest Sim!E25", "Quest Sim!F25", "Quest Sim!G25", "Quest Sim!H25", "Quest Sim!B27", "Quest Sim!C27", "Quest Sim!D27", "Quest Sim!E27", "Quest Sim!F27", "Quest Sim!B28", "Quest Sim!C28", "Quest Sim!D28", "Quest Sim!E28", "Quest Sim!F28", "Quest Sim!B30", "Quest Sim!C30", "Quest Sim!D30", "Quest Sim!E30", "Quest Sim!F30", "Quest Sim!B31", "Quest Sim!C31", "Quest Sim!D31", "Quest Sim!E31", "Quest Sim!F31", "Quest Sim!B32", "Quest Sim!C32", "Quest Sim!D32", "Quest Sim!E32", "Quest Sim!F32"],
+      "inputs": {
+        "questZone": "Sun God Tomb",
+        "difficulty": "Easy",
+        "barrier": "Dark",
+        "party": ["Champion 1", "Hero 1", "Hero 2", "Hero 3", ""]
+      },
+      "expected": {
+        "questSuccessRate": 100,
+        "minimumRounds": 1,
+        "averageRounds": 1,
+        "maximumRounds": 1,
+        "poloniaLootRate": 0,
+        "poloniaLootCap": 0,
+        "roundLimitHit": "No",
+        "loopErrorRate": 0,
+        "survivalRates": [100, 100, 100, 100, 0],
+        "averageHpRemaining": [271.60388, 532.6062, 532.5768, 532.69836, 0],
+        "maximumDamageDealt": [19195, 35873.200000000004, 35873.200000000004, 35873.200000000004, 0],
+        "averageDamageDealt": [10074.11185, 22058.61004599973, 22030.62894999957, 22138.248549999604, 0],
+        "minimumDamageDealt": [9597.5, 8968.300000000001, 8968.300000000001, 8968.300000000001, 0]
+      }
+    }
+  ]
+}

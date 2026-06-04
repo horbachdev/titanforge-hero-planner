@@ -22,6 +22,18 @@ describe('generated game data', () => {
     expect(data.quests.length).toBeGreaterThan(80);
   });
 
+  it('enriches quests with Ress combat metadata', () => {
+    const sunGodTomb = data.quests.find((quest) => quest.id === 'sun-god-s-tomb-normal-easy');
+    expect(sunGodTomb?.defenseCap).toBe(12000);
+    expect(sunGodTomb?.aoeDamage).toBe(20);
+    expect(sunGodTomb?.aoeChance).toBe(25);
+    expect(sunGodTomb?.lcog).toBe(false);
+
+    const lcogQuest = data.quests.find((quest) => quest.zone === 'Lost City Of Gold Diff 7' && quest.difficulty === 'Easy');
+    expect(lcogQuest?.lcog).toBe(true);
+    expect(lcogQuest?.partySize).toBe(5);
+  });
+
   it('links base classes to promotions and innate skills', () => {
     const soldier = data.heroes.find((hero) => hero.id === 'soldier');
     expect(soldier?.promotedClassId).toBe('mercenary-soldier-class-promotion');
