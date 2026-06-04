@@ -155,6 +155,50 @@ criticalHitDamageTaken = max(heroDamageTakenPerHit * 1.5, roundupExcel(1.5 * mob
 
 `Hero 1!B36:B39` are stored values in the exported workbook, not formulas. They are still valid fixture targets, but the random or imported formula chain behind them must be traced before implementation.
 
+## Enemy Critical Damage
+
+Source cell:
+
+- `Hero 1!B35`
+
+The solo quest formula exposes the enemy critical-damage branch even though the full random critical-hit chance is not exported as formulas:
+
+```excel
+MAX(B32*1.5,ROUNDUP(1.5*B43,0))
+```
+
+Named variables:
+
+```ts
+enemyCriticalDamageTaken = max(enemyDamagePerHit * 1.5, roundupExcel(1.5 * questAttack));
+```
+
+Default workbook fixture:
+
+```ts
+enemyDamagePerHit = 118;
+questAttack = 175;
+enemyCriticalDamageTaken = 263;
+```
+
+This covers damage amount only. It does not define when an enemy critical hit occurs.
+
+## Full Analysis Export Audit
+
+Audited on the exported Ress V9.4 XLSX:
+
+- `Quest Sim!A25:H32` are stored values, not formulas.
+- The workbook contains no `RAND` or `RANDBETWEEN` formulas in `Quest Sim`.
+- There are no hidden sheets containing the random simulation chain.
+- The visible intro text says the simulator runs 50,000 quests and accounts for dodging and critical hits, but the exported XLSX does not preserve that logic as formula text.
+
+Implication: full Monte Carlo parity cannot be implemented from the current exported XLSX alone. The next required source artifact is either:
+
+- raw formula text from the live Google Sheet with formulas shown/exported before calculation is flattened, or
+- manually captured known input/output rows across controlled scenarios sufficient to infer and validate the random event chain.
+
+Until that source exists, Enemy Crit Chance, exact Evasion rolls, exact AoE rolls, target retargeting after deaths, and full-party success percentages must remain marked as pending.
+
 ## Champion Stat Formulas
 
 Source cells:

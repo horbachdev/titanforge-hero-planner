@@ -145,6 +145,19 @@
       }
     },
     {
+      "id": "hero-1-enemy-critical-damage-taken",
+      "kind": "deterministic-formula",
+      "description": "Enemy critical damage branch from Hero 1 solo quest summary formula.",
+      "sourceCells": ["Hero 1!B32", "Hero 1!B35", "Hero 1!B43"],
+      "inputs": {
+        "damagePerHit": 118,
+        "questAttack": 175
+      },
+      "expected": {
+        "criticalDamageTaken": 263
+      }
+    },
+    {
       "id": "champion-1-visible-final-stats",
       "kind": "workbook-visible-output",
       "description": "Champion 1 default workbook final stat panel for Yami.",

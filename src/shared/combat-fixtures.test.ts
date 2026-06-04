@@ -1,5 +1,6 @@
 import fixtures from '../../data/fixtures/combat-simulator-cases.json';
 import {
+  calculateEnemyCriticalDamageTaken,
   calculateEnemyDamagePerHit,
   calculateExpectedAoeDamage,
   calculateHeroSoloQuestSummary,
@@ -48,6 +49,11 @@ describe('combat simulator Ress parity fixtures', () => {
       const fixture = fixtureById(id);
       expect(calculateEnemyDamagePerHit(fixture.inputs as never)).toBe(fixture.expected.damagePerHit);
     }
+  });
+
+  it('matches Ress deterministic enemy critical damage fixtures', () => {
+    const fixture = fixtureById('hero-1-enemy-critical-damage-taken');
+    expect(calculateEnemyCriticalDamageTaken(fixture.inputs as never)).toBe(fixture.expected.criticalDamageTaken);
   });
 
   it('matches Ress deterministic enemy hit fixtures', () => {

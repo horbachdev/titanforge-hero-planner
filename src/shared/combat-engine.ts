@@ -29,6 +29,11 @@ export interface EnemyDamageInput {
   questDefenseCap: number;
 }
 
+export interface EnemyCriticalDamageInput {
+  damagePerHit: number;
+  questAttack: number;
+}
+
 export interface TotalEnemyHitsInput {
   questHp: number;
   teamAttackNoCrit: number;
@@ -114,6 +119,10 @@ export function calculateEnemyDamagePerHit({
   return roundExcel(
     linear(heroDefense, questDefenseCap / 3, questDefenseCap, 0.3 * questAttack, 0.25 * questAttack)
   );
+}
+
+export function calculateEnemyCriticalDamageTaken({ damagePerHit, questAttack }: EnemyCriticalDamageInput): number {
+  return Math.max(damagePerHit * 1.5, roundupExcel(1.5 * questAttack));
 }
 
 export function calculateTotalEnemyHits({ questHp, teamAttackNoCrit }: TotalEnemyHitsInput): number {
@@ -228,7 +237,10 @@ export function calculateHeroSoloQuestSummary(input: HeroSoloQuestSummaryInput):
   });
   const hitsToKillNoCrits = input.mobHp > 0 && damageDealt > 0 ? roundupExcel(input.mobHp / damageDealt) : 0;
   const roundsSurvivedNoCrits = safeRoundup((input.heroHp - damageTaken) / (damageTaken - lizardRegen));
-  const criticalDamageTaken = Math.max(damageTaken * 1.5, roundupExcel(1.5 * input.mobBaseDamage));
+  const criticalDamageTaken = calculateEnemyCriticalDamageTaken({
+    damagePerHit: damageTaken,
+    questAttack: input.mobBaseDamage
+  });
   const criticalRoundsSurvived = safeRoundup(
     (input.heroHp - criticalDamageTaken) / (criticalDamageTaken - lizardRegen)
   );
