@@ -4,6 +4,7 @@ import {
   calculateEnemyDamagePerHit,
   calculateExpectedAoeDamage,
   calculateHeroSoloQuestSummary,
+  calculateRessEnemyState,
   calculateTargetedHits,
   calculateTotalEnemyHits,
   getHeroSlotLimitForQuest
@@ -76,6 +77,52 @@ describe('combat simulator Ress parity fixtures', () => {
     expect(getHeroSlotLimitForQuest({ lcog: true, partySize: 4 })).toBe(5);
     expect(getHeroSlotLimitForQuest({ lcog: false, partySize: 4 })).toBe(4);
     expect(getHeroSlotLimitForQuest({ lcog: false, partySize: 3 })).toBe(3);
+  });
+
+  it('applies Ress mini-boss enemy modifiers', () => {
+    const baseQuest = {
+      id: 'test',
+      name: 'Test',
+      hp: 1000,
+      attack: 100,
+      defenseCap: 1000,
+      aoeDamage: 25,
+      aoeChance: 25,
+      lcog: false,
+      isBoss: false,
+      isExtreme: false,
+      barrierType: '',
+      barrierHealth: 0
+    };
+
+    expect(calculateRessEnemyState({ ...baseQuest, miniBoss: 'Agile' })).toMatchObject({
+      hp: 1000,
+      attack: 100,
+      aoeChance: 25,
+      critChance: 10,
+      evasion: 40
+    });
+    expect(calculateRessEnemyState({ ...baseQuest, miniBoss: 'Dire' })).toMatchObject({
+      hp: 1500,
+      attack: 100,
+      aoeChance: 25,
+      critChance: 30,
+      evasion: -100
+    });
+    expect(calculateRessEnemyState({ ...baseQuest, miniBoss: 'Huge' })).toMatchObject({
+      hp: 2000,
+      attack: 100,
+      aoeChance: 75,
+      critChance: 10,
+      evasion: -100
+    });
+    expect(calculateRessEnemyState({ ...baseQuest, miniBoss: 'Legendary' })).toMatchObject({
+      hp: 1500,
+      attack: 125,
+      aoeChance: 25,
+      critChance: 15,
+      evasion: 10
+    });
   });
 
   it('matches Ress deterministic Hero 1 solo quest summary formulas', () => {

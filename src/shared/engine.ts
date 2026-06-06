@@ -429,6 +429,8 @@ export function calculateChampionBuildStats(build: ChampionBuildConfig, data: Ga
       leaderSkill: null,
       gear: [],
       elementScores: {},
+      modifiers: { ...EMPTY_MODIFIERS },
+      flatStats: { ...EMPTY_FLAT_STATS },
       warnings: [`Champion "${build.championId}" was not found.`],
       sourceVersion: data.metadata.officialSpreadsheetVersion
     };
@@ -515,6 +517,8 @@ export function calculateChampionBuildStats(build: ChampionBuildConfig, data: Ga
     leaderSkill: resolvedChampion.leaderSkill,
     gear: gearLines,
     elementScores,
+    modifiers,
+    flatStats,
     warnings,
     sourceVersion: data.metadata.officialSpreadsheetVersion
   };

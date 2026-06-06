@@ -16,7 +16,7 @@ import {
 import { useEffect, useMemo, useState } from 'react';
 import rawGameData from '../data/generated/game-data.json';
 import { parseBuildJsonDetailed, serializeBuild, validateBuildConfig } from '../shared/build-io';
-import { calculateSimpleQuestAnalysis, estimateQuestDefenseCap, getHeroSlotLimitForQuest, questToCombatInput } from '../shared/combat-engine';
+import { calculateRessQuestSimulation, estimateQuestDefenseCap, getHeroSlotLimitForQuest, questToCombatInput } from '../shared/combat-engine';
 import {
   ITEM_QUALITIES,
   QUALITY_LABELS,
@@ -56,7 +56,7 @@ import type {
   SkillData,
   StatBlock
 } from '../shared/types';
-import type { CombatantInput, SimpleQuestAnalysis } from '../shared/combat-engine';
+import type { CombatantInput, CombatSpiritEffects, RessMiniBossModifier, RessQuestSimulation } from '../shared/combat-engine';
 import { ChampionToken, EnchantmentToken, HeroToken, ItemToken, SkillToken, VisualToken } from './VisualToken';
 
 const data = rawGameData as GameData;
@@ -92,6 +92,7 @@ export function App(): JSX.Element {
   const [rosters, setRosters] = useState<RosterConfig[]>(() => loadRosters());
   const [activeRosterId, setActiveRosterId] = useState(() => window.localStorage.getItem(ACTIVE_ROSTER_KEY) ?? '');
   const [simulatorQuestId, setSimulatorQuestId] = useState(() => data.quests[0]?.id ?? '');
+  const [simulatorMiniBoss, setSimulatorMiniBoss] = useState<RessMiniBossModifier>('None');
   const [simulatorDefenseCaps, setSimulatorDefenseCaps] = useState<Record<string, number>>({});
   const [importText, setImportText] = useState('');
   const [ioMessage, setIoMessage] = useState('');
@@ -618,9 +619,11 @@ export function App(): JSX.Element {
           savedBuilds={savedBuilds}
           savedChampionBuilds={savedChampionBuilds}
           questId={simulatorQuestId}
+          miniBoss={simulatorMiniBoss}
           defenseCapOverrides={simulatorDefenseCaps}
           onActiveRosterChange={setActiveRosterId}
           onQuestChange={setSimulatorQuestId}
+          onMiniBossChange={setSimulatorMiniBoss}
           onDefenseCapChange={updateSimulatorDefenseCap}
         />
       )}
@@ -1005,9 +1008,11 @@ function QuestSimulatorPanel({
   savedBuilds,
   savedChampionBuilds,
   questId,
+  miniBoss,
   defenseCapOverrides,
   onActiveRosterChange,
   onQuestChange,
+  onMiniBossChange,
   onDefenseCapChange
 }: {
   activeRoster: RosterConfig;
@@ -1015,16 +1020,19 @@ function QuestSimulatorPanel({
   savedBuilds: BuildConfig[];
   savedChampionBuilds: ChampionBuildConfig[];
   questId: string;
+  miniBoss: RessMiniBossModifier;
   defenseCapOverrides: Record<string, number>;
   onActiveRosterChange: (id: string) => void;
   onQuestChange: (id: string) => void;
+  onMiniBossChange: (miniBoss: RessMiniBossModifier) => void;
   onDefenseCapChange: (questId: string, defenseCap: number) => void;
 }): JSX.Element {
+  const [simulationRuns, setSimulationRuns] = useState(10000);
   const selectedQuest = data.quests.find((quest) => quest.id === questId) ?? data.quests[0];
   const questDefenseCap = selectedQuest
     ? defenseCapOverrides[selectedQuest.id] ?? (selectedQuest.defenseCap || estimateQuestDefenseCap(selectedQuest))
     : 0;
-  const questInput = selectedQuest ? questToCombatInput(selectedQuest, questDefenseCap) : null;
+  const questInput = selectedQuest ? questToCombatInput(selectedQuest, questDefenseCap, miniBoss) : null;
   const heroBuildIds = normalizeRosterHeroIds(activeRoster.heroBuildIds);
   const heroSlotLimit = selectedQuest ? getHeroSlotLimitForQuest(selectedQuest) : 4;
   const activeHeroBuildIds = heroBuildIds.slice(0, heroSlotLimit);
@@ -1034,7 +1042,8 @@ function QuestSimulatorPanel({
   const resolvedHeroes = activeHeroBuildIds
     .map((buildId) => savedBuilds.find((entry) => entry.id === buildId) ?? null)
     .filter((build): build is BuildConfig => Boolean(build))
-    .map((build) => calculateHeroStats(build, data, { championSkillId: resolvedChampion?.leaderSkill?.id }));
+    .map((build) => calculateHeroStats(build, data));
+  const championAurasongName = resolvedChampion?.gear.find((line) => line.slotId === 'aurasong' && line.itemName !== 'Empty')?.itemName ?? '';
   const combatants: CombatantInput[] = [
     ...(resolvedChampion
       ? [
@@ -1043,7 +1052,15 @@ function QuestSimulatorPanel({
             name: championBuild?.name ?? resolvedChampion.champion?.name ?? 'Champion',
             kind: 'champion' as const,
             stats: resolvedChampion.stats,
-            elementScores: resolvedChampion.elementScores
+            elementScores: resolvedChampion.elementScores,
+            className: resolvedChampion.champion?.name,
+            role: 'champion' as const,
+            tier: resolvedChampion.leaderSkill?.tier ?? 0,
+            modifiers: resolvedChampion.modifiers,
+            combatEffects: {
+              ...combatEffectsFromGear(resolvedChampion.gear),
+              aurasongName: championAurasongName
+            }
           }
         ]
       : []),
@@ -1052,10 +1069,18 @@ function QuestSimulatorPanel({
       name: resolved.build.name,
       kind: 'hero' as const,
       stats: resolved.stats,
-      elementScores: resolved.elementScores
+      elementScores: resolved.elementScores,
+      className: resolved.hero?.name,
+      role: resolved.hero?.role ?? 'unknown',
+      tier: ressInnateTier(resolved),
+      modifiers: resolved.modifiers,
+      combatEffects: combatEffectsFromGear(resolved.gear)
     }))
   ];
-  const analysis = questInput ? calculateSimpleQuestAnalysis(questInput, combatants) : null;
+  const simulation = useMemo(
+    () => (questInput ? calculateRessQuestSimulation(questInput, combatants, { runs: simulationRuns }) : null),
+    [questInput, combatants, simulationRuns]
+  );
   const teamPower =
     resolvedHeroes.reduce((total, entry) => total + entry.stats.power, 0) + (resolvedChampion?.stats.power ?? 0);
   const totalElementScores = [
@@ -1063,7 +1088,7 @@ function QuestSimulatorPanel({
     ...(resolvedChampion ? [resolvedChampion.elementScores] : [])
   ].reduce((acc, scores) => mergeElementScores(acc, scores), {} as ElementScores);
   const capIsEstimated = Boolean(selectedQuest && selectedQuest.defenseCap <= 0 && defenseCapOverrides[selectedQuest.id] === undefined);
-  const quickResult = analysis ? quickResultForAnalysis(analysis) : null;
+  const quickResult = simulation ? quickResultForSimulation(simulation) : null;
 
   return (
     <main className="simulator-view">
@@ -1095,6 +1120,16 @@ function QuestSimulatorPanel({
             </select>
           </label>
           <label>
+            Mini-boss
+            <select value={miniBoss} onChange={(event) => onMiniBossChange(event.target.value as RessMiniBossModifier)}>
+              {(['None', 'Agile', 'Dire', 'Huge', 'Legendary'] as RessMiniBossModifier[]).map((modifier) => (
+                <option key={modifier} value={modifier}>
+                  {modifier}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
             Defense cap
             <input
               type="number"
@@ -1103,9 +1138,20 @@ function QuestSimulatorPanel({
               onChange={(event) => selectedQuest && onDefenseCapChange(selectedQuest.id, event.target.valueAsNumber)}
             />
           </label>
+          <label>
+            Runs
+            <input
+              type="number"
+              min={1000}
+              max={50000}
+              step={1000}
+              value={simulationRuns}
+              onChange={(event) => setSimulationRuns(clampNumber(event.target.valueAsNumber, 1000, 50000))}
+            />
+          </label>
         </div>
 
-        {selectedQuest && analysis && (
+        {selectedQuest && simulation && (
           <>
             {quickResult && (
               <div className={`quick-result-card ${quickResult.tone}`}>
@@ -1118,11 +1164,11 @@ function QuestSimulatorPanel({
             <div className="simulator-overview">
               <div>
                 <span>Quest HP</span>
-                <strong>{selectedQuest.enemyHealth.toLocaleString()}</strong>
+                <strong>{simulation.enemy.hp.toLocaleString()}</strong>
               </div>
               <div>
                 <span>Enemy ATK</span>
-                <strong>{selectedQuest.enemyDamage.toLocaleString()}</strong>
+                <strong>{simulation.enemy.attack.toLocaleString()}</strong>
               </div>
               <div>
                 <span>Defense Cap</span>
@@ -1132,22 +1178,22 @@ function QuestSimulatorPanel({
                 <span>AoE</span>
                 <strong>
                   {selectedQuest.aoeDamage > 0
-                    ? `${selectedQuest.aoeDamage.toLocaleString()} @ ${formatPercent(selectedQuest.aoeChance)}`
+                    ? `${selectedQuest.aoeDamage.toLocaleString()} @ ${formatPercent(simulation.enemy.aoeChance)}`
                     : 'None'}
                 </strong>
               </div>
               <div>
                 <span>Team ATK</span>
-                <strong>{analysis.teamAttackNoCrit.toLocaleString()}</strong>
+                <strong>{simulation.rows.reduce((total, row) => total + row.stats.attack, 0).toLocaleString()}</strong>
               </div>
               <div>
-                <span>Enemy hits</span>
-                <strong>{analysis.totalEnemyHits.toLocaleString()}</strong>
+                <span>Win Rate</span>
+                <strong>{formatPercent(simulation.successRate)}</strong>
               </div>
               <div>
                 <span>Survival</span>
                 <strong>
-                  {analysis.survivingCombatants} / {analysis.occupiedCombatants}
+                  {simulation.rows.filter((row) => row.survives).length} / {simulation.occupiedCombatants}
                 </strong>
               </div>
               <div>
@@ -1163,21 +1209,40 @@ function QuestSimulatorPanel({
               <div>
                 <span>Quest Flags</span>
                 <strong>
-                  {[selectedQuest.lcog ? 'LCoG' : '', selectedQuest.isBoss ? 'Boss' : '', selectedQuest.isExtreme ? 'Extreme' : '']
+                  {[
+                    selectedQuest.lcog ? 'LCoG' : '',
+                    selectedQuest.isBoss ? 'Boss' : '',
+                    selectedQuest.isExtreme ? 'Extreme' : '',
+                    simulation.enemy.miniBoss !== 'None' ? simulation.enemy.miniBoss : ''
+                  ]
                     .filter(Boolean)
                     .join(', ') || 'Normal'}
                 </strong>
               </div>
               <div>
                 <span>Enemy Crit</span>
-                <strong>Pending</strong>
+                <strong>{formatPercent(simulation.enemy.critChance)}</strong>
+              </div>
+              <div>
+                <span>Enemy EVA</span>
+                <strong>{simulation.enemy.evasion > 0 ? formatPercent(simulation.enemy.evasion) : 'None'}</strong>
+              </div>
+              <div>
+                <span>Rounds</span>
+                <strong>
+                  {simulation.minimumRounds} / {formatCompactNumber(simulation.averageRounds)} / {simulation.maximumRounds}
+                </strong>
+              </div>
+              <div>
+                <span>Runs</span>
+                <strong>{simulation.simulations.toLocaleString()}</strong>
               </div>
             </div>
 
             <div className={`simulator-result ${quickResult?.tone ?? 'warning'}`}>
               <strong>{quickResult?.label ?? 'No result'}</strong>
               <span>
-                Barrier {analysis.barrier.met ? 'met' : 'short'}: {analysis.barrier.available} / {analysis.barrier.required}
+                Barrier {simulation.barrier.met ? 'met' : 'short'}: {formatCompactNumber(simulation.barrier.available)} / {simulation.barrier.required}
               </span>
             </div>
 
@@ -1189,18 +1254,21 @@ function QuestSimulatorPanel({
                     <th>HP</th>
                     <th>ATK</th>
                     <th>DEF</th>
+                    <th>EVA</th>
+                    <th>CRIT</th>
                     <th>Threat</th>
                     <th>Target %</th>
                     <th>Dmg / hit</th>
-                    <th>Hits</th>
-                    <th>Target dmg</th>
-                    <th>AoE est.</th>
-                    <th>Total dmg</th>
+                    <th>Crit hit</th>
+                    <th>Survival</th>
+                    <th>Avg HP</th>
+                    <th>Avg dmg</th>
+                    <th>Max dmg</th>
                     <th>Result</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {analysis.rows.map((row) => (
+                  {simulation.rows.map((row) => (
                     <tr key={row.combatant.id}>
                       <td>
                         <span className="simulator-unit">
@@ -1212,26 +1280,29 @@ function QuestSimulatorPanel({
                           <strong>{row.combatant.name}</strong>
                         </span>
                       </td>
-                      <td>{row.combatant.stats.hp.toLocaleString()}</td>
-                      <td>{row.combatant.stats.attack.toLocaleString()}</td>
-                      <td>{row.combatant.stats.defense.toLocaleString()}</td>
-                      <td>{row.combatant.stats.threat.toLocaleString()}</td>
+                      <td>{row.stats.hp.toLocaleString()}</td>
+                      <td>{row.stats.attack.toLocaleString()}</td>
+                      <td>{row.stats.defense.toLocaleString()}</td>
+                      <td>{formatPercent(row.stats.evasion)}</td>
+                      <td>{formatPercent(row.stats.critChance)}</td>
+                      <td>{row.stats.threat.toLocaleString()}</td>
                       <td>{formatPercent(row.targetPercent)}</td>
                       <td>{row.damagePerHit.toLocaleString()}</td>
-                      <td>{row.targetedHits.toLocaleString()}</td>
-                      <td>{row.targetedDamage.toLocaleString()}</td>
-                      <td>{row.expectedAoeDamage.toLocaleString()}</td>
-                      <td>{row.totalExpectedDamage.toLocaleString()}</td>
+                      <td>{row.criticalDamagePerHit.toLocaleString()}</td>
+                      <td>{formatPercent(row.survivalRate)}</td>
+                      <td>{formatCompactNumber(row.averageHpRemaining)}</td>
+                      <td>{formatCompactNumber(row.averageDamageDealt)}</td>
+                      <td>{formatCompactNumber(row.maximumDamageDealt)}</td>
                       <td>
                         <span className={row.survives ? 'result-pill success' : 'result-pill warning'}>
-                          {row.survives ? 'Survives' : 'Falls'}
+                          {row.survives ? 'Stable' : row.survivalRate > 0 ? 'Risk' : 'Falls'}
                         </span>
                       </td>
                     </tr>
                   ))}
-                  {analysis.rows.length === 0 && (
+                  {simulation.rows.length === 0 && (
                     <tr>
-                      <td colSpan={12}>No saved roster units loaded.</td>
+                      <td colSpan={15}>No saved roster units loaded.</td>
                     </tr>
                   )}
                 </tbody>
@@ -1251,10 +1322,11 @@ function QuestSimulatorPanel({
                     5 hero slots; normal quests use the imported party limit capped at 4.
                   </p>
                 )}
-                <p>Quick Result covers HP, ATK, DEF, threat targeting, enemy hits, barrier points, LCoG slot limits, and expected AoE damage.</p>
-                <p>Enemy critical hits, evasion rolls, healing, special artifacts, fatal-blow effects, conditional spirits, Polonia, and rest time are not included yet.</p>
-                <p>Monte Carlo output remains locked until the random simulation chain is mapped from Ress.</p>
-                {analysis.warnings.map((warning) => (
+                <p>Quick Result uses seeded Ress-style Monte Carlo with enemy crits, mini-boss modifiers, evasion, AoE rolls, healing, fatal-blow saves, barriers, LCoG slot limits, combat spirits, and mapped champion/aura effects.</p>
+                <p>Rest time, break chance, Tamas randomness, and non-combat drop side effects remain outside the MVP simulator.</p>
+                {simulation.roundLimitHit && <p>Round limit hit in {formatPercent(simulation.roundLimitRate)} of runs.</p>}
+                {simulation.poloniaLootAverage > 0 && <p>Polonia loot average: {formatCompactNumber(simulation.poloniaLootAverage)} per run.</p>}
+                {simulation.warnings.map((warning) => (
                   <p key={warning}>{warning}</p>
                 ))}
               </div>
@@ -2316,16 +2388,27 @@ function formatPercent(value: number): string {
   return `${Math.round(value * 100) / 100}%`;
 }
 
-function quickResultForAnalysis(analysis: SimpleQuestAnalysis): {
+function formatCompactNumber(value: number): string {
+  if (!Number.isFinite(value)) {
+    return '0';
+  }
+  return Math.round(value * 100) / 100 === Math.round(value)
+    ? Math.round(value).toLocaleString()
+    : (Math.round(value * 100) / 100).toLocaleString();
+}
+
+function quickResultForSimulation(simulation: RessQuestSimulation): {
   label: string;
   detail: string;
   tone: 'success' | 'warning' | 'danger' | 'empty';
 } {
-  const total = analysis.occupiedCombatants;
-  const survivors = analysis.survivingCombatants;
-  const barrierDetail = analysis.barrier.required > 0
-    ? ` Barrier ${analysis.barrier.met ? 'met' : 'short'}: ${analysis.barrier.available} / ${analysis.barrier.required}.`
+  const total = simulation.occupiedCombatants;
+  const stableSurvivors = simulation.rows.filter((row) => row.survives).length;
+  const anySurvivors = simulation.rows.filter((row) => row.survivalRate > 0).length;
+  const barrierDetail = simulation.barrier.required > 0
+    ? ` Barrier ${simulation.barrier.met ? 'met' : 'short'}: ${formatCompactNumber(simulation.barrier.available)} / ${simulation.barrier.required}.`
     : '';
+  const runDetail = `Win ${formatPercent(simulation.successRate)} over ${simulation.simulations.toLocaleString()} seeded runs.${barrierDetail}`;
 
   if (total === 0) {
     return {
@@ -2335,27 +2418,84 @@ function quickResultForAnalysis(analysis: SimpleQuestAnalysis): {
     };
   }
 
-  if (survivors === total) {
+  if (stableSurvivors === total) {
     return {
       label: 'All survive',
-      detail: `${survivors} / ${total} units survive simple analysis plus expected AoE.${barrierDetail}`,
-      tone: analysis.barrier.met ? 'success' : 'warning'
+      detail: `${stableSurvivors} / ${total} units are stable. ${runDetail}`,
+      tone: simulation.barrier.met ? 'success' : 'warning'
     };
   }
 
-  if (survivors > 0) {
+  if (anySurvivors > 0) {
     return {
       label: 'Some survive',
-      detail: `${survivors} / ${total} units survive simple analysis plus expected AoE.${barrierDetail}`,
+      detail: `${anySurvivors} / ${total} units survive at least one run. ${runDetail}`,
       tone: 'warning'
     };
   }
 
   return {
     label: 'None survive',
-    detail: `0 / ${total} units survive simple analysis plus expected AoE.${barrierDetail}`,
+    detail: `0 / ${total} units survive. ${runDetail}`,
     tone: 'danger'
   };
+}
+
+function ressInnateTier(resolved: ResolvedBuild): number {
+  return resolved.innateSkills[0]?.tier ?? (resolved.hero?.promoted ? 4 : 0);
+}
+
+function combatEffectsFromGear(gear: ResolvedGearLine[]): CombatSpiritEffects & { artifact?: string } {
+  const effects: CombatSpiritEffects & { artifact?: string } = {
+    armadillo: 0,
+    lizard: 0,
+    shark: 0,
+    dinosaur: 0,
+    mundra: 0,
+    artifact: undefined
+  };
+  const artifact = gear.find((line) =>
+    [
+      'Kiku-Ichimonji',
+      'Pickaxe of Greed',
+      'Lone Wolf Cowl',
+      'Rock Stompers',
+      'Backfire Hammer',
+      'Torc of Peace',
+      'Armor of Invincibility',
+      'Wyrmbane Cannon',
+      "Grimar's Collection"
+    ].includes(line.itemName)
+  );
+  effects.artifact = artifact?.itemName;
+
+  for (const line of gear) {
+    const spiritMultiplier = /^(Idol|Totem)$/i.test(line.itemType) ? 2 : 1;
+    const affinityBonus = line.affinityBonuses.some((bonus) => /Ress matched spirit columns/i.test(bonus));
+    for (const source of line.spiritSources) {
+      const normalized = source.toLowerCase();
+      if (normalized.includes('armadillo')) {
+        effects.armadillo += (15 + (affinityBonus ? 10 : 0)) * spiritMultiplier;
+      }
+      if (normalized.includes('dinosaur')) {
+        effects.dinosaur += (25 + (affinityBonus ? 10 : 0)) * spiritMultiplier;
+      }
+      if (normalized.includes('shark')) {
+        effects.shark += (20 + (affinityBonus ? 10 : 0)) * spiritMultiplier;
+      }
+      if (normalized.includes('lizard') || normalized.includes('phoenix')) {
+        effects.lizard += (3 + (affinityBonus ? 2 : 0)) * spiritMultiplier;
+      }
+      if (normalized.includes('ouroboros') || normalized.includes('ouruboros')) {
+        effects.lizard += (4 + (affinityBonus ? 2 : 0)) * spiritMultiplier;
+      }
+      if (normalized.includes('mundra')) {
+        effects.mundra += spiritMultiplier;
+      }
+    }
+  }
+
+  return effects;
 }
 
 function clampNumber(value: number, min: number, max: number): number {

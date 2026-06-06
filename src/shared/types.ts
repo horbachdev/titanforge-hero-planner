@@ -293,6 +293,8 @@ export interface ResolvedChampionBuild {
   leaderSkill: SkillData | null;
   gear: ResolvedGearLine[];
   elementScores: ElementScores;
+  modifiers: PercentModifiers;
+  flatStats: FlatStatModifiers;
   warnings: string[];
   sourceVersion: string;
 }

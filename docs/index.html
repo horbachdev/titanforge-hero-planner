@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TitanForge Hero Planner</title>
+    <meta
+      name="description"
+      content="Electron desktop hero, champion, roster, and quest simulator for Shop Titans builds."
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav" aria-label="Primary navigation">
+        <a class="brand" href="#top">TitanForge</a>
+        <div class="nav-links">
+          <a href="#features">Features</a>
+          <a href="#workflow">Workflow</a>
+          <a href="#simulator">Simulator</a>
+          <a href="#download">Download</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero-section">
+        <div class="hero-copy">
+          <p class="eyebrow">Shop Titans build planning desktop app</p>
+          <h1>TitanForge Hero Planner</h1>
+          <p class="hero-text">
+            A desktop hero, champion, roster, and quest simulator for planning Shop Titans builds without spreadsheet
+            friction.
+          </p>
+          <div class="hero-actions" aria-label="Project actions">
+            <a class="primary-action" href="https://github.com/horbachM-cpu/titanforge-hero-planner/releases">Releases</a>
+            <a class="secondary-action" href="https://github.com/horbachM-cpu/titanforge-hero-planner">Repository</a>
+          </div>
+        </div>
+        <div class="hero-panel" aria-label="Application summary">
+          <div class="window-bar">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="app-preview">
+            <div class="preview-sidebar">
+              <strong>Roster</strong>
+              <span>Champion + 5 heroes</span>
+              <span>Element points</span>
+              <span>Spirit effects</span>
+            </div>
+            <div class="preview-main">
+              <div class="preview-stat success">
+                <span>Quick Result</span>
+                <strong>All survive</strong>
+              </div>
+              <div class="preview-grid">
+                <div><span>ATK</span><strong>1.32M</strong></div>
+                <div><span>DEF</span><strong>84.2K</strong></div>
+                <div><span>HP</span><strong>9.8K</strong></div>
+                <div><span>Runs</span><strong>10K</strong></div>
+              </div>
+              <div class="preview-table">
+                <span>Hero</span><span>Survival</span><span>Damage</span>
+                <strong>Daimyo</strong><strong>100%</strong><strong>High</strong>
+                <strong>Bishop</strong><strong>99.8%</strong><strong>Safe</strong>
+                <strong>Champion</strong><strong>100%</strong><strong>Aura</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="features" class="content-section">
+        <div class="section-heading">
+          <p class="eyebrow">MVP features</p>
+          <h2>Built for real roster planning</h2>
+        </div>
+        <div class="feature-grid">
+          <article>
+            <h3>Hero Builder</h3>
+            <p>Create heroes with class, Titan Soul promotion, level, seeds, skills, gear, quality, elements, spirits, and Starforge toggles.</p>
+          </article>
+          <article>
+            <h3>Champion Builder</h3>
+            <p>Build champions with rank, Champion Soul, familiar, Aurasong, gear, enchants, and mapped combat aura effects.</p>
+          </article>
+          <article>
+            <h3>Build Library</h3>
+            <p>Save heroes and champions as reusable builds, edit them later, and keep rosters connected to saved build references.</p>
+          </article>
+          <article>
+            <h3>Roster Management</h3>
+            <p>Assemble up to five hero slots plus one champion slot, compare team totals, and inspect element point coverage.</p>
+          </article>
+          <article>
+            <h3>Item Browser</h3>
+            <p>Search imported blueprints, enchantments, skills, affinities, inherent elements, inherent spirits, and Starforge data.</p>
+          </article>
+          <article>
+            <h3>JSON Sharing</h3>
+            <p>Export and import versioned build JSON for backups, testing, and sharing controlled build snapshots.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="workflow" class="split-section">
+        <div>
+          <p class="eyebrow">Workflow</p>
+          <h2>From build idea to roster check</h2>
+        </div>
+        <ol class="steps">
+          <li>Create and save hero builds.</li>
+          <li>Create and save champion builds.</li>
+          <li>Assemble a roster from saved builds.</li>
+          <li>Review team stats, elements, spirits, and gear effects.</li>
+          <li>Run a seeded Ress-style quest simulation.</li>
+          <li>Export builds as JSON when needed.</li>
+        </ol>
+      </section>
+
+      <section id="simulator" class="content-section muted">
+        <div class="section-heading">
+          <p class="eyebrow">Combat engine</p>
+          <h2>Ress-style simulation groundwork</h2>
+        </div>
+        <div class="simulator-grid">
+          <div>
+            <h3>Currently modeled</h3>
+            <p>
+              Seeded Monte Carlo runs, enemy crits, AoE rolls, target weighting by threat, barriers, mini-boss modifiers,
+              LCoG slot handling, combat spirits, healing, fatal-blow saves, and mapped champion/Aurasong effects.
+            </p>
+          </div>
+          <div>
+            <h3>Still under validation</h3>
+            <p>
+              Full parity against Ress output rows, every special artifact edge case, Tamas randomness, boosters, rest
+              time, break chance, and non-combat drop side effects.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="download" class="download-section">
+        <div>
+          <p class="eyebrow">Distribution</p>
+          <h2>Desktop-first release plan</h2>
+          <p>
+            TitanForge Hero Planner is built as an Electron desktop app. GitHub Pages hosts this project page; compiled
+            desktop builds should be distributed through GitHub Releases.
+          </p>
+        </div>
+        <div class="download-card">
+          <strong>License</strong>
+          <p>Source available for review. Not open source. Free personal use of official releases is allowed.</p>
+          <a href="https://github.com/horbachM-cpu/titanforge-hero-planner/blob/main/LICENSE.md">Read license</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>
+        TitanForge Hero Planner is not affiliated with, endorsed by, or sponsored by Kabam. Shop Titans is owned by
+        Kabam.
+      </p>
+    </footer>
+  </body>
+</html>

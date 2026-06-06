@@ -65,7 +65,7 @@ describe('App', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Roster Management' }));
     expect(screen.getByRole('heading', { name: 'Roster Management' })).toBeInTheDocument();
-    expect(screen.getByText('Main Roster')).toBeInTheDocument();
+    expect(screen.getAllByText('Main Roster').length).toBeGreaterThan(0);
     expect(screen.getByText('0 / 5')).toBeInTheDocument();
 
     const heroSelect = screen.getAllByLabelText('Load Hero')[0] as HTMLSelectElement;
@@ -92,7 +92,8 @@ describe('App', () => {
     expect(screen.getByLabelText('Quest')).toBeInTheDocument();
     expect(screen.getByLabelText('Defense cap')).toBeInTheDocument();
     expect(screen.getByText('Quick Result')).toBeInTheDocument();
-    expect(screen.getByText('No roster loaded')).toBeInTheDocument();
-    expect(screen.getByText('Enemy hits')).toBeInTheDocument();
+    expect(screen.getAllByText('No roster loaded').length).toBeGreaterThan(0);
+    expect(screen.getByText('Win Rate')).toBeInTheDocument();
+    expect(screen.getByLabelText('Runs')).toBeInTheDocument();
   });
 });
