@@ -65,6 +65,7 @@ pnpm.cmd run dev
 pnpm.cmd run dev:renderer
 pnpm.cmd run test
 pnpm.cmd run build
+pnpm.cmd run build:web
 pnpm.cmd run dist
 pnpm.cmd run import:data
 pnpm.cmd run dump:ress-formulas
@@ -75,6 +76,8 @@ pnpm.cmd run dump:ress-formulas
 ```text
 http://127.0.0.1:5173
 ```
+
+`pnpm.cmd run build:web` builds the browser-hosted GitHub Pages app into `docs/app`.
 
 ## App Workflow
 
@@ -147,18 +150,19 @@ The current test suite covers importer expectations, stat engine behavior, build
 
 ## Distribution Plan
 
-For a desktop app, the main distribution target should be GitHub Releases with packaged Electron builds.
+TitanForge is published in two forms:
 
-GitHub Pages can still be useful for:
+- A browser demo hosted on GitHub Pages.
+- A Windows desktop build distributed through GitHub Releases.
 
-- A project landing page
-- Documentation
-- Screenshots and quick-start instructions
-- A browser-only demo of the renderer, if that path is intentionally supported later
+GitHub Pages URLs:
 
-GitHub Pages is not a replacement for distributing the Electron desktop app.
+```text
+https://horbachm-cpu.github.io/titanforge-hero-planner/
+https://horbachm-cpu.github.io/titanforge-hero-planner/app/
+```
 
-The current Pages entry point is `docs/index.html`.
+The current Pages entry point is `docs/index.html`. The interactive web app is built into `docs/app` with the Vite base URL `/titanforge-hero-planner/app/`.
 
 Build Windows release artifacts with:
 
