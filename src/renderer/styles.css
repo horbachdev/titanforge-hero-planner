@@ -50,6 +50,18 @@ button:disabled {
   opacity: 0.55;
 }
 
+.sr-only {
+  position: absolute;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  margin: -1px;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
 input,
 select,
 textarea {
@@ -1056,9 +1068,55 @@ h3 {
 
 .simulator-toolbar {
   display: grid;
-  grid-template-columns: minmax(180px, 0.8fr) minmax(360px, 1.4fr) minmax(150px, 0.45fr);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 12px;
   align-items: end;
+}
+
+.run-control {
+  display: grid;
+  gap: 6px;
+}
+
+.control-label {
+  color: #53645b;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.run-stepper {
+  display: grid;
+  grid-template-columns: 38px minmax(88px, 1fr) 38px;
+  gap: 6px;
+}
+
+.run-stepper button {
+  width: 38px;
+  min-height: 38px;
+  padding: 0;
+}
+
+.run-stepper input {
+  text-align: center;
+}
+
+.run-presets {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.run-presets button {
+  min-height: 30px;
+  padding: 0 8px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.run-presets button.active {
+  border-color: #2e7f67;
+  color: #174838;
+  background: #e4f3ec;
 }
 
 .simulator-overview {

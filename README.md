@@ -65,6 +65,7 @@ pnpm.cmd run dev
 pnpm.cmd run dev:renderer
 pnpm.cmd run test
 pnpm.cmd run build
+pnpm.cmd run dist
 pnpm.cmd run import:data
 pnpm.cmd run dump:ress-formulas
 ```
@@ -159,6 +160,14 @@ GitHub Pages is not a replacement for distributing the Electron desktop app.
 
 The current Pages entry point is `docs/index.html`.
 
+Build Windows release artifacts with:
+
+```powershell
+pnpm.cmd run dist
+```
+
+The generated artifacts are written to `release/`. For the MVP release, publish them on GitHub as `v0.1.0-mvp` and upload the portable `.exe` plus the `.zip` archive.
+
 ## License
 
 This project is source-available, not open source.
@@ -174,7 +183,7 @@ Near-term:
 - Capture controlled Ress spreadsheet truth rows for full simulator parity tests
 - Add more simulator fixtures for special artifacts and champion edge cases
 - Add screenshots and release downloads to the GitHub Pages landing page
-- Add release packaging
+- Add automated release publishing
 
 Later:
 

@@ -95,5 +95,8 @@ describe('App', () => {
     expect(screen.getAllByText('No roster loaded').length).toBeGreaterThan(0);
     expect(screen.getByText('Win Rate')).toBeInTheDocument();
     expect(screen.getByLabelText('Runs')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '1K' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '10K' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '50K' })).toBeInTheDocument();
   });
 });

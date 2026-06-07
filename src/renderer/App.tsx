@@ -4,6 +4,7 @@ import {
   Crown,
   Database,
   GitCompare,
+  Minus,
   Plus,
   Save,
   Search,
@@ -69,6 +70,7 @@ const ACTIVE_ROSTER_KEY = 'shopTitansHeroBuilder.activeRoster';
 
 const ROSTER_SLOT_COUNT = 5;
 const rosterSlots = [0, 1, 2, 3, 4] as const;
+const SIMULATION_RUN_PRESETS = [1000, 10000, 50000] as const;
 
 type AppTab = 'hero' | 'champion' | 'library' | 'roster' | 'simulator';
 
@@ -1138,17 +1140,49 @@ function QuestSimulatorPanel({
               onChange={(event) => selectedQuest && onDefenseCapChange(selectedQuest.id, event.target.valueAsNumber)}
             />
           </label>
-          <label>
-            Runs
-            <input
-              type="number"
-              min={1000}
-              max={50000}
-              step={1000}
-              value={simulationRuns}
-              onChange={(event) => setSimulationRuns(clampNumber(event.target.valueAsNumber, 1000, 50000))}
-            />
-          </label>
+          <div className="run-control">
+            <span className="control-label">Monte Carlo runs</span>
+            <div className="run-stepper">
+              <button
+                type="button"
+                aria-label="Decrease Monte Carlo runs"
+                onClick={() => setSimulationRuns((current) => clampNumber(current - 1000, 1000, 50000))}
+              >
+                <Minus size={14} />
+              </button>
+              <label>
+                <span className="sr-only">Runs</span>
+                <input
+                  type="number"
+                  min={1000}
+                  max={50000}
+                  step={1000}
+                  value={simulationRuns}
+                  onChange={(event) => setSimulationRuns(clampNumber(event.target.valueAsNumber, 1000, 50000))}
+                />
+              </label>
+              <button
+                type="button"
+                aria-label="Increase Monte Carlo runs"
+                onClick={() => setSimulationRuns((current) => clampNumber(current + 1000, 1000, 50000))}
+              >
+                <Plus size={14} />
+              </button>
+            </div>
+            <div className="run-presets" aria-label="Monte Carlo run presets">
+              {SIMULATION_RUN_PRESETS.map((runs) => (
+                <button
+                  key={runs}
+                  type="button"
+                  className={simulationRuns === runs ? 'active' : ''}
+                  aria-pressed={simulationRuns === runs}
+                  onClick={() => setSimulationRuns(runs)}
+                >
+                  {formatRunCount(runs)}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         {selectedQuest && simulation && (
@@ -2395,6 +2429,10 @@ function formatCompactNumber(value: number): string {
   return Math.round(value * 100) / 100 === Math.round(value)
     ? Math.round(value).toLocaleString()
     : (Math.round(value * 100) / 100).toLocaleString();
+}
+
+function formatRunCount(value: number): string {
+  return value >= 1000 ? `${value / 1000}K` : value.toLocaleString();
 }
 
 function quickResultForSimulation(simulation: RessQuestSimulation): {

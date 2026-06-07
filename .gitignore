@@ -8,6 +8,7 @@ vendor/
 dist/
 build/
 out/
+release/
 coverage/
 
 # Python

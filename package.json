@@ -1,13 +1,16 @@
 {
-  "name": "shop-titans-hero-builder",
+  "name": "titanforge-hero-planner",
   "version": "0.1.0",
-  "description": "Desktop hero builder and simulator groundwork for Shop Titans.",
+  "description": "Electron desktop hero, champion, roster, and quest simulator for Shop Titans builds.",
+  "author": "Marcel Horbach",
   "type": "module",
   "main": "out/main/index.js",
   "scripts": {
     "dev": "electron-vite dev",
     "dev:renderer": "vite src/renderer --host 127.0.0.1 --port 5173",
     "build": "tsc --noEmit && electron-vite build",
+    "package": "pnpm.cmd run build && electron-builder --dir",
+    "dist": "pnpm.cmd run build && electron-builder --win portable zip --x64",
     "start": "electron-vite preview",
     "test": "vitest run --config vitest.config.mjs",
     "import:data": "node scripts/import-data.mjs",
@@ -28,6 +31,7 @@
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "electron": "^33.2.1",
+    "electron-builder": "^26.15.0",
     "jsdom": "^25.0.1",
     "typescript": "^5.7.2",
     "vite": "^5.4.11",
@@ -38,5 +42,40 @@
       "electron",
       "esbuild"
     ]
+  },
+  "build": {
+    "appId": "com.marcelhorbach.titanforge",
+    "productName": "TitanForge Hero Planner",
+    "copyright": "Copyright (c) 2026 Marcel Horbach",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "out/**/*",
+      "package.json",
+      "LICENSE.md",
+      "README.md"
+    ],
+    "asar": true,
+    "win": {
+      "artifactName": "TitanForge-Hero-Planner-${version}-${arch}.${ext}",
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "portable": {
+      "artifactName": "TitanForge-Hero-Planner-${version}-portable-${arch}.${ext}"
+    }
   }
 }
