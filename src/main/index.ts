@@ -8,7 +8,7 @@ function createWindow(): void {
     minWidth: 760,
     minHeight: 720,
     title: 'TitanForge',
-    backgroundColor: '#f6f4ef',
+    backgroundColor: '#0f0d0b',
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       contextIsolation: true,

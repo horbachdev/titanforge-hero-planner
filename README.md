@@ -12,11 +12,10 @@ Version 0.2. Builder, teams and simulator are usable; simulator parity with Ress
 
 What you can do:
 
-- **Heroes** – recreate heroes with class, promotion, level, seeds, skills, gear, quality, elements, spirits and Starforge. Stats update live, edits save automatically.
-- **Champions** – rank, Champion Soul, power-ups, familiar, aurasong and party aura.
-- **Teams** – up to five heroes plus a champion; order decides who joins smaller parties, the 5th slot is for Lost City of Gold.
-- **Simulate** – seeded Monte Carlo fights against any quest, with a plain-language verdict, a win-rate ladder across difficulties and concrete tips (barrier short, who falls and why, timeouts, benched heroes).
-- **Data** – backup/restore, import of builds suggested by AI assistants, item catalog, data version.
+- **Quest board** – your party sits in a dock at the top; below it every quest is a heatmap cell showing how often *this* party wins (quick estimate for all 244 quests in ~2 s, in a background worker). Click a cell for a full 10,000-fight analysis with a verdict, "what to improve" tips and per-unit survival.
+- **Barracks** – heroes and champions as cards. Recruit by picking a class crest.
+- **Character sheet** – six equipment slots like in game. Clicking a slot opens an item drawer that shows the stat and power change of every candidate *before* you equip it (hover previews the full stat list). Quality, elements, spirits, Starforge and skills live there too. Everything saves automatically; delete has Undo.
+- **Ledger** – backup/restore, import of builds suggested by AI assistants, item catalog, data version.
 - **For AI assistants** – an MCP server and a CLI expose the same planner API (see `docs/llm-interface.md`).
 
 Still being validated:
@@ -78,13 +77,13 @@ http://127.0.0.1:5173
 
 ## App Workflow
 
-1. **Heroes** – create your heroes. Everything saves automatically; deleting offers Undo.
-2. **Champions** – add the champion you use.
-3. **Teams** – put heroes and a champion into a team. Order matters for 3- and 4-hero quests.
-4. **Simulate** – pick a zone and difficulty. Read the verdict and the "What to improve" list, use the difficulty ladder to find what the team can farm.
-5. **Data** – download a backup, import builds, or copy a team for an AI assistant.
+1. **Barracks → Recruit hero** – pick the class, then fill the six slots on the character sheet. The drawer shows what each item changes before you equip it.
+2. Add your champion the same way.
+3. **Quest board** – put heroes and the champion into the party dock (click a socket; drag to reorder — order decides who joins 3- and 4-hero quests, the 5th socket is for Lost City of Gold).
+4. Read the heatmap: green is farmable. Click any cell for the detailed fight analysis and tips.
+5. **Ledger** – download a backup, import builds, or copy your party for an AI assistant.
 
-Teams store references to heroes, so improving a hero updates every team it is in. Data saved by v0.1 is picked up automatically, including an unsaved draft from the old builder.
+Parties store references to heroes, so improving a hero updates every party it is in. Data saved by v0.1 is picked up automatically, including an unsaved draft from the old builder.
 
 ## Architecture
 
@@ -93,7 +92,7 @@ Important project areas:
 ```text
 src/main/                 Electron main process
 src/preload/              Electron preload bridge
-src/renderer/             React UI: views/, components/, state/ (storage, store, import/export), sim/ (Web Worker)
+src/renderer/             React UI: views/ (quest board, barracks, character sheets, ledger), components/ (art, drawers, pickers), state/, sim/ (Web Worker + quest scan)
 src/shared/data/          Data source boundary, validator, indexed repository
 src/shared/engine.ts      Stat engine
 src/shared/combat-engine.ts  Ress-style quest simulator

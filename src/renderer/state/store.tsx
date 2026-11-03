@@ -6,13 +6,10 @@ import type { BuildConfig, ChampionBuildConfig, RosterConfig } from '../../share
 import { useGame } from '../data/GameDataContext';
 import { loadLibrary, newTeam, readPrefs, saveLibraryPart, STORAGE_KEYS, writePrefs, type Library } from './storage';
 
-export type Tab = 'heroes' | 'champions' | 'teams' | 'simulate' | 'data';
-export const TABS: Tab[] = ['heroes', 'champions', 'teams', 'simulate', 'data'];
+export type Route = { page: 'quests' } | { page: 'barracks' } | { page: 'ledger' } | { page: 'hero'; id: string } | { page: 'champion'; id: string };
 
 export interface Prefs {
-  tab: Tab;
-  heroId: string;
-  championId: string;
+  route: Route;
   teamId: string;
   sim: {
     zoneKey: string;
@@ -33,7 +30,8 @@ export interface Toast {
 interface StoreValue extends Library {
   prefs: Prefs;
   setPrefs: (patch: Partial<Prefs> | ((current: Prefs) => Partial<Prefs>)) => void;
-  setTab: (tab: Tab) => void;
+  navigate: (route: Route) => void;
+  goBack: () => void;
 
   createHero: (heroClassId?: string) => BuildConfig;
   updateHero: (id: string, updater: (build: BuildConfig) => BuildConfig) => void;
@@ -69,14 +67,12 @@ export function StoreProvider({ children }: { children: ReactNode }): JSX.Elemen
   const [prefs, setPrefsState] = useState<Prefs>(() => {
     const legacyTeam = safeGet(STORAGE_KEYS.activeTeam) ?? '';
     const stored = readPrefs<Prefs>({
-      tab: initial.library.heroes.length > 0 ? 'teams' : 'heroes',
-      heroId: initial.library.heroes[0]?.id ?? '',
-      championId: initial.library.champions[0]?.id ?? '',
+      route: { page: initial.library.heroes.length > 0 ? 'quests' : 'barracks' },
       teamId: legacyTeam,
       sim: { zoneKey: '', questId: '', miniBoss: 'None', runs: DEFAULT_SIMULATION_RUNS, defenseCaps: {} }
     });
-    const hashTab = tabFromHash();
-    return { ...stored, tab: hashTab ?? stored.tab };
+    const route = routeFromHash() ?? (isRoute(stored.route) ? stored.route : { page: 'barracks' as const });
+    return { ...stored, route };
   });
 
   // Persist each slice only when it actually changes.
@@ -95,18 +91,23 @@ export function StoreProvider({ children }: { children: ReactNode }): JSX.Elemen
     if (typeof window === 'undefined') {
       return;
     }
-    if (window.location.hash !== `#/${prefs.tab}`) {
-      window.history.replaceState(null, '', `#/${prefs.tab}`);
+    const hash = routeToHash(prefs.route);
+    if (window.location.hash !== hash) {
+      window.history.replaceState(null, '', hash);
     }
     const onHashChange = () => {
-      const tab = tabFromHash();
-      if (tab) {
-        setPrefsState((current) => (current.tab === tab ? current : { ...current, tab }));
+      const route = routeFromHash();
+      if (route) {
+        setPrefsState((current) => (routeToHash(current.route) === routeToHash(route) ? current : { ...current, route }));
       }
     };
     window.addEventListener('hashchange', onHashChange);
-    return () => window.removeEventListener('hashchange', onHashChange);
-  }, [prefs.tab]);
+    window.addEventListener('popstate', onHashChange);
+    return () => {
+      window.removeEventListener('hashchange', onHashChange);
+      window.removeEventListener('popstate', onHashChange);
+    };
+  }, [prefs.route]);
 
   const notify = useCallback((toast: Omit<Toast, 'id'>) => {
     const id = createId('toast');
@@ -131,12 +132,19 @@ export function StoreProvider({ children }: { children: ReactNode }): JSX.Elemen
     setPrefsState((current) => ({ ...current, ...(typeof patch === 'function' ? patch(current) : patch) }));
   }, []);
 
-  const setTab = useCallback((tab: Tab) => {
-    setPrefsState((current) => ({ ...current, tab }));
+  const navigate = useCallback((route: Route) => {
+    setPrefsState((current) => ({ ...current, route }));
     if (typeof window !== 'undefined') {
-      window.history.pushState(null, '', `#/${tab}`);
+      window.history.pushState(null, '', routeToHash(route));
       window.scrollTo?.({ top: 0 });
     }
+  }, []);
+
+  const goBack = useCallback(() => {
+    setPrefsState((current) => ({
+      ...current,
+      route: { page: current.route.page === 'champion' || current.route.page === 'hero' ? 'barracks' : 'quests' }
+    }));
   }, []);
 
   // Refs let callbacks read the latest lists without re-creating themselves.
@@ -159,7 +167,6 @@ export function StoreProvider({ children }: { children: ReactNode }): JSX.Elemen
         equipment: emptyEquipmentForHero(hero)
       };
       setHeroes((current) => [...current, build]);
-      setPrefsState((current) => ({ ...current, heroId: build.id }));
       return build;
     }
 
@@ -173,7 +180,6 @@ export function StoreProvider({ children }: { children: ReactNode }): JSX.Elemen
         name: champion?.name ?? base.name
       };
       setChampions((current) => [...current, build]);
-      setPrefsState((current) => ({ ...current, championId: build.id }));
       return build;
     }
 
@@ -220,7 +226,8 @@ export function StoreProvider({ children }: { children: ReactNode }): JSX.Elemen
       teams,
       prefs,
       setPrefs,
-      setTab,
+      navigate,
+      goBack,
       toasts,
       notify,
       dismissToast,
@@ -234,7 +241,7 @@ export function StoreProvider({ children }: { children: ReactNode }): JSX.Elemen
         }
         const copy = { ...structuredCloneSafe(source), id: createId('build'), name: `${source.name} copy` };
         setHeroes((current) => [...current, copy]);
-        setPrefsState((current) => ({ ...current, heroId: copy.id }));
+        navigate({ page: 'hero', id: copy.id });
         notify({ message: `Created “${copy.name}”. Changes to it won't affect the original.`, tone: 'success' });
       },
       deleteHero: (id) =>
@@ -264,7 +271,7 @@ export function StoreProvider({ children }: { children: ReactNode }): JSX.Elemen
         }
         const copy = { ...structuredCloneSafe(source), id: createId('champion'), name: `${source.name} copy` };
         setChampions((current) => [...current, copy]);
-        setPrefsState((current) => ({ ...current, championId: copy.id }));
+        navigate({ page: 'champion', id: copy.id });
       },
       deleteChampion: (id) =>
         removeWithUndo(
@@ -322,7 +329,7 @@ export function StoreProvider({ children }: { children: ReactNode }): JSX.Elemen
         setTeams((current) => merge(current, incoming.teams));
       }
     };
-  }, [heroes, champions, teams, prefs, toasts, data, repo, notify, dismissToast, setPrefs, setTab]);
+  }, [heroes, champions, teams, prefs, toasts, data, repo, notify, dismissToast, setPrefs, navigate, goBack]);
 
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
 }
@@ -335,12 +342,26 @@ export function useStore(): StoreValue {
   return value;
 }
 
-function tabFromHash(): Tab | null {
+export function routeToHash(route: Route): string {
+  return route.page === 'hero' || route.page === 'champion' ? `#/${route.page}/${encodeURIComponent(route.id)}` : `#/${route.page}`;
+}
+
+function routeFromHash(): Route | null {
   if (typeof window === 'undefined') {
     return null;
   }
-  const tab = window.location.hash.replace(/^#\/?/, '') as Tab;
-  return TABS.includes(tab) ? tab : null;
+  const [page, id] = window.location.hash.replace(/^#\/?/, '').split('/');
+  if ((page === 'hero' || page === 'champion') && id) {
+    return { page, id: decodeURIComponent(id) };
+  }
+  // v0.2 tab names map onto the new pages.
+  const legacy: Record<string, Route['page']> = { simulate: 'quests', teams: 'quests', heroes: 'barracks', champions: 'barracks', data: 'ledger' };
+  const resolved = page === 'quests' || page === 'barracks' || page === 'ledger' ? page : legacy[page];
+  return resolved ? ({ page: resolved } as Route) : null;
+}
+
+function isRoute(value: unknown): value is Route {
+  return Boolean(value && typeof value === 'object' && typeof (value as Route).page === 'string');
 }
 
 function structuredCloneSafe<T>(value: T): T {

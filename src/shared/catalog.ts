@@ -46,7 +46,7 @@ export function questLabel(quest: QuestData): string {
   return `${formatZone(quest.zone)} · ${quest.type === 'Boss' ? 'Boss · ' : ''}${quest.difficulty}`;
 }
 
-export type ZoneGroup = 'Zones' | 'Bosses' | 'Lost City of Gold' | 'Towers' | 'Events & Specials';
+export type ZoneGroup = 'Zones' | 'Lost City of Gold' | 'Bosses' | 'Towers';
 
 export interface QuestZone {
   key: string;
@@ -76,8 +76,10 @@ export function questZones(data: GameData): QuestZone[] {
         DIFFICULTY_ORDER.indexOf(left.difficulty) - DIFFICULTY_ORDER.indexOf(right.difficulty)
     );
   }
-  return [...zones.values()];
+  return [...zones.values()].sort((left, right) => GROUP_ORDER.indexOf(left.group) - GROUP_ORDER.indexOf(right.group));
 }
+
+const GROUP_ORDER: ZoneGroup[] = ['Zones', 'Lost City of Gold', 'Bosses', 'Towers'];
 
 function zoneGroup(quest: QuestData, data: GameData): ZoneGroup {
   if (/lost city of gold/i.test(quest.zone)) {
@@ -87,10 +89,7 @@ function zoneGroup(quest: QuestData, data: GameData): ZoneGroup {
     return 'Towers';
   }
   const hasNormal = data.quests.some((entry) => entry.zone === quest.zone && entry.type === 'Normal');
-  if (hasNormal) {
-    return 'Zones';
-  }
-  return quest.isBoss && quest.powerRequirement > 0 ? 'Bosses' : 'Events & Specials';
+  return hasNormal ? 'Zones' : 'Bosses';
 }
 
 export function normalizeEnchantmentName(value: string): string {

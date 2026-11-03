@@ -9,15 +9,23 @@ import { useGame } from '../data/GameDataContext';
 import { useStore } from '../state/store';
 import { createBackup, parseImport, teamForAssistant, type ImportResult } from '../state/transfer';
 
-export function DataView(): JSX.Element {
+export function LedgerView(): JSX.Element {
   return (
-    <div className="view data-layout">
-      <div className="data-column">
-        <BackupCard />
-        <AssistantCard />
-        <SourceCard />
+    <div className="page">
+      <header className="page-header">
+        <div>
+          <p className="eyebrow">Records & tools</p>
+          <h1>Ledger</h1>
+        </div>
+      </header>
+      <div className="ledger-layout">
+        <div className="data-column">
+          <BackupCard />
+          <AssistantCard />
+          <SourceCard />
+        </div>
+        <ItemCatalog />
       </div>
-      <ItemCatalog />
     </div>
   );
 }
