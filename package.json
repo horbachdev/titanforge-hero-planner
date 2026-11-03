@@ -1,6 +1,6 @@
 {
   "name": "titanforge-hero-planner",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Electron desktop hero, champion, roster, and quest simulator for Shop Titans builds.",
   "author": "Marcel Horbach",
   "type": "module",
@@ -16,7 +16,10 @@
     "start": "electron-vite preview",
     "test": "vitest run --config vitest.config.mjs",
     "import:data": "tsx scripts/import-data.mjs",
-    "dump:ress-formulas": "node scripts/dump-ress-formulas.mjs"
+    "dump:ress-formulas": "node scripts/dump-ress-formulas.mjs",
+    "mcp": "tsx src/mcp/server.ts",
+    "titanforge": "tsx src/mcp/cli.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.32.2",

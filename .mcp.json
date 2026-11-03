@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "titanforge": {
+      "command": "pnpm",
+      "args": ["-s", "mcp"]
+    }
+  }
+}
