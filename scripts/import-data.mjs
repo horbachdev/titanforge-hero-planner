@@ -1,7 +1,13 @@
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as XLSXModule from 'xlsx';
+import { validateGameData } from '../src/shared/data/validate.ts';
+
+// Usage:
+//   pnpm import:data                       fetch, validate and write game-data.json
+//   pnpm import:data --check               only report whether upstream has a newer version
+//   pnpm import:data --summary out.md      also write a Markdown change summary (used by CI)
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const rootDir = resolve(__dirname, '..');
@@ -13,8 +19,24 @@ const OFFICIAL_TABS = ['Home', 'Blueprints', 'Heroes', 'Hero Levels', 'Skills', 
 const OFFICIAL_CSV_TABS = OFFICIAL_TABS.filter((tab) => tab !== 'Champions');
 const OUTPUT_PATH = resolve(rootDir, 'src/data/generated/game-data.json');
 const RAW_RESS_PATH = resolve(rootDir, 'data/raw/ress-hero-quest-simulator.xlsx');
+const ALIASES_PATH = resolve(rootDir, 'data/id-aliases.json');
+const args = process.argv.slice(2);
+const CHECK_ONLY = args.includes('--check');
+const SUMMARY_PATH = args.includes('--summary') ? resolve(args[args.indexOf('--summary') + 1] ?? 'data-update-summary.md') : '';
 
 async function main() {
+  const previous = await readPreviousData();
+
+  if (CHECK_ONLY) {
+    const homeRows = parseCsv(await fetchCsv(OFFICIAL_SHEET_ID, 'Home'));
+    const upstream = readMetadata(homeRows, '').officialSpreadsheetVersion;
+    const local = previous?.metadata?.officialSpreadsheetVersion ?? 'none';
+    const updateAvailable = upstream !== local;
+    process.stdout.write(`local:    ${local}\nupstream: ${upstream}\n${updateAvailable ? 'UPDATE AVAILABLE' : 'up to date'}\n`);
+    process.exitCode = updateAvailable ? 10 : 0;
+    return;
+  }
+
   const sheets = new Map();
 
   for (const tab of OFFICIAL_CSV_TABS) {
@@ -35,6 +57,7 @@ async function main() {
   const heroes = linkHeroMetadata(parseHeroes(sheets.get('Heroes') ?? []), skills);
   const data = {
     metadata,
+    aliases: await readAliases(),
     heroes,
     heroLevels: parseHeroLevels(sheets.get('Hero Levels') ?? []),
     items: parseItems(sheets.get('Blueprints') ?? []),
@@ -44,15 +67,99 @@ async function main() {
     quests: enrichQuestsWithRessMetadata(parseQuests(sheets.get('Quests') ?? []), ressWorkbook)
   };
 
+  const report = validateGameData(data);
+  for (const warning of report.warnings) {
+    process.stderr.write(`Warning: ${warning.path}: ${warning.message}\n`);
+  }
+  if (!report.ok) {
+    for (const error of report.errors) {
+      process.stderr.write(`Error: ${error.path}: ${error.message}\n`);
+    }
+    throw new Error(
+      `Refusing to write game data: ${report.errors.length} validation error(s). The upstream spreadsheet layout probably changed; the existing data file was left untouched.`
+    );
+  }
+
+  if (previous && withoutTimestamp(previous) === withoutTimestamp(data)) {
+    process.stdout.write('Game data is unchanged; nothing written.\n');
+    return;
+  }
+
   await mkdir(dirname(OUTPUT_PATH), { recursive: true });
   await writeFile(OUTPUT_PATH, `${JSON.stringify(data, null, 2)}\n`, 'utf8');
   process.stdout.write(`Wrote ${OUTPUT_PATH}\n`);
 
+  const summary = summarizeChanges(previous, data);
+  process.stdout.write(`\n${summary}\n`);
+  if (SUMMARY_PATH) {
+    await writeFile(SUMMARY_PATH, `${summary}\n`, 'utf8');
+  }
+
   await writeRessWorkbook(ressWorkbook);
 }
 
-async function fetchCsv(sheetId, tab) {
-  const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tab)}`;
+function withoutTimestamp(data) {
+  return JSON.stringify({ ...data, metadata: { ...data.metadata, generatedAt: '' } });
+}
+
+async function readPreviousData() {
+  try {
+    return JSON.parse(await readFile(OUTPUT_PATH, 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
+async function readAliases() {
+  try {
+    const { $comment: _comment, ...aliases } = JSON.parse(await readFile(ALIASES_PATH, 'utf8'));
+    return aliases;
+  } catch {
+    return {};
+  }
+}
+
+function summarizeChanges(previous, next) {
+  const lines = [
+    '### Game data changes',
+    '',
+    `- Official spreadsheet: \`${previous?.metadata?.officialSpreadsheetVersion ?? 'none'}\` → \`${next.metadata.officialSpreadsheetVersion}\``,
+    `- Ress simulator workbook: \`${previous?.metadata?.ressSpreadsheetVersion ?? 'none'}\` → \`${next.metadata.ressSpreadsheetVersion}\``,
+    '',
+    '| Collection | Before | After | Added | Removed |',
+    '| --- | ---: | ---: | --- | --- |'
+  ];
+  const removedTotal = [];
+  for (const key of ['heroes', 'items', 'skills', 'champions', 'enchantments', 'quests']) {
+    const before = new Map((previous?.[key] ?? []).map((entry) => [entry.id, entry]));
+    const after = new Map(next[key].map((entry) => [entry.id, entry]));
+    const added = [...after.keys()].filter((id) => !before.has(id));
+    const removed = [...before.keys()].filter((id) => !after.has(id));
+    removedTotal.push(...removed.map((id) => `${key}/${id}`));
+    lines.push(`| ${key} | ${before.size} | ${after.size} | ${listPreview(added, after)} | ${listPreview(removed, before)} |`);
+  }
+  if (removedTotal.length > 0) {
+    lines.push(
+      '',
+      `> ⚠️ ${removedTotal.length} id(s) disappeared. Saved builds that use them will show a warning. If an entity was only renamed, add an entry to \`data/id-aliases.json\`.`
+    );
+  }
+  return lines.join('\n');
+}
+
+function listPreview(ids, map) {
+  if (ids.length === 0) {
+    return '–';
+  }
+  const names = ids.slice(0, 6).map((id) => map.get(id)?.name ?? map.get(id)?.zone ?? id);
+  return `${names.join(', ')}${ids.length > 6 ? ` (+${ids.length - 6})` : ''}`;
+}
+
+// `headers=1` is essential: without it Google's gviz endpoint *guesses* how
+// many rows form the header and, for mixed-type columns, merges dozens of data
+// rows into it (this broke the import at client v26.9.1).
+async function fetchCsv(sheetId, tab, headers = 1) {
+  const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&headers=${headers}&sheet=${encodeURIComponent(tab)}`;
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`Failed to fetch ${tab}: ${response.status} ${response.statusText}`);
@@ -87,7 +194,7 @@ function readXlsxRows(workbook, tab) {
 
 async function readRessVersion() {
   try {
-    const csv = await fetchCsv(RESS_SHEET_ID, 'Intro');
+    const csv = await fetchCsv(RESS_SHEET_ID, 'Intro', 0);
     const rows = parseCsv(csv);
     const text = rows.flat().join(' ');
     return text.match(/Latest version\s+(V[\d.]+)/i)?.[1] ?? text.match(/This version\s+(V[\d.]+)/i)?.[1] ?? 'V9.4';
@@ -95,18 +202,6 @@ async function readRessVersion() {
     process.stderr.write(`Warning: could not read Ress version (${error.message}).\n`);
     return 'V9.4';
   }
-}
-
-async function downloadRessWorkbook() {
-  const url = `https://docs.google.com/spreadsheets/d/${RESS_SHEET_ID}/export?format=xlsx`;
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`Failed to download Ress workbook: ${response.status} ${response.statusText}`);
-  }
-  const bytes = Buffer.from(await response.arrayBuffer());
-  await mkdir(dirname(RAW_RESS_PATH), { recursive: true });
-  await writeFile(RAW_RESS_PATH, bytes);
-  process.stdout.write(`Wrote ${RAW_RESS_PATH}\n`);
 }
 
 async function writeRessWorkbook(workbook) {

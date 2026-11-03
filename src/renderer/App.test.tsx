@@ -1,102 +1,147 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it } from 'vitest';
+import rawGameData from '../data/generated/game-data.json';
+import { createPlannerApi } from '../shared/api/planner';
+import { GameRepository } from '../shared/data/repository';
+import { memoryDataSource } from '../shared/data/source';
+import type { GameData } from '../shared/types';
 import { App } from './App';
+import { STORAGE_KEYS } from './state/storage';
+
+const data = rawGameData as unknown as GameData;
+const source = memoryDataSource(data);
+const api = createPlannerApi(new GameRepository(data));
+
+function renderApp(hash = '') {
+  window.location.hash = hash;
+  return render(<App source={source} />);
+}
+
+function seedParty(): { tankId: string } {
+  const heroes = [
+    api.evaluateHero({ name: 'Tank', heroClass: 'Mercenary', level: 40 }).build,
+    api.evaluateHero({ name: 'Caster', heroClass: 'Mage', level: 40 }).build
+  ];
+  const champion = api.evaluateChampion({ champion: 'Argon' }).build;
+  localStorage.setItem(STORAGE_KEYS.heroes, JSON.stringify(heroes));
+  localStorage.setItem(STORAGE_KEYS.champions, JSON.stringify([champion]));
+  localStorage.setItem(
+    STORAGE_KEYS.teams,
+    JSON.stringify([
+      {
+        schemaVersion: 1,
+        id: 'team-1',
+        name: 'Farm Party',
+        heroBuildIds: [heroes[0].id, heroes[1].id, null, null, null],
+        championBuildId: champion.id
+      }
+    ])
+  );
+  return { tankId: heroes[0].id };
+}
+
+const storedHeroes = () =>
+  JSON.parse(localStorage.getItem(STORAGE_KEYS.heroes) ?? '[]') as Array<{ name: string; equipment: Array<{ itemId: string }> }>;
 
 describe('App', () => {
   beforeEach(() => {
-    window.localStorage.clear();
+    localStorage.clear();
   });
 
-  it('renders the create hero workflow with save, load, and reset', () => {
-    render(<App />);
+  it('welcomes a new player and recruits a hero by class', async () => {
+    renderApp();
+    expect(await screen.findByRole('heading', { name: 'Bring your heroes over from the game' })).toBeInTheDocument();
 
-    expect(screen.getByRole('button', { name: 'Create Hero' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Create Hero' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Save Hero/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Reset' })).toBeInTheDocument();
-    expect(screen.getByLabelText('Load Hero')).toBeDisabled();
+    fireEvent.click(screen.getByRole('button', { name: /Recruit your first hero/ }));
+    const dialog = screen.getByRole('dialog', { name: /choose a class/ });
+    fireEvent.click(within(dialog).getByRole('button', { name: /Samurai/ }));
 
-    fireEvent.change(screen.getByDisplayValue('New Build'), { target: { value: 'Roster Hero A' } });
-    fireEvent.click(screen.getByRole('button', { name: /Save Hero/i }));
-
-    expect(screen.getByLabelText('Load Hero')).not.toBeDisabled();
-    expect(screen.getByText(/1 saved/i)).toBeInTheDocument();
+    const name = await screen.findByLabelText('Hero name');
+    expect(name).toHaveValue('Samurai');
+    fireEvent.change(name, { target: { value: 'Kenji' } });
+    expect(storedHeroes()[0].name).toBe('Kenji');
   });
 
-  it('lists saved heroes in the library and edit opens the hero builder', () => {
-    render(<App />);
+  it('equips an item from the slot drawer and previews stats on hover', async () => {
+    renderApp();
+    fireEvent.click(await screen.findByRole('button', { name: /Recruit your first hero/ }));
+    fireEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: /Soldier/ }));
 
-    fireEvent.change(screen.getByDisplayValue('New Build'), { target: { value: 'Edit Me Hero' } });
-    fireEvent.click(screen.getByRole('button', { name: /Save Hero/i }));
-    fireEvent.click(screen.getByRole('button', { name: 'Library' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Slot 1: empty' }));
+    const drawer = screen.getByRole('dialog', { name: 'Slot 1' });
+    const options = within(drawer)
+      .getAllByRole('button')
+      .filter((button) => button.classList.contains('item-option'));
 
-    expect(screen.getByRole('heading', { name: 'Library' })).toBeInTheDocument();
-    expect(screen.getByText('Edit Me Hero')).toBeInTheDocument();
+    fireEvent.mouseEnter(options[0]);
+    expect(screen.getByText(/Previewing/)).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Edit' }));
-    expect(screen.getByRole('heading', { name: 'Create Hero' })).toBeInTheDocument();
-    expect(screen.getByDisplayValue('Edit Me Hero')).toBeInTheDocument();
+    fireEvent.click(options[0]);
+    expect(storedHeroes()[0].equipment[0].itemId).not.toBe('');
+    expect(within(drawer).getByRole('radiogroup', { name: 'Quality' })).toBeInTheDocument();
   });
 
-  it('saves champions and exposes them in the library', () => {
-    render(<App />);
+  it('shows win chances on the quest board and explains a selected quest', async () => {
+    seedParty();
+    renderApp('#/quests');
 
-    fireEvent.click(screen.getByRole('button', { name: 'Create Champion' }));
-    expect(screen.getByRole('heading', { name: 'Create Champion' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Save Champion/i })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Pick a quest' })).toBeInTheDocument();
+    const cell = await screen.findByRole('cell', { name: /Howling Woods Normal Easy: \d+% win chance/ }, { timeout: 15000 });
+    fireEvent.click(cell);
 
-    fireEvent.change(screen.getByDisplayValue('Champion 1'), { target: { value: 'Roster Champion A' } });
-    fireEvent.click(screen.getByRole('button', { name: /Save Champion/i }));
-    fireEvent.click(screen.getByRole('button', { name: 'Library' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Champions' }));
+    expect(await screen.findByText('win chance', {}, { timeout: 5000 })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Howling Woods' })).toBeInTheDocument();
+    expect(screen.getByText('Your units')).toBeInTheDocument();
+  }, 20000);
 
-    expect(screen.getByText('Roster Champion A')).toBeInTheDocument();
+  it('recovers an unsaved draft from v0.1', async () => {
+    const draft = api.evaluateHero({ name: 'Old Draft', heroClass: 'Soldier' }).build;
+    localStorage.setItem(STORAGE_KEYS.legacyHeroDraft, JSON.stringify(draft));
+    renderApp('#/barracks');
+
+    expect(await screen.findByText('Old Draft (recovered draft)')).toBeInTheDocument();
+    expect(localStorage.getItem(STORAGE_KEYS.legacyHeroDraft)).toBeNull();
   });
 
-  it('builds a roster from saved hero and champion references', () => {
-    render(<App />);
+  it('deletes a hero with undo and restores the party slot', async () => {
+    const { tankId } = seedParty();
+    renderApp(`#/hero/${tankId}`);
 
-    fireEvent.change(screen.getByDisplayValue('New Build'), { target: { value: 'Roster Hero A' } });
-    fireEvent.click(screen.getByRole('button', { name: /Save Hero/i }));
+    await screen.findByLabelText('Hero name');
+    fireEvent.click(screen.getByRole('button', { name: /Delete/ }));
+    expect(storedHeroes()).toHaveLength(1);
+    expect(JSON.parse(localStorage.getItem(STORAGE_KEYS.teams) ?? '[]')[0].heroBuildIds[0]).toBeNull();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Create Champion' }));
-    fireEvent.change(screen.getByDisplayValue('Champion 1'), { target: { value: 'Roster Champion A' } });
-    fireEvent.click(screen.getByRole('button', { name: /Save Champion/i }));
-
-    fireEvent.click(screen.getByRole('button', { name: 'Roster Management' }));
-    expect(screen.getByRole('heading', { name: 'Roster Management' })).toBeInTheDocument();
-    expect(screen.getAllByText('Main Roster').length).toBeGreaterThan(0);
-    expect(screen.getByText('0 / 5')).toBeInTheDocument();
-
-    const heroSelect = screen.getAllByLabelText('Load Hero')[0] as HTMLSelectElement;
-    const heroOption = Array.from(heroSelect.options).find((option) => option.textContent === 'Roster Hero A');
-    expect(heroOption).toBeDefined();
-    fireEvent.change(heroSelect, { target: { value: heroOption?.value } });
-
-    const championSelect = screen.getByLabelText('Load Champion') as HTMLSelectElement;
-    const championOption = Array.from(championSelect.options).find((option) => option.textContent === 'Roster Champion A');
-    expect(championOption).toBeDefined();
-    fireEvent.change(championSelect, { target: { value: championOption?.value } });
-
-    expect(screen.getByText('1 / 5')).toBeInTheDocument();
-    expect(screen.getAllByText('Roster Champion A').length).toBeGreaterThan(0);
+    act(() => {
+      fireEvent.click(screen.getByRole('button', { name: 'Undo' }));
+    });
+    expect(storedHeroes()).toHaveLength(2);
+    expect(JSON.parse(localStorage.getItem(STORAGE_KEYS.teams) ?? '[]')[0].heroBuildIds[0]).toBe(tankId);
   });
 
-  it('opens the quest simulator with the active roster controls', () => {
-    render(<App />);
+  it('imports a team suggested by an AI assistant', async () => {
+    renderApp('#/ledger');
+    const box = await screen.findByLabelText(/paste JSON/i);
+    fireEvent.change(box, {
+      target: {
+        value: JSON.stringify({
+          name: 'AI Team',
+          heroes: [{ heroClass: 'Samurai', level: 30 }, { heroClass: 'Cleric' }],
+          champion: { champion: 'Argon' }
+        })
+      }
+    });
 
-    fireEvent.click(screen.getByRole('button', { name: 'Quest Simulator' }));
+    expect(screen.getByText(/Ready to import 2 heroes, 1 champion, 1 team/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Import' }));
+    expect(JSON.parse(localStorage.getItem(STORAGE_KEYS.teams) ?? '[]').some((team: { name: string }) => team.name === 'AI Team')).toBe(true);
+  });
 
-    expect(screen.getByRole('heading', { name: 'Quest Simulator' })).toBeInTheDocument();
-    expect(screen.getByLabelText('Roster')).toBeInTheDocument();
-    expect(screen.getByLabelText('Quest')).toBeInTheDocument();
-    expect(screen.getByLabelText('Defense cap')).toBeInTheDocument();
-    expect(screen.getByText('Quick Result')).toBeInTheDocument();
-    expect(screen.getAllByText('No roster loaded').length).toBeGreaterThan(0);
-    expect(screen.getByText('Win Rate')).toBeInTheDocument();
-    expect(screen.getByLabelText('Runs')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '1K' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '10K' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '50K' })).toBeInTheDocument();
+  it('explains import errors with suggestions', async () => {
+    renderApp('#/ledger');
+    const box = await screen.findByLabelText(/paste JSON/i);
+    fireEvent.change(box, { target: { value: JSON.stringify({ heroes: [{ heroClass: 'Soldier', gear: [{ item: 'aegis' }] }] }) } });
+    expect(screen.getByText('Can’t import this')).toBeInTheDocument();
+    expect(screen.getByText(/Did you mean/)).toBeInTheDocument();
   });
 });

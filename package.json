@@ -1,6 +1,6 @@
 {
   "name": "titanforge-hero-planner",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Electron desktop hero, champion, roster, and quest simulator for Shop Titans builds.",
   "author": "Marcel Horbach",
   "type": "module",
@@ -15,16 +15,23 @@
     "preview:web": "vite preview --host 127.0.0.1 --port 4173 --outDir docs",
     "start": "electron-vite preview",
     "test": "vitest run --config vitest.config.mjs",
-    "import:data": "node scripts/import-data.mjs",
-    "dump:ress-formulas": "node scripts/dump-ress-formulas.mjs"
+    "import:data": "tsx scripts/import-data.mjs",
+    "dump:ress-formulas": "node scripts/dump-ress-formulas.mjs",
+    "mcp": "tsx src/mcp/server.ts",
+    "titanforge": "tsx src/mcp/cli.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@fontsource-variable/fraunces": "5.3.0",
+    "@fontsource-variable/manrope": "5.3.0",
+    "@modelcontextprotocol/sdk": "1.32.2",
     "@vitejs/plugin-react": "^4.3.4",
     "electron-vite": "^2.3.0",
     "lucide-react": "^0.468.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "zod": "4.6.7"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",
@@ -35,6 +42,7 @@
     "electron": "^33.2.1",
     "electron-builder": "^26.15.0",
     "jsdom": "^25.0.1",
+    "tsx": "4.23.15",
     "typescript": "^5.7.2",
     "vite": "^5.4.11",
     "vitest": "^2.1.8"

@@ -8,21 +8,15 @@ This project is not affiliated with, endorsed by, or sponsored by Kabam. Shop Ti
 
 ## Current Status
 
-This is an MVP. The hero/champion builder and roster workflow are usable, while simulator parity is still being validated against Ress' spreadsheet and Apps Script logic.
+Version 0.2. Builder, teams and simulator are usable; simulator parity with Ress' spreadsheet is still being validated.
 
-Implemented:
+What you can do:
 
-- Electron + Vite + React + TypeScript desktop app
-- Local JSON data generated from the official Shop Titans data spreadsheet
-- Hero builder with class, promotion, level, seeds, skills, gear, quality, element, spirit, and per-item Starforge toggle
-- Champion builder with rank, level, Champion Soul, seeds, familiar, Aurasong, gear, enchants, and champion item effects
-- Build library for saved heroes and champions
-- Roster management with up to five hero slots plus one champion slot
-- Team totals, element point display, and stat summaries
-- Build comparison
-- Item database browser
-- Versioned JSON export/import
-- Ress-style quest simulator with seeded Monte Carlo runs, enemy crits, AoE rolls, barriers, mini-boss modifiers, LCoG slot handling, combat spirits, healing, fatal-blow saves, and mapped champion/Aurasong effects
+- **Quest board** – your party sits in a dock at the top; below it every quest is a heatmap cell showing how often *this* party wins (quick estimate for all 244 quests in ~2 s, in a background worker). Click a cell for a full 10,000-fight analysis with a verdict, "what to improve" tips and per-unit survival.
+- **Barracks** – heroes and champions as cards. Recruit by picking a class crest.
+- **Character sheet** – six equipment slots like in game. Clicking a slot opens an item drawer that shows the stat and power change of every candidate *before* you equip it (hover previews the full stat list). Quality, elements, spirits, Starforge and skills live there too. Everything saves automatically; delete has Undo.
+- **Ledger** – backup/restore, import of builds suggested by AI assistants, item catalog, data version.
+- **For AI assistants** – an MCP server and a CLI expose the same planner API (see `docs/llm-interface.md`).
 
 Still being validated:
 
@@ -33,16 +27,14 @@ Still being validated:
 
 ## Data Sources
 
-Generated data lives in `src/data/generated/game-data.json`.
+There is no public Shop Titans API. Game data comes from:
 
-The importer uses:
-
-- Official Shop Titans Data Spreadsheet, currently tracked as `client v26.5.0`
-- Ress' Hero & Quest Simulator workbook, currently tracked as `V9.4`
-- Ress Apps Script snippets copied from the live sheet for Monte Carlo combat logic inspection
+- Kabam's official Shop Titans Data Spreadsheet (currently `client v26.9.1`)
+- Ress' Hero & Quest Simulator workbook (`V9.4`) for quest combat metadata
+- Ress Apps Script snippets for the Monte Carlo combat logic
 - ST-Central combat references for mechanic explanations
 
-The app consumes local JSON at runtime. It does not fetch live Google Sheet data while the user is using the app.
+`pnpm import:data` turns them into `src/data/generated/game-data.json`, validates the result and refuses to overwrite good data with broken data. A scheduled GitHub Action (`docs/github-workflows/`, ready to enable) checks for new game versions every week and opens a pull request when the data changed. The app loads data through a `GameDataSource` boundary, so a hosted JSON or a future official API can be plugged in without touching the UI or engine. Details: `docs/data-sources.md`.
 
 ## Requirements
 
@@ -64,10 +56,14 @@ Useful commands:
 pnpm.cmd run dev
 pnpm.cmd run dev:renderer
 pnpm.cmd run test
+pnpm.cmd run typecheck
 pnpm.cmd run build
 pnpm.cmd run build:web
 pnpm.cmd run dist
-pnpm.cmd run import:data
+pnpm.cmd run import:data            # refresh + validate game data
+pnpm.cmd run import:data --check    # only check for a newer game version
+pnpm.cmd run mcp                    # MCP server for AI assistants
+pnpm.cmd run titanforge             # planner API on the command line
 pnpm.cmd run dump:ress-formulas
 ```
 
@@ -81,17 +77,13 @@ http://127.0.0.1:5173
 
 ## App Workflow
 
-Recommended MVP workflow:
+1. **Barracks → Recruit hero** – pick the class, then fill the six slots on the character sheet. The drawer shows what each item changes before you equip it.
+2. Add your champion the same way.
+3. **Quest board** – put heroes and the champion into the party dock (click a socket; drag to reorder — order decides who joins 3- and 4-hero quests, the 5th socket is for Lost City of Gold).
+4. Read the heatmap: green is farmable. Click any cell for the detailed fight analysis and tips.
+5. **Ledger** – download a backup, import builds, or copy your party for an AI assistant.
 
-1. Create a hero in the hero builder.
-2. Save it to the build library.
-3. Create a champion in the champion builder.
-4. Save it to the champion library.
-5. Assemble one or more rosters from saved heroes and champions.
-6. Open the quest simulator and select a roster, quest, mini-boss modifier, defense cap, and run count.
-7. Export builds as JSON when you want to share or back them up.
-
-Rosters store references to saved builds. This keeps old rosters stable and makes it clear when a saved build is being edited.
+Parties store references to heroes, so improving a hero updates every party it is in. Data saved by v0.1 is picked up automatically, including an unsaved draft from the old builder.
 
 ## Architecture
 
@@ -100,16 +92,21 @@ Important project areas:
 ```text
 src/main/                 Electron main process
 src/preload/              Electron preload bridge
-src/renderer/             React renderer app and UI
-src/shared/               Pure TypeScript data, stat, import/export, and combat logic
-src/data/generated/       Generated game data consumed by the app
+src/renderer/             React UI: views/ (quest board, barracks, character sheets, ledger), components/ (art, drawers, pickers), state/, sim/ (Web Worker + quest scan)
+src/shared/data/          Data source boundary, validator, indexed repository
+src/shared/engine.ts      Stat engine
+src/shared/combat-engine.ts  Ress-style quest simulator
+src/shared/team.ts        Team pipeline + plain-language analysis (shared by UI, API, CLI)
+src/shared/api/           LLM-friendly planner API
+src/mcp/                  MCP server and CLI
+src/data/generated/       Generated game data
 scripts/                  Data import and Ress formula dump scripts
-docs/                     Formula notes and combat simulator calc specs
-data/fixtures/            Test fixtures for simulator parity
-data/raw/                 Local raw spreadsheet artifacts
+data/id-aliases.json      Old → new ids for entities renamed upstream
+docs/                     Formula notes, simulator spec, data sources, LLM interface
+docs/github-workflows/    CI and weekly data update workflows (move to .github/workflows to enable)
 ```
 
-Core principle: data and logic stay separate. New game data should be imported into JSON instead of hardcoded into the stat engine.
+Core principles: data and logic stay separate, and nothing above `src/shared/data` knows where the data came from. New game data is imported into JSON instead of hardcoded into the stat engine.
 
 ## Simulator Notes
 
@@ -137,6 +134,8 @@ See:
 - `docs/combat-simulator-calc-spec.md`
 - `docs/formula-notes.md`
 - `docs/ress-formula-index.md`
+- `docs/data-sources.md`
+- `docs/llm-interface.md`
 
 ## Testing
 
@@ -146,7 +145,7 @@ Run:
 pnpm.cmd run test
 ```
 
-The current test suite covers importer expectations, stat engine behavior, build import/export, UI workflows, and deterministic combat formulas. Some Ress parity tests remain marked as TODO until stable input/output truth rows are captured from the live spreadsheet.
+The test suite covers data validation and sources, the stat engine, the planner API (including parity with the UI pipeline), UI workflows (autosave, pickers, simulation, migration, undo, AI import), and deterministic combat formulas. Some Ress parity tests remain marked as TODO until stable input/output truth rows are captured from the live spreadsheet.
 
 ## Distribution Plan
 
@@ -185,6 +184,7 @@ See `LICENSE.md`.
 Near-term:
 
 - Capture controlled Ress spreadsheet truth rows for full simulator parity tests
+- Item icons (Kabam's fan kit) instead of initials
 - Add more simulator fixtures for special artifacts and champion edge cases
 - Add screenshots and release downloads to the GitHub Pages landing page
 - Add automated release publishing
@@ -193,5 +193,4 @@ Later:
 
 - More polished simulator result views
 - Build sharing links or portable build bundles
-- Automated data update workflow
 - Better visual data browser for items, skills, spirits, elements, and champions
