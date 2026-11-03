@@ -153,7 +153,7 @@ export function createPlannerApi(loaded: LoadedGameData | GameRepository): Plann
     const match = result as ResolveMatch<NonNullable<typeof result.entity>>;
     if (match.matchedBy === 'partial' || match.matchedBy === 'alias' || match.matchedBy === 'normalized') {
       const name = (match.entity as { name?: string }).name ?? (match.entity as { id: string }).id;
-      if (name.toLowerCase() !== input.trim().toLowerCase()) {
+      if (!isTrivialMatch(name, input)) {
         notes.push(`Interpreted ${context} "${input}" as "${name}".`);
       }
     }
@@ -483,16 +483,14 @@ export function createPlannerApi(loaded: LoadedGameData | GameRepository): Plann
       if (kind === 'hero') {
         return {
           kind,
-          results: repo
-            .search('hero', query, { limit: cappedLimit })
-            .map((hero) => ({
-              id: hero.id,
-              name: hero.name,
-              role: hero.role,
-              promoted: hero.promoted,
-              baseClass: hero.baseClassName,
-              element: hero.element
-            }))
+          results: repo.search('hero', query, { limit: cappedLimit }).map((hero) => ({
+            id: hero.id,
+            name: hero.name,
+            role: hero.role,
+            promoted: hero.promoted,
+            baseClass: hero.baseClassName,
+            element: hero.element
+          }))
         };
       }
       if (kind === 'champion') {
@@ -793,6 +791,16 @@ function nonZero(stats: Record<string, number>): Record<string, number> {
 
 function firstProblem(insights: SimulationInsight[]): string | null {
   return insights.find((insight) => insight.severity === 'critical' || insight.severity === 'warning')?.title ?? null;
+}
+
+/** "Inferno" → "Inferno Element" or "kiku-ichimonji" → "Kiku-Ichimonji" are not worth a note. */
+function isTrivialMatch(name: string, input: string): boolean {
+  const strip = (value: string) =>
+    value
+      .toLowerCase()
+      .replace(/\b(element|spirit)\b/g, '')
+      .replace(/[^a-z0-9]/g, '');
+  return strip(name) === strip(input);
 }
 
 function round2(value: number): number {

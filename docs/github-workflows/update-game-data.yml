@@ -1,0 +1,74 @@
+name: Update game data
+
+# Checks Kabam's official Shop Titans data spreadsheet for a new game version
+# every Monday (and on demand). If the data changed, it re-imports, validates,
+# runs the tests, rebuilds the web app and opens a pull request with a change
+# summary. Nothing is merged automatically.
+#
+# One-time setup: Settings → Actions → General → Workflow permissions →
+# enable "Allow GitHub Actions to create and approve pull requests".
+
+on:
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: update-game-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+
+      - name: Import and validate data
+        # Fails loudly (and leaves the old data untouched) if the upstream
+        # spreadsheet layout changed in a way the importer cannot handle.
+        run: pnpm import:data --summary data-update-summary.md
+
+      - name: Detect changes
+        id: diff
+        run: |
+          if git diff --quiet -- src/data/generated/game-data.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Game data is up to date."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "version=$(node -p "require('./src/data/generated/game-data.json').metadata.officialSpreadsheetVersion")" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Test and rebuild web app
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          pnpm typecheck
+          pnpm test
+          pnpm build:web
+
+      - name: Open pull request
+        if: steps.diff.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: automation/game-data
+          delete-branch: true
+          commit-message: 'Update game data to ${{ steps.diff.outputs.version }}'
+          title: 'Update game data to ${{ steps.diff.outputs.version }}'
+          body-path: data-update-summary.md
+          add-paths: |
+            src/data/generated/game-data.json
+            data/raw/ress-hero-quest-simulator.xlsx
+            docs/app/**
+          labels: game-data

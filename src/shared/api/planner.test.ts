@@ -31,7 +31,10 @@ describe('planner API', () => {
     expect(result.build.promoted).toBe(true);
     expect(result.build.equipment[0].itemId).toBe('kiku-ichimonji');
     expect(result.build.equipment[0].elementId).toBe('inferno-element');
-    expect(result.notes.some((note) => note.includes('"wolf" as "Wolf Spirit"'))).toBe(true);
+    // Trivial completions ("wolf" → "Wolf Spirit") stay quiet; real guesses are reported.
+    expect(result.notes).toEqual([]);
+    const partial = api.evaluateHero({ heroClass: 'Soldier', gear: [{ item: 'kiku' }] });
+    expect(partial.notes).toEqual(['Interpreted item "kiku" as "Kiku-Ichimonji".']);
     expect((result.stats as Record<string, number>).attack).toBeGreaterThan(0);
   });
 
