@@ -70,7 +70,10 @@ describe('planner API', () => {
     expect(summary.notes.some((note) => note.includes('Boss'))).toBe(true);
 
     // Same builds through the UI's code path → same numbers.
-    const evaluated = api.evaluateTeam({ heroes: [tank, { heroClass: 'Mage', level: 40 }, { heroClass: 'Cleric', level: 40 }], champion: { champion: 'Argon' } });
+    const evaluated = api.evaluateTeam({
+      heroes: [tank, { heroClass: 'Mage', level: 40 }, { heroClass: 'Cleric', level: 40 }],
+      champion: { champion: 'Argon' }
+    });
     const direct = simulateTeam(
       { heroes: evaluated.builds.heroes, champion: evaluated.builds.champion, questId: 'howling-woods-normal-easy', runs: 1000 },
       data

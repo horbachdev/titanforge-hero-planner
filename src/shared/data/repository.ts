@@ -1,13 +1,4 @@
-import type {
-  ChampionData,
-  EnchantmentData,
-  GameData,
-  GameDataAliases,
-  HeroData,
-  ItemData,
-  QuestData,
-  SkillData
-} from '../types';
+import type { ChampionData, EnchantmentData, GameData, GameDataAliases, HeroData, ItemData, QuestData, SkillData } from '../types';
 
 export type EntityKind = 'hero' | 'item' | 'skill' | 'champion' | 'enchantment' | 'quest';
 
@@ -132,11 +123,7 @@ export class GameRepository {
    * one entity. Never guesses between several equally good matches: an
    * ambiguous input returns suggestions instead.
    */
-  resolve<K extends EntityKind>(
-    kind: K,
-    input: string,
-    filter?: (entity: EntityMap[K]) => boolean
-  ): ResolveMatch<EntityMap[K]> | ResolveFailure {
+  resolve<K extends EntityKind>(kind: K, input: string, filter?: (entity: EntityMap[K]) => boolean): ResolveMatch<EntityMap[K]> | ResolveFailure {
     const query = input.trim();
     const accept = (entity: EntityMap[K] | undefined): entity is EntityMap[K] => Boolean(entity && (!filter || filter(entity)));
 
@@ -162,9 +149,7 @@ export class GameRepository {
       return { entity: normalized[0], matchedBy: 'normalized' };
     }
 
-    const partial = normalizedQuery
-      ? candidates.filter((entity) => normalizeSearch(searchText(kind, entity)).includes(normalizedQuery))
-      : [];
+    const partial = normalizedQuery ? candidates.filter((entity) => normalizeSearch(searchText(kind, entity)).includes(normalizedQuery)) : [];
     if (partial.length === 1) {
       return { entity: partial[0], matchedBy: 'partial' };
     }
@@ -190,7 +175,10 @@ export class GameRepository {
       return pool.slice(0, options.limit ?? pool.length);
     }
     return pool
-      .map((entity) => ({ entity, score: matchScore(normalizeSearch(searchText(kind, entity)), normalizeSearch(displayName(kind, entity)), normalizedQuery) }))
+      .map((entity) => ({
+        entity,
+        score: matchScore(normalizeSearch(searchText(kind, entity)), normalizeSearch(displayName(kind, entity)), normalizedQuery)
+      }))
       .filter((entry) => entry.score > 0)
       .sort((left, right) => right.score - left.score || displayName(kind, left.entity).localeCompare(displayName(kind, right.entity)))
       .slice(0, options.limit ?? 50)

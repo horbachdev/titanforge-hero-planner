@@ -20,7 +20,10 @@ import { loadGameData } from '../shared/data/source';
 const qualities = z.enum(['normal', 'superior', 'flawless', 'epic', 'legendary']);
 
 const gearSchema = z.object({
-  slot: z.union([z.number().int().min(1).max(6), z.string()]).optional().describe('1–6. Omit to use the first free slot that accepts the item.'),
+  slot: z
+    .union([z.number().int().min(1).max(6), z.string()])
+    .optional()
+    .describe('1–6. Omit to use the first free slot that accepts the item.'),
   item: z.string().describe('Item name or id, e.g. "Kiku-Ichimonji".'),
   quality: qualities.optional().describe('Default "normal".'),
   element: z.string().optional().describe('Element enchantment, e.g. "Inferno" or "Gaia Element".'),
@@ -85,7 +88,9 @@ async function main(): Promise<void> {
       }
     });
 
-  tool('get_data_info', 'Data info', 'Game data version, entity counts and value conventions. Call once to orient yourself.', {}, () => api.getDataInfo());
+  tool('get_data_info', 'Data info', 'Game data version, entity counts and value conventions. Call once to orient yourself.', {}, () =>
+    api.getDataInfo()
+  );
 
   tool(
     'search',
@@ -118,8 +123,12 @@ async function main(): Promise<void> {
     (input: Parameters<typeof api.getHeroOptions>[0]) => api.getHeroOptions(input)
   );
 
-  tool('evaluate_hero', 'Evaluate hero', 'Final stats, power and element points for one hero build. Returns a normalized build for the app.', { hero: heroSchema }, (input: { hero: Parameters<typeof api.evaluateHero>[0] }) =>
-    api.evaluateHero(input.hero)
+  tool(
+    'evaluate_hero',
+    'Evaluate hero',
+    'Final stats, power and element points for one hero build. Returns a normalized build for the app.',
+    { hero: heroSchema },
+    (input: { hero: Parameters<typeof api.evaluateHero>[0] }) => api.evaluateHero(input.hero)
   );
 
   tool(
@@ -130,8 +139,12 @@ async function main(): Promise<void> {
     (input: { champion: Parameters<typeof api.evaluateChampion>[0] }) => api.evaluateChampion(input.champion)
   );
 
-  tool('evaluate_team', 'Evaluate team', 'Stats of every hero with the champion aura applied, plus team totals and element points.', teamShape, (input: Parameters<typeof api.evaluateTeam>[0]) =>
-    api.evaluateTeam(input)
+  tool(
+    'evaluate_team',
+    'Evaluate team',
+    'Stats of every hero with the champion aura applied, plus team totals and element points.',
+    teamShape,
+    (input: Parameters<typeof api.evaluateTeam>[0]) => api.evaluateTeam(input)
   );
 
   tool(
@@ -168,6 +181,6 @@ async function main(): Promise<void> {
 }
 
 main().catch((error) => {
-  process.stderr.write(`${error instanceof Error ? error.stack ?? error.message : String(error)}\n`);
+  process.stderr.write(`${error instanceof Error ? (error.stack ?? error.message) : String(error)}\n`);
   process.exit(1);
 });

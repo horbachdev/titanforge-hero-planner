@@ -102,11 +102,7 @@ export function normalizeEnchantmentName(value: string): string {
     .replace(/[^a-z0-9]+/g, '');
 }
 
-export function findBuiltInEnchantment(
-  data: GameData,
-  item: ItemData | undefined,
-  type: 'Element' | 'Spirit'
-): EnchantmentData | undefined {
+export function findBuiltInEnchantment(data: GameData, item: ItemData | undefined, type: 'Element' | 'Spirit'): EnchantmentData | undefined {
   const name = type === 'Element' ? item?.builtInElement : item?.builtInSpirit;
   const normalized = normalizeEnchantmentName(name ?? '');
   if (!normalized) {

@@ -66,9 +66,7 @@ export async function loadGameData(source: GameDataSource, signal?: AbortSignal)
     }
   }
 
-  throw new Error(
-    `No game data source could be loaded: ${failures.map((failure) => `${failure.source.label}: ${failure.error}`).join(' | ')}`
-  );
+  throw new Error(`No game data source could be loaded: ${failures.map((failure) => `${failure.source.label}: ${failure.error}`).join(' | ')}`);
 }
 
 /** Wraps an in-memory object. Handy for tests and for already-fetched data. */

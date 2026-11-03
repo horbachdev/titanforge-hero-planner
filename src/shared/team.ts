@@ -8,6 +8,7 @@ import {
   type RessMiniBossModifier,
   type RessQuestSimulation
 } from './combat-engine';
+import { formatZone } from './catalog';
 import { calculateChampionBuildStats, calculateHeroStats } from './engine';
 import type {
   BuildConfig,
@@ -48,9 +49,7 @@ export interface ResolvedTeam {
 
 export function resolveTeam(team: TeamInput, data: GameData): ResolvedTeam {
   const champion = team.champion ? calculateChampionBuildStats(team.champion, data) : null;
-  const heroes = team.heroes.map((build) =>
-    build ? calculateHeroStats(build, data, { championSkillId: champion?.leaderSkill?.id }) : null
-  );
+  const heroes = team.heroes.map((build) => (build ? calculateHeroStats(build, data, { championSkillId: champion?.leaderSkill?.id }) : null));
   const present = heroes.filter((entry): entry is ResolvedBuild => Boolean(entry));
   return {
     heroes,
@@ -244,9 +243,7 @@ export function verdictForWinRate(winRate: number, occupied: number): VerdictLev
   return winRate > 0 ? 'unlikely' : 'fails';
 }
 
-export function analyzeSimulation(
-  result: Omit<TeamSimulationResult, 'analysis'>
-): SimulationAnalysis {
+export function analyzeSimulation(result: Omit<TeamSimulationResult, 'analysis'>): SimulationAnalysis {
   const { simulation, quest } = result;
   const winRate = simulation.successRate;
   const level = verdictForWinRate(winRate, simulation.occupiedCombatants);
@@ -286,11 +283,21 @@ export function analyzeSimulation(
     });
   }
 
-  const fragile = [...simulation.rows]
-    .filter((row) => row.survivalRate < 90)
-    .sort((left, right) => left.survivalRate - right.survivalRate);
-  for (const row of fragile.slice(0, 3)) {
-    const takesShare = row.targetPercent >= 100 / Math.max(1, simulation.rows.length) * 1.5;
+  const fragile = [...simulation.rows].filter((row) => row.survivalRate < 90).sort((left, right) => left.survivalRate - right.survivalRate);
+  const overwhelmed = simulation.rows.length > 1 && simulation.rows.every((row) => row.survivalRate < 5);
+  if (overwhelmed) {
+    const toughest = [...simulation.rows].sort(
+      (left, right) => right.stats.hp / Math.max(1, right.damagePerHit) - left.stats.hp / Math.max(1, left.damagePerHit)
+    )[0];
+    insights.push({
+      severity: 'critical',
+      code: 'team-overwhelmed',
+      title: 'The whole team is overwhelmed',
+      detail: `Every unit falls in almost every fight. Even ${toughest.combatant.name} only survives about ${Math.max(1, Math.floor(toughest.stats.hp / Math.max(1, toughest.damagePerHit)))} hits (${toughest.damagePerHit.toLocaleString('en-US')} damage each). This quest needs much stronger gear or levels — try a lower difficulty first.`
+    });
+  }
+  for (const row of overwhelmed ? [] : fragile.slice(0, 3)) {
+    const takesShare = row.targetPercent >= (100 / Math.max(1, simulation.rows.length)) * 1.5;
     insights.push({
       severity: row.survivalRate < 50 ? 'critical' : 'warning',
       code: 'unit-falls',
@@ -318,17 +325,14 @@ export function analyzeSimulation(
     insights.push({
       severity: 'warning',
       code: 'slots-ignored',
-      title:
-        result.ignoredHeroes.length === 1
-          ? '1 hero sits this one out'
-          : `${result.ignoredHeroes.length} heroes sit this one out`,
-      detail: `${quest.zone} allows ${result.heroSlotLimit} heroes, so the last slots are skipped: ${result.ignoredHeroes.join(', ')}.${
+      title: result.ignoredHeroes.length === 1 ? '1 hero sits this one out' : `${result.ignoredHeroes.length} heroes sit this one out`,
+      detail: `${formatZone(quest.zone)} allows ${result.heroSlotLimit} heroes, so the last slots are skipped: ${result.ignoredHeroes.join(', ')}.${
         result.heroSlotLimit === 4 ? ' The 5th slot is only used in Lost City of Gold quests.' : ''
       } Reorder the team to choose who goes.`
     });
   }
 
-  if (result.defenseCapEstimated) {
+  if (result.defenseCapEstimated && (level === 'likely' || level === 'risky' || level === 'unlikely')) {
     insights.push({
       severity: 'info',
       code: 'defense-cap-estimated',
@@ -401,5 +405,5 @@ export const ELEMENT_LABELS: Record<string, string> = {
 
 function formatElementList(types: string[]): string {
   const labels = [...new Set(types.map((type) => ELEMENT_LABELS[type] ?? type))];
-  return labels.length <= 1 ? labels[0] ?? 'element' : `${labels.slice(0, -1).join(', ')} or ${labels[labels.length - 1]}`;
+  return labels.length <= 1 ? (labels[0] ?? 'element') : `${labels.slice(0, -1).join(', ')} or ${labels[labels.length - 1]}`;
 }

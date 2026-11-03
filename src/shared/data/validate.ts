@@ -161,7 +161,10 @@ export function validateGameData(value: unknown): DataValidationReport {
 }
 
 export class GameDataValidationError extends Error {
-  constructor(readonly report: DataValidationReport, sourceLabel = 'game data') {
+  constructor(
+    readonly report: DataValidationReport,
+    sourceLabel = 'game data'
+  ) {
     super(
       `Invalid ${sourceLabel}: ${report.errors
         .slice(0, 5)

@@ -2,13 +2,7 @@ import { calculateChampionBuildStats, calculateHeroStats, getChampionMaxRank, ge
 import { createId, emptyEquipmentForHero, ITEM_QUALITIES } from '../data-utils';
 import { GameRepository, type EntityKind, type ResolveFailure, type ResolveMatch } from '../data/repository';
 import type { LoadedGameData } from '../data/source';
-import {
-  DEFAULT_SIMULATION_RUNS,
-  MINI_BOSS_MODIFIERS,
-  resolveTeam,
-  simulateTeam,
-  type SimulationInsight
-} from '../team';
+import { DEFAULT_SIMULATION_RUNS, MINI_BOSS_MODIFIERS, resolveTeam, simulateTeam, type SimulationInsight } from '../team';
 import type { RessMiniBossModifier } from '../combat-engine';
 import type {
   BuildConfig,
@@ -152,9 +146,7 @@ export function createPlannerApi(loaded: LoadedGameData | GameRepository): Plann
       const failure = result as ResolveFailure;
       throw new PlannerError(
         failure.ambiguous ? 'ambiguous' : 'not_found',
-        failure.ambiguous
-          ? `"${input}" matches several ${context}s. Use the exact name or id.`
-          : `No ${context} named "${input}".`,
+        failure.ambiguous ? `"${input}" matches several ${context}s. Use the exact name or id.` : `No ${context} named "${input}".`,
         failure.suggestions
       );
     }
@@ -172,8 +164,7 @@ export function createPlannerApi(loaded: LoadedGameData | GameRepository): Plann
     if (!input) {
       return '';
     }
-    return resolveOrThrow('enchantment', input, notes, (entry) => (entry as { type: string }).type === type, type.toLowerCase() as EntityKind)
-      .id;
+    return resolveOrThrow('enchantment', input, notes, (entry) => (entry as { type: string }).type === type, type.toLowerCase() as EntityKind).id;
   }
 
   function quality(input: string | undefined, notes: string[]): ItemQuality {
@@ -209,14 +200,14 @@ export function createPlannerApi(loaded: LoadedGameData | GameRepository): Plann
     if (promoted && !base.promotedClassId) {
       throw new PlannerError('not_allowed', `${base.name} has no promotion.`);
     }
-    const hero = promoted ? repo.hero(base.promotedClassId) ?? base : base;
+    const hero = promoted ? (repo.hero(base.promotedClassId) ?? base) : base;
     const level = clampInt(input.level ?? 40, 1, 50, 'level', notes);
     const maxTier = repo.maxTierForLevel(level);
 
     const allowedSkills = skillsForHero(data, hero);
-    const skills = (input.skills ?? []).slice(0, 4).map((skillName) =>
-      resolveOrThrow('skill', skillName, notes, (skill) => allowedSkills.includes(skill as SkillData), 'skill' as EntityKind).id
-    );
+    const skills = (input.skills ?? [])
+      .slice(0, 4)
+      .map((skillName) => resolveOrThrow('skill', skillName, notes, (skill) => allowedSkills.includes(skill as SkillData), 'skill' as EntityKind).id);
     if ((input.skills ?? []).length > 4) {
       notes.push('Only the first 4 skills were used (heroes have 4 skill slots).');
     }
@@ -246,8 +237,7 @@ export function createPlannerApi(loaded: LoadedGameData | GameRepository): Plann
   function placeGear(hero: HeroData, equipment: EquipmentSelection[], gear: GearInput, maxTier: number, notes: string[]): void {
     let slotIndex = -1;
     if (gear.slot !== undefined) {
-      slotIndex =
-        typeof gear.slot === 'number' ? gear.slot - 1 : hero.slots.findIndex((slot) => slot.id === gear.slot || slot.label === gear.slot);
+      slotIndex = typeof gear.slot === 'number' ? gear.slot - 1 : hero.slots.findIndex((slot) => slot.id === gear.slot || slot.label === gear.slot);
       if (slotIndex < 0 || slotIndex >= hero.slots.length) {
         throw new PlannerError('invalid_input', `Slot "${gear.slot}" does not exist. ${hero.name} has slots 1–${hero.slots.length}.`);
       }
@@ -313,7 +303,13 @@ export function createPlannerApi(loaded: LoadedGameData | GameRepository): Plann
       if (!gear?.item) {
         return { slotId, itemId: '', quality: 'normal', elementId: '', spiritId: '', starforged: false };
       }
-      const item = resolveOrThrow('item', gear.item, notes, (entry) => (entry as ItemData).type === type, type.toLowerCase() as EntityKind) as ItemData;
+      const item = resolveOrThrow(
+        'item',
+        gear.item,
+        notes,
+        (entry) => (entry as ItemData).type === type,
+        type.toLowerCase() as EntityKind
+      ) as ItemData;
       return {
         slotId,
         itemId: item.id,
@@ -458,11 +454,12 @@ export function createPlannerApi(loaded: LoadedGameData | GameRepository): Plann
         const results = repo.search('item', query, {
           limit: cappedLimit,
           filter: (item) =>
-            (!type || item.type.toLowerCase() === type.toLowerCase()) &&
-            (!maxTier || item.tier <= maxTier) &&
-            (!allowed || allowed.has(item.type))
+            (!type || item.type.toLowerCase() === type.toLowerCase()) && (!maxTier || item.tier <= maxTier) && (!allowed || allowed.has(item.type))
         });
-        return { kind, results: results.map((item) => ({ id: item.id, name: item.name, type: item.type, tier: item.tier, stats: nonZero({ ...item.stats }) })) };
+        return {
+          kind,
+          results: results.map((item) => ({ id: item.id, name: item.name, type: item.type, tier: item.tier, stats: nonZero({ ...item.stats }) }))
+        };
       }
       if (kind === 'skill') {
         const hero = heroClass ? (resolveOrThrow('hero', heroClass, []) as HeroData) : null;
@@ -471,10 +468,16 @@ export function createPlannerApi(loaded: LoadedGameData | GameRepository): Plann
           limit: cappedLimit,
           filter: (skill) => (!type || skill.type.toLowerCase() === type.toLowerCase()) && (!allowed || allowed.has(skill.id))
         });
-        return { kind, results: results.map((skill) => ({ id: skill.id, name: skill.name, type: skill.type, tier: skill.tier, effect: skill.effect })) };
+        return {
+          kind,
+          results: results.map((skill) => ({ id: skill.id, name: skill.name, type: skill.type, tier: skill.tier, effect: skill.effect }))
+        };
       }
       if (kind === 'quest') {
-        const results = repo.search('quest', query, { limit: cappedLimit, filter: (quest) => !type || quest.type.toLowerCase() === type.toLowerCase() });
+        const results = repo.search('quest', query, {
+          limit: cappedLimit,
+          filter: (quest) => !type || quest.type.toLowerCase() === type.toLowerCase()
+        });
         return { kind, results: results.map(questSummary) };
       }
       if (kind === 'hero') {
@@ -482,13 +485,22 @@ export function createPlannerApi(loaded: LoadedGameData | GameRepository): Plann
           kind,
           results: repo
             .search('hero', query, { limit: cappedLimit })
-            .map((hero) => ({ id: hero.id, name: hero.name, role: hero.role, promoted: hero.promoted, baseClass: hero.baseClassName, element: hero.element }))
+            .map((hero) => ({
+              id: hero.id,
+              name: hero.name,
+              role: hero.role,
+              promoted: hero.promoted,
+              baseClass: hero.baseClassName,
+              element: hero.element
+            }))
         };
       }
       if (kind === 'champion') {
         return {
           kind,
-          results: repo.search('champion', query, { limit: cappedLimit }).map((champion) => ({ id: champion.id, name: champion.name, element: champion.element }))
+          results: repo
+            .search('champion', query, { limit: cappedLimit })
+            .map((champion) => ({ id: champion.id, name: champion.name, element: champion.element }))
         };
       }
       if (kind === 'enchantment') {
@@ -522,7 +534,7 @@ export function createPlannerApi(loaded: LoadedGameData | GameRepository): Plann
       const notes: string[] = [];
       const match = resolveOrThrow('hero', heroClass, notes) as HeroData;
       const base = repo.hero(match.baseClassId) ?? match;
-      const hero = (promoted ?? match.promoted) && base.promotedClassId ? repo.hero(base.promotedClassId) ?? base : base;
+      const hero = (promoted ?? match.promoted) && base.promotedClassId ? (repo.hero(base.promotedClassId) ?? base) : base;
       const maxTier = repo.maxTierForLevel(level);
       return {
         class: hero.name,
@@ -607,8 +619,17 @@ export function createPlannerApi(loaded: LoadedGameData | GameRepository): Plann
         verdict: result.analysis.verdict,
         insights: result.analysis.insights,
         rounds: { min: sim.minimumRounds, average: round2(sim.averageRounds), max: sim.maximumRounds },
-        barrier: sim.barrier.required > 0 ? { elements: sim.barrier.types, required: sim.barrier.required, available: round2(sim.barrier.available), broken: sim.barrier.met } : null,
-        enemy: { hp: sim.enemy.hp, attack: sim.enemy.attack, critChance: sim.enemy.critChance, evasion: sim.enemy.evasion, aoeChance: sim.enemy.aoeChance },
+        barrier:
+          sim.barrier.required > 0
+            ? { elements: sim.barrier.types, required: sim.barrier.required, available: round2(sim.barrier.available), broken: sim.barrier.met }
+            : null,
+        enemy: {
+          hp: sim.enemy.hp,
+          attack: sim.enemy.attack,
+          critChance: sim.enemy.critChance,
+          evasion: sim.enemy.evasion,
+          aoeChance: sim.enemy.aoeChance
+        },
         units: sim.rows.map((row) => ({
           name: row.combatant.name,
           kind: row.combatant.kind,
@@ -624,7 +645,7 @@ export function createPlannerApi(loaded: LoadedGameData | GameRepository): Plann
         ignoredHeroes: result.ignoredHeroes,
         runs: sim.simulations,
         notes,
-        disclaimer: 'Monte Carlo port of Ress\' community simulator; not affiliated with Kabam. Treat win rates as estimates.'
+        disclaimer: "Monte Carlo port of Ress' community simulator; not affiliated with Kabam. Treat win rates as estimates."
       };
     },
 

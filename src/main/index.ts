@@ -5,10 +5,10 @@ function createWindow(): void {
   const mainWindow = new BrowserWindow({
     width: 1320,
     height: 860,
-    minWidth: 1040,
+    minWidth: 760,
     minHeight: 720,
-    title: 'Shop Titans Hero Builder',
-    backgroundColor: '#eef2f0',
+    title: 'TitanForge',
+    backgroundColor: '#f6f4ef',
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       contextIsolation: true,
