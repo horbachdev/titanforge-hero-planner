@@ -1,16 +1,24 @@
 import rawGameData from '../data/generated/game-data.json';
+import { validateGameData } from './data/validate';
 import { getStarforgeStatMultiplier } from './engine';
 import type { GameData } from './types';
 
-const data = rawGameData as GameData;
+const data = rawGameData as unknown as GameData;
 
 describe('generated game data', () => {
   it('contains the MVP source tabs and metadata', () => {
-    expect(data.metadata.officialSpreadsheetVersion).toContain('v26.5.0');
-    expect(data.metadata.ressSpreadsheetVersion).toBe('V9.4');
+    // The data is refreshed automatically, so pin the format, not a version.
+    expect(data.metadata.officialSpreadsheetVersion).toMatch(/^client v\d+\.\d+\.\d+ \/ spreadsheet v[\d.]+$/);
+    expect(data.metadata.ressSpreadsheetVersion).toMatch(/^V\d+(\.\d+)*$/);
     expect(data.metadata.tabs).toEqual(
       expect.arrayContaining(['Blueprints', 'Heroes', 'Hero Levels', 'Skills', 'Champions', 'Quests', 'Enchantments'])
     );
+  });
+
+  it('passes the same validation the importer and remote sources use', () => {
+    const report = validateGameData(data);
+    expect(report.errors).toEqual([]);
+    expect(report.ok).toBe(true);
   });
 
   it('imports the core entity sets', () => {

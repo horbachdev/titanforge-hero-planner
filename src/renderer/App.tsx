@@ -60,7 +60,7 @@ import type {
 import type { CombatantInput, CombatSpiritEffects, RessMiniBossModifier, RessQuestSimulation } from '../shared/combat-engine';
 import { ChampionToken, EnchantmentToken, HeroToken, ItemToken, SkillToken, VisualToken } from './VisualToken';
 
-const data = rawGameData as GameData;
+const data = rawGameData as unknown as GameData;
 const CURRENT_BUILD_KEY = 'shopTitansHeroBuilder.currentBuild';
 const CHAMPION_BUILD_KEY = 'shopTitansHeroBuilder.championBuild';
 const SAVED_BUILDS_KEY = 'shopTitansHeroBuilder.savedBuilds';

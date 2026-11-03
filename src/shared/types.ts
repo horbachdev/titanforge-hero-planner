@@ -179,8 +179,21 @@ export interface QuestData {
   barrierHealth: number;
 }
 
+/**
+ * Old → new id mappings for entities that were renamed upstream, so saved
+ * builds keep working after a data refresh. Optional for older data files.
+ */
+export interface GameDataAliases {
+  items?: Record<string, string>;
+  skills?: Record<string, string>;
+  heroes?: Record<string, string>;
+  champions?: Record<string, string>;
+  quests?: Record<string, string>;
+}
+
 export interface GameData {
   metadata: SourceMetadata;
+  aliases?: GameDataAliases;
   heroes: HeroData[];
   heroLevels: HeroLevelData[];
   items: ItemData[];

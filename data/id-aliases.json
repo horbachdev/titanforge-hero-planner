@@ -1,0 +1,6 @@
+{
+  "$comment": "Old id -> current id for entities renamed upstream. Keeps saved builds working after a data refresh. Applied by scripts/import-data.mjs.",
+  "items": {
+    "otherwordly-chime": "otherworldly-chime"
+  }
+}

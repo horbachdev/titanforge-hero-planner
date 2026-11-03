@@ -4,7 +4,7 @@ import { defaultChampionBuild, emptyEquipmentForHero } from './data-utils';
 import { calculateChampionBuildStats, calculateHeroStats, resolveGearLine } from './engine';
 import type { BuildConfig, GameData } from './types';
 
-const data = rawGameData as GameData;
+const data = rawGameData as unknown as GameData;
 
 describe('calculateHeroStats', () => {
   it('uses promoted hero data when the Titan Soul toggle is on', () => {
